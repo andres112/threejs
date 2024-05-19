@@ -7,7 +7,7 @@ const canvas = document.querySelector('canvas.webgl');
 const scene = new THREE.Scene();
 
 // Object
-const cube = new THREE.BoxGeometry(1, 1, 3);
+const cube = new THREE.BoxGeometry(1, 1, 2);
 const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true});
 // wireframe makes the cube hollow
 const mesh = new THREE.Mesh(cube, material);

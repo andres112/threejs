@@ -1,12 +1,15 @@
 {
-  "name": "threejs-journey-exercise",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "first",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "devDependencies": {
     "vite": "^5.2.11"
   },

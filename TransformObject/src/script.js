@@ -54,6 +54,9 @@ camera.position.x = 1;
 camera.position.y = 1;
 scene.add(camera);
 
+// look at
+camera.lookAt(mesh.position);
+
 // Methods of mesh position object
 console.log('Distance to the center ' + mesh.position.distanceTo(camera.position));
 

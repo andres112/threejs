@@ -8,7 +8,7 @@ const scene = new THREE.Scene();
 
 // Object
 const cube = new THREE.BoxGeometry(1, 1, 2);
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true});
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 // wireframe makes the cube hollow
 const mesh = new THREE.Mesh(cube, material);
 
@@ -16,7 +16,7 @@ const mesh = new THREE.Mesh(cube, material);
 // mesh.position.x = 0.7;
 // mesh.position.y = -0.6;
 // mesh.position.z = -1;
-mesh.position.set(0.7, -0.6, -1);
+mesh.position.set(1, -0.6, -1);
 
 // Scale
 // mesh.scale.x = 2;
@@ -39,6 +39,25 @@ scene.add(axesHelper);
 
 // Methods of mesh position object
 console.log('Distance to the center ' + mesh.position.length());
+
+// Group
+const group = new THREE.Group();
+scene.add(group);
+
+const cube1 = new THREE.Mesh(
+  new THREE.BoxGeometry(0.5, 0.5, 0.5),
+  new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true})
+);
+cube1.position.set(0, 1, 0);
+const cube2 = new THREE.Mesh(
+  new THREE.BoxGeometry(0.5, 0.5, 0.5),
+  new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true})
+);
+cube2.position.set(0, 0, 1.5);
+// transform and add cubes to the group
+group.position.x = -0.5;
+group.rotation.z = Math.PI * 0.10;
+group.add(cube1, cube2);
 
 // Sizes
 const sizes = {

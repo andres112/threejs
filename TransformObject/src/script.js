@@ -46,17 +46,17 @@ scene.add(group);
 
 const cube1 = new THREE.Mesh(
   new THREE.BoxGeometry(0.5, 0.5, 0.5),
-  new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true})
+  new THREE.MeshBasicMaterial({ color: 0x00aa11, wireframe: false })
 );
 cube1.position.set(0, 1, 0);
 const cube2 = new THREE.Mesh(
   new THREE.BoxGeometry(0.5, 0.5, 0.5),
-  new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true})
+  new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true })
 );
 cube2.position.set(0, 0, 1.5);
 // transform and add cubes to the group
 group.position.x = -0.5;
-group.rotation.z = Math.PI * 0.10;
+group.rotation.z = Math.PI * 0.5;
 group.add(cube1, cube2);
 
 // Sizes
@@ -84,5 +84,15 @@ const renderer = new THREE.WebGLRenderer({
   canvas,
 });
 renderer.setSize(sizes.width, sizes.height);
-
 renderer.render(scene, camera);
+
+// Change camera position
+const mySwitch = document.getElementById('mySwitch');
+
+const toggleCamera = () => {
+  const target = mySwitch.checked ? group.position : mesh.position;
+  camera.lookAt(target);
+  renderer.render(scene, camera);
+};
+
+mySwitch.addEventListener('change', toggleCamera);

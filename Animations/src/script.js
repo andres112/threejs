@@ -60,6 +60,7 @@ const loop = () => {
 
 loop();
 
+// Timeline using GSAP GreenSock
 const timeline = gsap.timeline({ repeat: -1 });
 timeline
   .to(mesh1.position, { duration: 1, delay: 1, x: 2 })

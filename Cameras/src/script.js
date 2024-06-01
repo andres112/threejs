@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 /**
  * Base
@@ -47,6 +48,11 @@ camera.position.z = 2;
 camera.lookAt(mesh.position);
 scene.add(camera);
 
+// Controls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.target = mesh.position;
+
 // Renderer
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
@@ -64,12 +70,16 @@ const tick = () => {
   // mesh.rotation.y = elapsedTime;
   mesh.rotation.x = elapsedTime;
 
-  // Update camera
-  camera.position.x = Math.cos(cursor.x * Math.PI * 2) * 3;
-  camera.position.z = Math.sin(cursor.x * Math.PI * 2) * 3;
-  camera.position.y = cursor.y * 5;
-  camera.lookAt(mesh.position);
+  // Comment because Orbit Built in camera
+  // // Update camera
+  // camera.position.x = Math.cos(cursor.x * Math.PI * 2) * 3;
+  // camera.position.z = Math.sin(cursor.x * Math.PI * 2) * 3;
+  // camera.position.y = cursor.y * 5;
+  // camera.lookAt(mesh.position);
 
+  // Update controls
+  controls.update(); // useful for damping
+  
   // Render
   renderer.render(scene, camera);
 

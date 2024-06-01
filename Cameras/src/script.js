@@ -79,9 +79,10 @@ const tick = () => {
 
   // Update controls
   controls.update(); // useful for damping
-  
+
   // Render
   renderer.render(scene, camera);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);
@@ -105,4 +106,5 @@ window.addEventListener('resize', () => {
 
   // Update renderer
   renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });

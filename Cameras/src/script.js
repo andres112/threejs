@@ -53,7 +53,7 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
   // Update objects
-  // mesh.rotation.z = elapsedTime;
+  mesh.rotation.z = elapsedTime * 2;
   // mesh.rotation.y = elapsedTime;
   mesh.rotation.x = elapsedTime;
 

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 /**
  * Base
@@ -12,9 +12,11 @@ const scene = new THREE.Scene();
 
 // Object
 // const geometry = new THREE.BoxGeometry(1, 1, 1, 5, 5, 5);
-const geometry = new THREE.SphereGeometry(1, 32, 32);
+const geometry = new THREE.SphereGeometry(1, 50, 50);
 const material = new THREE.MeshBasicMaterial({ color: 0xF34f00, wireframe: true});
 const mesh = new THREE.Mesh(geometry, material);
+mesh.rotation.z = 0.7;
+mesh.rotation.reorder('YXZ');
 scene.add(mesh);
 
 // Sizes
@@ -58,6 +60,8 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+  mesh.rotation.y = elapsedTime*0.5;
+  mesh.position.y = Math.sin(elapsedTime);
 
   // Update controls
   controls.update();

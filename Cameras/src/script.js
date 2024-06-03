@@ -7,19 +7,6 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
 
-/**
- * Cursor
- */
-const cursor = {
-  x: 0,
-  y: 0,
-};
-
-window.addEventListener('mousemove', (event) => {
- cursor.x = event.clientX / sizes.width - 0.5;
- cursor.y = -(event.clientY / sizes.height - 0.5);
-});
-
 // Sizes
 const sizes = {
   width: window.innerWidth,
@@ -90,6 +77,19 @@ const tick = () => {
 
 tick();
 
+/**
+ * Cursor
+ */
+const cursor = {
+  x: 0,
+  y: 0,
+};
+
+window.addEventListener('mousemove', (event) => {
+  cursor.x = event.clientX / sizes.width - 0.5;
+  cursor.y = -(event.clientY / sizes.height - 0.5);
+});
+
 // Resize event
 window.addEventListener('resize', () => {
   // Update sizes
@@ -107,4 +107,23 @@ window.addEventListener('resize', () => {
   // Update renderer
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+// Fullscreen
+window.addEventListener('dblclick', () => {
+  const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+
+  if (!fullscreenElement) {
+    canvas.requestFullscreen
+      ? canvas.requestFullscreen()
+      : canvas.webkitRequestFullscreen
+      ? canvas.webkitRequestFullscreen()
+      : null;
+  } else {
+    document.exitFullscreen
+      ? document.exitFullscreen()
+      : document.webkitExitFullscreen
+      ? document.webkitExitFullscreen()
+      : null;
+  }
 });

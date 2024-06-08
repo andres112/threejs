@@ -10,6 +10,14 @@ gsap.registerPlugin(CustomEase);
  * Debug
  */
 const gui = new GUI();
+const debugObject = {
+  scale: 1,
+  color: 0xbac520,
+  spin: () => {
+    gsap.to(mesh.rotation, { duration: 2, y: mesh.rotation.y + Math.PI * 2 });
+  },
+  subdivision: 6,
+};
 
 /**
  * Base
@@ -24,7 +32,7 @@ const scene = new THREE.Scene();
  * Object
  */
 const geometry = new THREE.SphereGeometry(1, 32, 16);
-const material = new THREE.MeshBasicMaterial({ color: '#ff0000', wireframe: true });
+const material = new THREE.MeshBasicMaterial({ color: debugObject.color, wireframe: true });
 const mesh = new THREE.Mesh(geometry, material);
 mesh.position.set(-5, 0, 0);
 scene.add(mesh);
@@ -34,18 +42,46 @@ gui.add(mesh.position, 'y').min(-3).max(3).step(0.01).name('elevation');
 gui.add(mesh.position, 'x').min(-3).max(3).step(0.01).name('azimuth');
 gui.add(mesh, 'visible');
 gui.add(mesh.material, 'wireframe');
-gui.addColor(mesh.material, 'color');
+// This method gives different results
+gui.addColor(mesh.material, 'color').name('fake color');
+
+const folder = gui.addFolder('Custom Tweaks');
+
+// This method gives the real color
+folder
+  .addColor(debugObject, 'color')
+  .onChange(() => {
+    mesh.material.color.set(debugObject.color);
+  })
+  .name('real color');
 // Custom scale controller
-let scaleValue = 1;
-const scaleController = gui
-  .add({ scale: scaleValue }, 'scale')
+folder
+  .add(debugObject, 'scale')
   .min(0.5)
   .max(3)
   .step(0.01)
-  .name('scale');
-scaleController.onChange(function (value) {
-  mesh.scale.set(value, value, value);
-});
+  .name('scale')
+  .onChange(function (value) {
+    mesh.scale.set(value, value, value);
+  });
+
+folder.add(debugObject, 'spin');
+
+folder
+  .add(debugObject, 'subdivision')
+  .min(3)
+  .max(32)
+  .step(1)
+  .onFinishChange(() => {
+    const newGeometry = new THREE.SphereGeometry(
+      1,
+      debugObject.subdivision,
+      debugObject.subdivision
+    );
+    // IMPORTANTY: Dispose the old geometry to avoid memory leaks
+    mesh.geometry.dispose();
+    mesh.geometry = newGeometry;
+  });
 
 /**
  * Sizes
@@ -112,15 +148,11 @@ const tick = () => {
 
 tick();
 
-CustomEase.create(
-  'hop',
-  'M0,0 C0,0 0.056,0.442 0.175,0.442 0.294,0.442 0.332,0 0.332,0 0.332,0 0.414,1 0.671,1 0.991,1 1,0 1,0'
-);
-const timeline = gsap.timeline({ repeat: -1 });
-timeline
-  .to(mesh.position, { duration: 2.5, x: 2, y: 2, z: 3, delay:1, ease: 'power2.inOut' })
-  .to(mesh.rotation, { duration: 2.5, x: Math.PI * 2, y: Math.PI * 2, z: Math.PI * 2, ease: 'power2.inOut' }, '-=2.5')
-  .to(mesh.scale, { duration: 1, x: 2, y: 2, z: 2, ease: 'elastic.out(1, 0.3)' })
-  .to(mesh.position, { duration: 3, x: 0, y: 0, z: 0, ease: 'bounce.out' })
-  .to(mesh.rotation, { duration: 3, x: 0, y: 0, z: 0, ease: 'power2.inOut' }, '-=3')
-  .to(mesh.scale, { duration: 1, x: 1, y: 1, z: 1, ease: 'power2.inOut' });
+// const timeline = gsap.timeline({ repeat: -1 });
+// timeline
+//   .to(mesh.position, { duration: 2.5, x: 2, y: 2, z: 3, delay:1, ease: 'power2.inOut' })
+//   .to(mesh.rotation, { duration: 2.5, x: Math.PI * 2, y: Math.PI * 2, z: Math.PI * 2, ease: 'power2.inOut' }, '-=2.5')
+//   .to(mesh.scale, { duration: 1, x: 1.5, y: 1.5, z: 1.5, ease: 'elastic.out(1, 0.3)' })
+//   .to(mesh.position, { duration: 3, x: -5, y: 0, z: 0, ease: 'bounce.out' })
+//   .to(mesh.rotation, { duration: 3, x: 0, y: 0, z: 0, ease: 'power2.inOut' }, '-=3')
+//   .to(mesh.scale, { duration: 1, x: 1, y: 1, z: 1, ease: 'power2.inOut' });

@@ -26,6 +26,7 @@ const scene = new THREE.Scene();
 const geometry = new THREE.SphereGeometry(1, 32, 16);
 const material = new THREE.MeshBasicMaterial({ color: '#ff0000', wireframe: true });
 const mesh = new THREE.Mesh(geometry, material);
+mesh.position.set(-5, 0, 0);
 scene.add(mesh);
 
 // Debug cube
@@ -75,7 +76,7 @@ window.addEventListener('resize', () => {
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
 camera.position.x = 1;
 camera.position.y = 1;
-camera.position.z = 5;
+camera.position.z = 8;
 scene.add(camera);
 
 // Controls
@@ -117,5 +118,9 @@ CustomEase.create(
 );
 const timeline = gsap.timeline({ repeat: -1 });
 timeline
-  .to(mesh.position, { duration: 2.5, y: 4, delay:1, ease: 'bounce.in' })
-  .to(mesh.position, { duration: 3, y: 0, ease: 'bounce.out' });
+  .to(mesh.position, { duration: 2.5, x: 2, y: 2, z: 3, delay:1, ease: 'power2.inOut' })
+  .to(mesh.rotation, { duration: 2.5, x: Math.PI * 2, y: Math.PI * 2, z: Math.PI * 2, ease: 'power2.inOut' }, '-=2.5')
+  .to(mesh.scale, { duration: 1, x: 2, y: 2, z: 2, ease: 'elastic.out(1, 0.3)' })
+  .to(mesh.position, { duration: 3, x: 0, y: 0, z: 0, ease: 'bounce.out' })
+  .to(mesh.rotation, { duration: 3, x: 0, y: 0, z: 0, ease: 'power2.inOut' }, '-=3')
+  .to(mesh.scale, { duration: 1, x: 1, y: 1, z: 1, ease: 'power2.inOut' });

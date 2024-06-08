@@ -27,6 +27,17 @@ mesh.rotation.z = 0.7;
 mesh.rotation.reorder('YXZ');
 scene.add(mesh);
 
+// Buffer Geometry
+const geometryBuffer = new THREE.BufferGeometry();
+const positionsArray = new Float32Array([
+  0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0,
+]);
+const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+geometryBuffer.setAttribute('position', positionsAttribute);
+const materialBuffer = new THREE.MeshBasicMaterial({ color: 0x1ce4eb, wireframe: true });
+const meshBuffer = new THREE.Mesh(geometryBuffer, materialBuffer);
+scene.add(meshBuffer);
+
 // Sizes
 const sizes = {
   width: window.innerWidth,

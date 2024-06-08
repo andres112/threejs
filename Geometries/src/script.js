@@ -1,11 +1,19 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import Stats from 'stats.js';
+
+const stats = new Stats();
+
+stats.showPanel(0);
+
+document.body.appendChild(stats.dom);
 
 /**
  * Base
  */
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
+const fps = document.querySelector('.fps');
 
 // Scene
 const scene = new THREE.Scene();
@@ -13,7 +21,7 @@ const scene = new THREE.Scene();
 // Object
 // const geometry = new THREE.BoxGeometry(1, 1, 1, 5, 5, 5);
 const geometry = new THREE.SphereGeometry(1, 50, 50);
-const material = new THREE.MeshBasicMaterial({ color: 0xF34f00, wireframe: true});
+const material = new THREE.MeshBasicMaterial({ color: 0xf34f00, wireframe: true });
 const mesh = new THREE.Mesh(geometry, material);
 mesh.rotation.z = 0.7;
 mesh.rotation.reorder('YXZ');
@@ -59,8 +67,9 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const clock = new THREE.Clock();
 
 const tick = () => {
+  stats.begin();
   const elapsedTime = clock.getElapsedTime();
-  mesh.rotation.y = elapsedTime*0.5;
+  mesh.rotation.y = elapsedTime * 0.5;
   mesh.position.y = Math.sin(elapsedTime);
 
   // Update controls
@@ -68,6 +77,8 @@ const tick = () => {
 
   // Render
   renderer.render(scene, camera);
+
+  stats.end();
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);

@@ -9,14 +9,65 @@ gsap.registerPlugin(CustomEase);
 /**
  * Debug
  */
-const gui = new GUI();
+const gui = new GUI({
+  title: 'My GUI',
+  closeFolders: true,
+});
+// gui.close();
+
+let keys = [];
+
+// Show and hide the GUI with the keyboard
+window.addEventListener('keydown', (e) => {
+  keys.push(e.key);
+  if (keys.length > 4) {
+    keys.shift();
+  }
+
+  if (keys.join('') === 'hide') {
+    gui.hide();
+  } else if (keys.join('') === 'show') {
+    gui.show();
+  }
+});
+
 const debugObject = {
   scale: 1,
   color: 0xbac520,
   spin: () => {
-    gsap.to(mesh.rotation, { duration: 2, y: mesh.rotation.y + Math.PI * 2 });
+    const timeline = gsap.timeline({ repeat: 0 });
+    timeline.to(mesh.rotation, { duration: 2, y: mesh.rotation.y + Math.PI * 2 }).to(
+      mesh.material.color,
+      {
+        duration: 2,
+        r: 1,
+        g: 0,
+        b: 0,
+        ease: 'power4.inOut',
+        onUpdate: () => {
+          mesh.material.needsUpdate = true;
+        },
+      },
+      '-=2'
+    );
   },
   subdivision: 6,
+  animate: () => {
+    const timeline = gsap.timeline({ repeat: 0 });
+    timeline
+      .to(camera.position, { duration: 1, x: 1, y: 2, z: 8, ease: 'power2.in' })
+      .to(mesh.position, { duration: 2.5, x: 2, y: 2, z: 3, ease: 'power2.inOut' })
+      .to(
+        mesh.rotation,
+        { duration: 2.5, x: Math.PI * 2, y: Math.PI * 2, z: Math.PI * 2, ease: 'power2.inOut' },
+        '-=2.5'
+      )
+      .to(mesh.scale, { duration: 1, x: 1.5, y: 1.5, z: 1.5, ease: 'elastic.out(1, 0.3)' })
+      .to(mesh.position, { duration: 3, x: -3, y: 0, z: 0, ease: 'bounce.out' })
+      .to(mesh.rotation, { duration: 3, x: 0, y: 0, z: 0, ease: 'power2.inOut' }, '-=3')
+      .to(mesh.scale, { duration: 1, x: 1, y: 1, z: 1, ease: 'power2.inOut' })
+      .to(camera.position, { duration: 1, x: 1, y: 1, z: 5, ease: 'power2.out' });
+  },
 };
 
 /**
@@ -34,7 +85,7 @@ const scene = new THREE.Scene();
 const geometry = new THREE.SphereGeometry(1, 32, 16);
 const material = new THREE.MeshBasicMaterial({ color: debugObject.color, wireframe: true });
 const mesh = new THREE.Mesh(geometry, material);
-mesh.position.set(-5, 0, 0);
+mesh.position.set(-3, 0, 0);
 scene.add(mesh);
 
 // Debug cube
@@ -65,8 +116,6 @@ folder
     mesh.scale.set(value, value, value);
   });
 
-folder.add(debugObject, 'spin');
-
 folder
   .add(debugObject, 'subdivision')
   .min(3)
@@ -82,6 +131,9 @@ folder
     mesh.geometry.dispose();
     mesh.geometry = newGeometry;
   });
+
+folder.add(debugObject, 'spin');
+folder.add(debugObject, 'animate');
 
 /**
  * Sizes
@@ -112,7 +164,7 @@ window.addEventListener('resize', () => {
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
 camera.position.x = 1;
 camera.position.y = 1;
-camera.position.z = 8;
+camera.position.z = 5;
 scene.add(camera);
 
 // Controls
@@ -147,12 +199,3 @@ const tick = () => {
 };
 
 tick();
-
-// const timeline = gsap.timeline({ repeat: -1 });
-// timeline
-//   .to(mesh.position, { duration: 2.5, x: 2, y: 2, z: 3, delay:1, ease: 'power2.inOut' })
-//   .to(mesh.rotation, { duration: 2.5, x: Math.PI * 2, y: Math.PI * 2, z: Math.PI * 2, ease: 'power2.inOut' }, '-=2.5')
-//   .to(mesh.scale, { duration: 1, x: 1.5, y: 1.5, z: 1.5, ease: 'elastic.out(1, 0.3)' })
-//   .to(mesh.position, { duration: 3, x: -5, y: 0, z: 0, ease: 'bounce.out' })
-//   .to(mesh.rotation, { duration: 3, x: 0, y: 0, z: 0, ease: 'power2.inOut' }, '-=3')
-//   .to(mesh.scale, { duration: 1, x: 1, y: 1, z: 1, ease: 'power2.inOut' });

@@ -1,7 +1,13 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
+import Stats from 'stats.js';
 
+const stats = new Stats();
+
+stats.showPanel(0);
+
+document.body.appendChild(stats.dom);
 
 /**
  * Textures
@@ -177,6 +183,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const clock = new THREE.Clock();
 
 const tick = () => {
+  stats.begin();
   const elapsedTime = clock.getElapsedTime();
 
   // Update controls
@@ -184,6 +191,7 @@ const tick = () => {
 
   // Render
   renderer.render(scene, camera);
+  stats.end();
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 
+
 /**
  * Textures
  */
@@ -12,12 +13,13 @@ loadingManager.onStart = () => {
 };
 loadingManager.onLoad = () => {
   console.log('loading finished');
+  tick();
 };
 loadingManager.onProgress = () => {
   console.log('loading progressing');
 };
-loadingManager.onError = () => {
-  console.log('loading error');
+loadingManager.onError = (error) => {
+  console.log('loading error', error);
 };
 // One textureLoader can load multiple textures
 const textureLLoader = new THREE.TextureLoader(loadingManager);
@@ -34,10 +36,34 @@ const colorTexture = textureLLoader.load(
   //     console.log('error');
   //   }
 );
-const ambientOcclusionTexture = textureLLoader.load('/textures/wall/ambientOcclusion.jpg');
-const heightTexture = textureLLoader.load('/textures/wall/height.jpg');
-const normalTexture = textureLLoader.load('/textures/wall/normal.jpg');
-const roughnessTexture = textureLLoader.load('/textures/wall/roughness.jpg');
+// const ambientOcclusionTexture = textureLLoader.load('/textures/wall/ambientOcclusion.jpg');
+// const heightTexture = textureLLoader.load('/textures/wall/height.png');
+// const normalTexture = textureLLoader.load('/textures/wall/normal.jpg');
+// const roughnessTexture = textureLLoader.load('/textures/wall/roughness.jpg');
+
+// colorTexture.repeat.x = 2
+// colorTexture.repeat.y = 2
+
+// colorTexture.offset.y = 0.2
+
+// colorTexture.wrapS = THREE.RepeatWrapping
+// colorTexture.wrapT = THREE.MirroredRepeatWrapping
+
+// colorTexture.rotation = Math.PI * 0.25
+// colorTexture.center.x = 0.5
+// colorTexture.center.y = 0.5
+
+// All textures
+const wallColorTexture = textureLLoader.load('/textures/wall/basecolor.jpg');
+const woodColorTexture = textureLLoader.load('/textures/wood/basecolor.jpg');
+const rockColorTexture = textureLLoader.load('/textures/rock/basecolor.jpg');
+const metalColorTexture = textureLLoader.load('/textures/metal/basecolor.png');
+const checkerboardColorTexture = textureLLoader.load('/textures/checkerboard-1024x1024.png');
+checkerboardColorTexture.mipmaps = false;
+checkerboardColorTexture.minFilter = THREE.NearestFilter;
+const minecraftColorTexture = textureLLoader.load('/textures/minecraft.png');
+minecraftColorTexture.mipmaps = false;
+minecraftColorTexture.magFilter = THREE.NearestFilter;
 
 /**
  * Debug
@@ -47,22 +73,34 @@ const tweaks = {
 };
 
 const textures = {
-  Wall: '/textures/wall/basecolor.jpg',
-  Rock: '/textures/rock/basecolor.jpg',
-  Wood: '/textures/wood/basecolor.jpg',
-  Metal: '/textures/metal/basecolor.png',
+  Wall: wallColorTexture,
+  Rock: rockColorTexture,
+  Wood: woodColorTexture,
+  Metal: metalColorTexture,
+  Big:checkerboardColorTexture ,
+  Small: minecraftColorTexture,
 };
 
 const gui = new GUI();
 const textureFolder = gui.addFolder('Textures');
 textureFolder
-  .add(tweaks, 'texture', ['Wall', 'Rock', 'Wood', 'Metal'])
+  .add(tweaks, 'texture', ['Wall', 'Rock', 'Wood', 'Metal', 'Big', 'Small'])
   .name('Base Color')
   .listen()
   .onChange(() => {
-    colorTexture.image = new Image();
-    colorTexture.image.src = textures[tweaks.texture];
-    colorTexture.needsUpdate = true;
+    // colorTexture.image = new Image();
+    // colorTexture.image.src = textures[tweaks.texture];
+    // colorTexture.generateMipmaps = true;
+    // if (tweaks.texture === 'Big') {
+    //   colorTexture.generateMipmaps = false
+    //   colorTexture.minFilter = THREE.NearestFilter
+    // }
+    // if (tweaks.texture === 'Small') {
+    //   colorTexture.generateMipmaps = false
+    //   colorTexture.magFilter = THREE.NearestFilter
+    // }
+    // colorTexture.needsUpdate = true;
+    mesh.material.map = textures[tweaks.texture];
   });
 
 /**
@@ -78,6 +116,11 @@ const scene = new THREE.Scene();
  * Object
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1);
+console.log(geometry.attributes.uv);
+// itemSize: 2 means each vertex has 2 values
+// count: 4 means 4 vertices
+// array: 48 means 4 vertices * 6 values (2 values for each vertex)
+
 // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 const material = new THREE.MeshBasicMaterial({ map: colorTexture });
 const mesh = new THREE.Mesh(geometry, material);
@@ -145,5 +188,3 @@ const tick = () => {
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);
 };
-
-tick();

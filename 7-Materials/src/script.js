@@ -52,6 +52,7 @@ basicMaterial.side = THREE.DoubleSide
 // Mesh Normal Material
 const normalMaterial = new THREE.MeshNormalMaterial()
 normalMaterial.normalMap = metalNormalTexture
+normalMaterial.flatShading = true
 // Avoid use DoubleSide, because it will require more processing power !!!
 normalMaterial.side = THREE.DoubleSide
 
@@ -94,8 +95,11 @@ gui
 ])
 .name('Material')
 .onFinishChange(() =>{
+    sphere.material.dispose()
     sphere.material = materials[tweaks.material]
+    plane.material.dispose()
     plane.material = materials[tweaks.material]
+    torus.material.dispose()
     torus.material = materials[tweaks.material]
 });
 

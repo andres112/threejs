@@ -19,6 +19,7 @@ loadingManager.onStart = () => {
 };
 loadingManager.onLoad = () => {
   console.log('loading finished');
+  // Start the animation loop once the textures are loaded
   tick();
 };
 loadingManager.onProgress = () => {

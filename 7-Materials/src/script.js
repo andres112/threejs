@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import GUI from 'lil-gui';
 
 /**
  * Base
@@ -37,23 +38,37 @@ matcapTexture.colorSpace = THREE.SRGBColorSpace
 /**
  * Objects
  */
-const material = new THREE.MeshBasicMaterial()
-material.map = metalColorTexture
+// Mesh Basic Material
+const basicMaterial = new THREE.MeshBasicMaterial()
+basicMaterial.map = metalColorTexture
+// basicMaterial.color = new THREE.Color(0xf123a2)
+basicMaterial.wireframe = false
+basicMaterial.transparent = true
+// basicMaterial.opacity = 1
+basicMaterial.alphaMap = metalAlphaTexture
+// Avoid use DoubleSide, because it will require more processing power !!!
+basicMaterial.side = THREE.DoubleSide
+
+// Mesh Normal Material
+const normalMaterial = new THREE.MeshNormalMaterial()
+normalMaterial.normalMap = metalNormalTexture
+// Avoid use DoubleSide, because it will require more processing power !!!
+normalMaterial.side = THREE.DoubleSide
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 32, 32),
-    material
+    basicMaterial
 )
 sphere.position.x = -1.5
 
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(1, 1, 100, 100),
-    material
+    basicMaterial
 )
 
 const torus = new THREE.Mesh(
     new THREE.TorusGeometry(0.3, 0.2, 32, 32),
-    material
+    basicMaterial
 )
 torus.position.x = 1.5
 
@@ -62,6 +77,28 @@ scene.add(sphere, plane, torus)
 // Axes helper
 const axesHelper = new THREE.AxesHelper(2);
 scene.add(axesHelper);
+
+// GUI
+const tweaks = {
+    material: 'Basic'
+}
+const materials = {
+    Basic: basicMaterial,
+    Normal: normalMaterial
+}
+const gui = new GUI()
+gui
+.add(tweaks, 'material', [
+    'Basic',
+    'Normal'
+])
+.name('Material')
+.onFinishChange(() =>{
+    sphere.material = materials[tweaks.material]
+    plane.material = materials[tweaks.material]
+    torus.material = materials[tweaks.material]
+});
+
 
 /**
  * Sizes
@@ -120,7 +157,6 @@ const tick = () =>
 
     // Update objects
     sphere.rotation.y = 0.3 * elapsedTime
-    sphere.rotation.z = 0.1 * elapsedTime
     plane.rotation.y = 0.3 * elapsedTime
     plane.rotation.x = 0.1 * elapsedTime
     torus.rotation.y = 0.3 * elapsedTime

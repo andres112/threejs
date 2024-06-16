@@ -11,10 +11,34 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 /**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader()
+const metalColorTexture = textureLoader.load('/textures/metal/basecolor.png')
+const metalAlphaTexture = textureLoader.load('/textures/metal/opacity.png')
+const metalAmbientOcclusionTexture = textureLoader.load('/textures/metal/ambientOcclusion.png')
+const metalHeightTexture = textureLoader.load('/textures/metal/height.png')
+const metalNormalTexture = textureLoader.load('/textures/metal/normal.png')
+const metalMetalnessTexture = textureLoader.load('/textures/metal/metallic.png')
+const metalRoughnessTexture = textureLoader.load('/textures/metal/roughness.png')
+
+// Material Capture
+/**
+ - Static Lighting: Since the lighting is pre-baked into the texture, it does not change dynamically with the scene lighting or object movement.
+ - Specific Use Cases: Best suited for scenarios where a consistent appearance is desired, rather than dynamic and realistic lighting effects.
+ */
+const matcapTexture = textureLoader.load('/textures/matcaps/2.png')
+const gradientTexture = textureLoader.load('/textures/gradients/3.jpg')
+
+// map and matcap types require the colorSpace to be set to SRGBColorSpace
+metalColorTexture.colorSpace = THREE.SRGBColorSpace
+matcapTexture.colorSpace = THREE.SRGBColorSpace
+
+/**
  * Objects
  */
- 
 const material = new THREE.MeshBasicMaterial()
+material.map = metalColorTexture
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 32, 32),
@@ -93,6 +117,14 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // Update objects
+    sphere.rotation.y = 0.3 * elapsedTime
+    sphere.rotation.z = 0.1 * elapsedTime
+    plane.rotation.y = 0.3 * elapsedTime
+    plane.rotation.x = 0.1 * elapsedTime
+    torus.rotation.y = 0.3 * elapsedTime
+    torus.rotation.x = 0.1 * elapsedTime
 
     // Update controls
     controls.update()

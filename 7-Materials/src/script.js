@@ -28,7 +28,7 @@ const metalRoughnessTexture = textureLoader.load('/textures/metal/roughness.png'
  - Static Lighting: Since the lighting is pre-baked into the texture, it does not change dynamically with the scene lighting or object movement.
  - Specific Use Cases: Best suited for scenarios where a consistent appearance is desired, rather than dynamic and realistic lighting effects.
  */
-const matcapTexture = textureLoader.load('/textures/matcaps/3.png')
+const matcapTexture = textureLoader.load('/textures/matcaps/9.png')
 const gradientTexture = textureLoader.load('/textures/gradients/3.jpg')
 
 // map and matcap types require the colorSpace to be set to SRGBColorSpace
@@ -87,7 +87,8 @@ scene.add(axesHelper);
 
 // GUI
 const tweaks = {
-    material: 'Basic'
+    material: 'Basic',
+    matcap: '1'
 }
 const materials = {
     Basic: basicMaterial,
@@ -109,6 +110,26 @@ gui
     plane.material = materials[tweaks.material]
     torus.material.dispose()
     torus.material = materials[tweaks.material]
+});
+
+gui.add(tweaks, 'matcap', {
+    Matcap1: '1',
+    Matcap2: '2',
+    Matcap3: '3',
+    Matcap4: '4',
+    Matcap5: '5',
+    Matcap6: '6',
+    Matcap7: '7',
+    Matcap8: '8',
+    Matcap9: '9',
+    Matcap10: '10',
+}).name('MatCap').onChange(() => {
+    matcapTexture.dispose()
+    // Load the new texture and then update the material
+    textureLoader.load(`/textures/matcaps/${tweaks.matcap}.png`, function(loadedTexture) {
+        matcapTexture.image = loadedTexture.image;
+        matcapTexture.needsUpdate = true;
+    });
 });
 
 

@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui';
+import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js';
 
 /**
  * Base
@@ -107,8 +108,8 @@ toonMaterial.side = THREE.DoubleSide
 // this material requires light to be visible
 const standardMaterial = new THREE.MeshStandardMaterial()
 standardMaterial.map = metalColorTexture
-standardMaterial.roughness= 0.5
-standardMaterial.metalness = 0.2
+standardMaterial.roughness= 0.2
+standardMaterial.metalness = 0.7
 standardMaterial.normalMap = metalNormalTexture
 standardMaterial.roughnessMap = metalRoughnessTexture
 standardMaterial.metalnessMap = metalMetalnessTexture
@@ -215,6 +216,16 @@ pointLight.position.y = 0
 pointLight.position.z = 2
 scene.add(pointLight)
 
+
+/**
+ * Environment map
+ */
+const rgbeloader = new RGBELoader()
+rgbeloader.load('/textures/environmentMap/studio_garden_2k.hdr', (envMap) => {
+    envMap.mapping = THREE.EquirectangularReflectionMapping
+    scene.background = envMap
+    scene.environment = envMap
+})
 
 /**
  * Sizes

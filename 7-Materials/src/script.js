@@ -62,6 +62,22 @@ matcapMaterial.matcap = matcapTexture
 // Avoid use DoubleSide, because it will require more processing power !!!
 matcapMaterial.side = THREE.DoubleSide
 
+// Mesh Depth Material
+const depthMaterial = new THREE.MeshDepthMaterial()
+depthMaterial.displacementMap = metalHeightTexture
+depthMaterial.displacementScale = 0.05
+// Avoid use DoubleSide, because it will require more processing power !!!
+depthMaterial.side = THREE.DoubleSide
+
+// Mesh Lambert Material
+// this material requires light to be visible
+const lambertMaterial = new THREE.MeshLambertMaterial()
+lambertMaterial.map = metalColorTexture
+lambertMaterial.aoMap = metalAmbientOcclusionTexture
+lambertMaterial.aoMapIntensity = 1
+// Avoid use DoubleSide, because it will require more processing power !!!
+lambertMaterial.side = THREE.DoubleSide
+
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 32, 32),
     basicMaterial
@@ -93,7 +109,9 @@ const tweaks = {
 const materials = {
     Basic: basicMaterial,
     Normal: normalMaterial,
-    Matcap: matcapMaterial
+    Matcap: matcapMaterial,
+    Depth: depthMaterial,
+    Lambert: lambertMaterial
 }
 const gui = new GUI()
 gui
@@ -101,6 +119,8 @@ gui
     'Basic',
     'Normal',
     'Matcap',
+    'Depth',
+    'Lambert'
 ])
 .name('Material')
 .onFinishChange(() =>{

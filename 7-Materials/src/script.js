@@ -34,6 +34,12 @@ const rusticRoughnessTexture = textureLoader.load('/textures/rustic/roughness.jp
 const rusticHeightTexture = textureLoader.load('/textures/rustic/height.jpg')
 const rusticMetalnessTexture = textureLoader.load('/textures/rustic/metallic.jpg')
 
+const fabricColorTexture = textureLoader.load('/textures/fabric/basecolor.jpg')
+const fabricAmbientOcclusionTexture = textureLoader.load('/textures/fabric/ambientOcclusion.jpg')
+const fabricNormalTexture = textureLoader.load('/textures/fabric/normal.jpg')
+const fabricRoughnessTexture = textureLoader.load('/textures/fabric/roughness.jpg')
+const fabricHeightTexture = textureLoader.load('/textures/fabric/height.jpg')
+
 // Material Capture
 /**
  - Static Lighting: Since the lighting is pre-baked into the texture, it does not change dynamically with the scene lighting or object movement.
@@ -154,6 +160,8 @@ physicalMaterial.map = rusticColorTexture
 physicalMaterial.normalMap = rusticNormalTexture
 physicalMaterial.roughness= 0
 physicalMaterial.metalness = 0
+physicalMaterial.roughnessMap = rusticRoughnessTexture
+physicalMaterial.metalnessMap = rusticMetalnessTexture
 physicalMaterial.aoMap = rusticAmbientOcclusionTexture
 physicalMaterial.aoMapIntensity = 1
 physicalMaterial.displacementMap = rusticHeightTexture
@@ -202,10 +210,34 @@ physicalGroup.add(physicalMaterial, 'transmission').min(0).max(1).step(0.0001).n
 physicalGroup.add(physicalMaterial, 'ior').min(0.5).max(10).step(0.0001).name('IOR')
 physicalGroup.add(physicalMaterial, 'thickness').min(0).max(1).step(0.0001).name('Thickness')
 
+fabricColorTexture.wrapS = fabricColorTexture.wrapT = THREE.RepeatWrapping;
+fabricNormalTexture.wrapS = fabricNormalTexture.wrapT = THREE.RepeatWrapping;
+fabricRoughnessTexture.wrapS = fabricRoughnessTexture.wrapT = THREE.RepeatWrapping;
+fabricAmbientOcclusionTexture.wrapS = fabricAmbientOcclusionTexture.wrapT = THREE.RepeatWrapping;
+fabricHeightTexture.wrapS = fabricHeightTexture.wrapT = THREE.RepeatWrapping;
+
+
+// Fluffy Material
+const fluffyMaterial = new THREE.MeshPhysicalMaterial()
+fluffyMaterial.map = fabricColorTexture
+fluffyMaterial.normalMap = fabricNormalTexture
+fluffyMaterial.roughness= 0.8
+fluffyMaterial.metalness = 0.9
+fluffyMaterial.roughnessMap = fabricRoughnessTexture
+fluffyMaterial.aoMap = fabricAmbientOcclusionTexture
+fluffyMaterial.aoMapIntensity = 1
+fluffyMaterial.displacementMap = fabricHeightTexture
+fluffyMaterial.displacementScale = 0.1
+
+fluffyMaterial.side = THREE.DoubleSide
+fluffyMaterial.sheen = 1
+fluffyMaterial.sheenRoughness = 0.5
+fluffyMaterial.sheenRoughnessMap = fabricRoughnessTexture
+
 
 
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 64, 64),
+    new THREE.SphereGeometry(0.5, 128, 128),
     standardMaterial
 )
 sphere.position.x = -1.5
@@ -251,7 +283,8 @@ const materials = {
     Depth: depthMaterial,
     Lambert: lambertMaterial,
     Phong: phongMaterial,
-    Toon: toonMaterial
+    Toon: toonMaterial,
+    Fluffy: fluffyMaterial
 }
 
 const matcapGroup = gui.addFolder('Matcap Material').close()
@@ -285,7 +318,8 @@ gui
     'Depth',
     'Lambert',
     'Phong',
-    'Toon'
+    'Toon',
+    'Fluffy'
 ])
 .name('Material')
 .onFinishChange(() =>{

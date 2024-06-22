@@ -28,7 +28,7 @@ const metalRoughnessTexture = textureLoader.load('/textures/metal/roughness.png'
  - Static Lighting: Since the lighting is pre-baked into the texture, it does not change dynamically with the scene lighting or object movement.
  - Specific Use Cases: Best suited for scenarios where a consistent appearance is desired, rather than dynamic and realistic lighting effects.
  */
-const matcapTexture = textureLoader.load('/textures/matcaps/2.png')
+const matcapTexture = textureLoader.load('/textures/matcaps/3.png')
 const gradientTexture = textureLoader.load('/textures/gradients/3.jpg')
 
 // map and matcap types require the colorSpace to be set to SRGBColorSpace
@@ -55,6 +55,12 @@ normalMaterial.normalMap = metalNormalTexture
 normalMaterial.flatShading = true
 // Avoid use DoubleSide, because it will require more processing power !!!
 normalMaterial.side = THREE.DoubleSide
+
+// Mesh Matcap Material
+const matcapMaterial = new THREE.MeshMatcapMaterial()
+matcapMaterial.matcap = matcapTexture
+// Avoid use DoubleSide, because it will require more processing power !!!
+matcapMaterial.side = THREE.DoubleSide
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 32, 32),
@@ -85,13 +91,15 @@ const tweaks = {
 }
 const materials = {
     Basic: basicMaterial,
-    Normal: normalMaterial
+    Normal: normalMaterial,
+    Matcap: matcapMaterial
 }
 const gui = new GUI()
 gui
 .add(tweaks, 'material', [
     'Basic',
-    'Normal'
+    'Normal',
+    'Matcap',
 ])
 .name('Material')
 .onFinishChange(() =>{

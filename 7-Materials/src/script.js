@@ -8,6 +8,9 @@ import GUI from 'lil-gui';
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
+// GUI
+const gui = new GUI();
+
 // Scene
 const scene = new THREE.Scene()
 
@@ -23,13 +26,15 @@ const metalNormalTexture = textureLoader.load('/textures/metal/normal.png')
 const metalMetalnessTexture = textureLoader.load('/textures/metal/metallic.png')
 const metalRoughnessTexture = textureLoader.load('/textures/metal/roughness.png')
 
+const rockColorTexture = textureLoader.load('/textures/rock/basecolor.jpg')
+
 // Material Capture
 /**
  - Static Lighting: Since the lighting is pre-baked into the texture, it does not change dynamically with the scene lighting or object movement.
  - Specific Use Cases: Best suited for scenarios where a consistent appearance is desired, rather than dynamic and realistic lighting effects.
  */
 const matcapTexture = textureLoader.load('/textures/matcaps/9.png')
-const gradientTexture = textureLoader.load('/textures/gradients/3.jpg')
+const gradientTexture = textureLoader.load('/textures/gradients/5.jpg')
 
 // map and matcap types require the colorSpace to be set to SRGBColorSpace
 metalColorTexture.colorSpace = THREE.SRGBColorSpace
@@ -78,20 +83,60 @@ lambertMaterial.aoMapIntensity = 1
 // Avoid use DoubleSide, because it will require more processing power !!!
 lambertMaterial.side = THREE.DoubleSide
 
+// Mesh Phong Material
+// this material requires light to be visible
+const phongMaterial = new THREE.MeshPhongMaterial()
+phongMaterial.map = metalColorTexture
+phongMaterial.shininess = 100
+phongMaterial.specular = new THREE.Color(0x1188ff)
+phongMaterial.specularMap = metalRoughnessTexture
+// Avoid use DoubleSide, because it will require more processing power !!!
+phongMaterial.side = THREE.DoubleSide
+
+// Mesh Toon Material
+// this material requires light to be visible
+const toonMaterial = new THREE.MeshToonMaterial()
+gradientTexture.minFilter = THREE.NearestFilter
+gradientTexture.magFilter = THREE.NearestFilter
+gradientTexture.generateMipmaps = false
+toonMaterial.map = rockColorTexture
+toonMaterial.gradientMap = gradientTexture
+toonMaterial.side = THREE.DoubleSide
+
+// Mesh Standard Material
+// this material requires light to be visible
+const standardMaterial = new THREE.MeshStandardMaterial()
+standardMaterial.map = metalColorTexture
+standardMaterial.roughness= 0.5
+standardMaterial.metalness = 0.2
+standardMaterial.normalMap = metalNormalTexture
+standardMaterial.roughnessMap = metalRoughnessTexture
+standardMaterial.metalnessMap = metalMetalnessTexture
+standardMaterial.aoMap = metalAmbientOcclusionTexture
+standardMaterial.aoMapIntensity = 1
+standardMaterial.alphaMap = metalAlphaTexture
+// Avoid use DoubleSide, because it will require more processing power !!!
+standardMaterial.side = THREE.DoubleSide
+
+gui.add(standardMaterial, 'metalness').min(0).max(1).step(0.0001).name('Metalness')
+gui.add(standardMaterial, 'roughness').min(0).max(1).step(0.0001).name('Roughness')
+
+
+
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 32, 32),
-    basicMaterial
+    standardMaterial
 )
 sphere.position.x = -1.5
 
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(1, 1, 100, 100),
-    basicMaterial
+    standardMaterial
 )
 
 const torus = new THREE.Mesh(
     new THREE.TorusGeometry(0.3, 0.2, 32, 32),
-    basicMaterial
+    standardMaterial
 )
 torus.position.x = 1.5
 
@@ -103,24 +148,30 @@ scene.add(axesHelper);
 
 // GUI
 const tweaks = {
-    material: 'Basic',
+    material: 'Standard',
     matcap: '1'
 }
 const materials = {
+    Standard: standardMaterial,
     Basic: basicMaterial,
     Normal: normalMaterial,
     Matcap: matcapMaterial,
     Depth: depthMaterial,
-    Lambert: lambertMaterial
+    Lambert: lambertMaterial,
+    Phong: phongMaterial,
+    Toon: toonMaterial
 }
-const gui = new GUI()
+
 gui
 .add(tweaks, 'material', [
+    'Standard',
     'Basic',
     'Normal',
     'Matcap',
     'Depth',
-    'Lambert'
+    'Lambert',
+    'Phong',
+    'Toon'
 ])
 .name('Material')
 .onFinishChange(() =>{
@@ -151,6 +202,18 @@ gui.add(tweaks, 'matcap', {
         matcapTexture.needsUpdate = true;
     });
 });
+
+/**
+ * Lights
+ */
+const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+scene.add(ambientLight)
+
+const pointLight = new THREE.PointLight(0xffffff, 30)
+pointLight.position.x = 0
+pointLight.position.y = 0
+pointLight.position.z = 2
+scene.add(pointLight)
 
 
 /**

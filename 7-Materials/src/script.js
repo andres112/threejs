@@ -153,11 +153,12 @@ const physicalMaterial = new THREE.MeshPhysicalMaterial()
 physicalMaterial.map = rusticColorTexture
 physicalMaterial.normalMap = rusticNormalTexture
 physicalMaterial.roughness= 0
-physicalMaterial.metalness = 1
+physicalMaterial.metalness = 0
 physicalMaterial.aoMap = rusticAmbientOcclusionTexture
 physicalMaterial.aoMapIntensity = 1
 physicalMaterial.displacementMap = rusticHeightTexture
 physicalMaterial.displacementScale = 1
+physicalMaterial.transparent = true
 physicalMaterial.side = THREE.DoubleSide
 
 const physicalGroup = gui.addFolder('Physical Material').close()
@@ -189,6 +190,17 @@ physicalGroup.add(physicalMaterial, 'iridescence').min(0).max(1).step(0.0001).na
 physicalGroup.add(physicalMaterial, 'iridescenceIOR').min(1).max(2.333).step(0.0001).name('Iridescence IOR')
 physicalGroup.add(physicalMaterial.iridescenceThicknessRange, '0').min(0).max(1000).step(1).name('Iridescence Thickness Max')
 physicalGroup.add(physicalMaterial.iridescenceThicknessRange, '1').min(0).max(1000).step(1).name('Iridescence Thickness Max')
+
+// Transmission
+// Add a transparent layer on the material
+// Requires metalness to be 0 and roughness to be 0
+physicalMaterial.transmission = 1
+physicalMaterial.ior = 1.5
+physicalMaterial.thickness = 0.5
+
+physicalGroup.add(physicalMaterial, 'transmission').min(0).max(1).step(0.0001).name('Transmission')
+physicalGroup.add(physicalMaterial, 'ior').min(0.5).max(10).step(0.0001).name('IOR')
+physicalGroup.add(physicalMaterial, 'thickness').min(0).max(1).step(0.0001).name('Thickness')
 
 
 

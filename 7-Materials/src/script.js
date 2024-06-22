@@ -27,7 +27,12 @@ const metalNormalTexture = textureLoader.load('/textures/metal/normal.png')
 const metalMetalnessTexture = textureLoader.load('/textures/metal/metallic.png')
 const metalRoughnessTexture = textureLoader.load('/textures/metal/roughness.png')
 
-const rockColorTexture = textureLoader.load('/textures/rock/basecolor.jpg')
+const rusticColorTexture = textureLoader.load('/textures/rustic/basecolor.jpg')
+const rusticAmbientOcclusionTexture = textureLoader.load('/textures/rustic/ambientOcclusion.jpg')
+const rusticNormalTexture = textureLoader.load('/textures/rustic/normal.jpg')
+const rusticRoughnessTexture = textureLoader.load('/textures/rustic/roughness.jpg')
+const rusticHeightTexture = textureLoader.load('/textures/rustic/height.jpg')
+const rusticMetalnessTexture = textureLoader.load('/textures/rustic/metallic.jpg')
 
 // Material Capture
 /**
@@ -100,21 +105,38 @@ const toonMaterial = new THREE.MeshToonMaterial()
 gradientTexture.minFilter = THREE.NearestFilter
 gradientTexture.magFilter = THREE.NearestFilter
 gradientTexture.generateMipmaps = false
-toonMaterial.map = rockColorTexture
+toonMaterial.map = rusticColorTexture
 toonMaterial.gradientMap = gradientTexture
 toonMaterial.side = THREE.DoubleSide
 
 // Mesh Standard Material
 // this material requires light to be visible
 const standardMaterial = new THREE.MeshStandardMaterial()
+// Rustic Textures
+// standardMaterial.map = rusticColorTexture
+// standardMaterial.normalMap = rusticNormalTexture
+// standardMaterial.roughness= 1
+// standardMaterial.metalness = 1
+// standardMaterial.roughnessMap = rusticRoughnessTexture
+// standardMaterial.metalnessMap = rusticMetalnessTexture
+// standardMaterial.aoMap = rusticAmbientOcclusionTexture
+// standardMaterial.aoMapIntensity = 1
+// standardMaterial.displacementMap = rusticHeightTexture
+// standardMaterial.displacementScale = 1
+
+// Metal Textures
 standardMaterial.map = metalColorTexture
-standardMaterial.roughness= 0.2
-standardMaterial.metalness = 0.7
 standardMaterial.normalMap = metalNormalTexture
+standardMaterial.normalScale.set(1, 1)
+standardMaterial.roughness= 1
+standardMaterial.metalness = 1
 standardMaterial.roughnessMap = metalRoughnessTexture
 standardMaterial.metalnessMap = metalMetalnessTexture
 standardMaterial.aoMap = metalAmbientOcclusionTexture
 standardMaterial.aoMapIntensity = 1
+standardMaterial.displacementMap = metalHeightTexture
+standardMaterial.displacementScale = -0.05
+standardMaterial.transparent = true
 standardMaterial.alphaMap = metalAlphaTexture
 // Avoid use DoubleSide, because it will require more processing power !!!
 standardMaterial.side = THREE.DoubleSide
@@ -125,7 +147,7 @@ gui.add(standardMaterial, 'roughness').min(0).max(1).step(0.0001).name('Roughnes
 
 
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 32, 32),
+    new THREE.SphereGeometry(0.5, 64, 64),
     standardMaterial
 )
 sphere.position.x = -1.5
@@ -136,12 +158,22 @@ const plane = new THREE.Mesh(
 )
 
 const torus = new THREE.Mesh(
-    new THREE.TorusGeometry(0.3, 0.2, 32, 32),
+    new THREE.TorusGeometry(0.3, 0.2, 64, 128),
     standardMaterial
 )
 torus.position.x = 1.5
 
 scene.add(sphere, plane, torus)
+
+/**
+ * Lights
+ */
+const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+
+const pointLight = new THREE.PointLight(0xffffff, 30)
+pointLight.position.x = 0
+pointLight.position.y = 0
+pointLight.position.z = 2
 
 // Axes helper
 const axesHelper = new THREE.AxesHelper(2);
@@ -176,6 +208,16 @@ gui
 ])
 .name('Material')
 .onFinishChange(() =>{
+
+    // if material is Standard, remove ambient light and point light
+    if(tweaks.material === 'Standard'){
+        scene.remove(ambientLight)
+        scene.remove(pointLight)
+    }else{
+        scene.add(ambientLight)
+        scene.add(pointLight)
+    }
+
     sphere.material.dispose()
     sphere.material = materials[tweaks.material]
     plane.material.dispose()
@@ -205,23 +247,10 @@ gui.add(tweaks, 'matcap', {
 });
 
 /**
- * Lights
- */
-const ambientLight = new THREE.AmbientLight(0xffffff, 1)
-scene.add(ambientLight)
-
-const pointLight = new THREE.PointLight(0xffffff, 30)
-pointLight.position.x = 0
-pointLight.position.y = 0
-pointLight.position.z = 2
-scene.add(pointLight)
-
-
-/**
  * Environment map
  */
 const rgbeloader = new RGBELoader()
-rgbeloader.load('/textures/environmentMap/studio_garden_2k.hdr', (envMap) => {
+rgbeloader.load('/textures/environmentMap/hill_2k.hdr', (envMap) => {
     envMap.mapping = THREE.EquirectangularReflectionMapping
     scene.background = envMap
     scene.environment = envMap

@@ -141,8 +141,54 @@ standardMaterial.alphaMap = metalAlphaTexture
 // Avoid use DoubleSide, because it will require more processing power !!!
 standardMaterial.side = THREE.DoubleSide
 
-gui.add(standardMaterial, 'metalness').min(0).max(1).step(0.0001).name('Metalness')
-gui.add(standardMaterial, 'roughness').min(0).max(1).step(0.0001).name('Roughness')
+const standardGroup = gui.addFolder('Standard Material').close()
+
+standardGroup.add(standardMaterial, 'metalness').min(0).max(1).step(0.0001).name('Metalness')
+standardGroup.add(standardMaterial, 'roughness').min(0).max(1).step(0.0001).name('Roughness')
+
+
+// Mesh Physical Material
+// this material requires light to be visible
+const physicalMaterial = new THREE.MeshPhysicalMaterial()
+physicalMaterial.map = rusticColorTexture
+physicalMaterial.normalMap = rusticNormalTexture
+physicalMaterial.roughness= 0
+physicalMaterial.metalness = 1
+physicalMaterial.aoMap = rusticAmbientOcclusionTexture
+physicalMaterial.aoMapIntensity = 1
+physicalMaterial.displacementMap = rusticHeightTexture
+physicalMaterial.displacementScale = 1
+physicalMaterial.side = THREE.DoubleSide
+
+const physicalGroup = gui.addFolder('Physical Material').close()
+
+// Clearcoat
+// Add a varnish layer on top of the material
+physicalMaterial.clearcoat = 1
+physicalMaterial.clearcoatRoughness = 0
+
+physicalGroup.add(physicalMaterial, 'clearcoat').min(0).max(1).step(0.0001).name('Clearcoat')
+
+// Sheen
+// Add a soft reflection on the material, like a velvet
+physicalMaterial.sheen = 1
+physicalMaterial.sheenRoughness = 0.25
+physicalMaterial.sheenColor.set('#ff0000')
+
+physicalGroup.add(physicalMaterial, 'sheen').min(0).max(1).step(0.0001).name('Sheen')
+physicalGroup.add(physicalMaterial, 'sheenRoughness').min(0).max(1).step(0.0001).name('Sheen Roughness')
+physicalGroup.addColor(physicalMaterial, 'sheenColor').name('Sheen Color')
+
+// Irirdescence
+// Add a rainbow reflection on the material
+physicalMaterial.iridescence = 1
+physicalMaterial.iridescenceIOR = 1
+physicalMaterial.iridescenceThicknessRange = [100, 400]
+
+physicalGroup.add(physicalMaterial, 'iridescence').min(0).max(1).step(0.0001).name('Iridescence')
+physicalGroup.add(physicalMaterial, 'iridescenceIOR').min(1).max(2.333).step(0.0001).name('Iridescence IOR')
+physicalGroup.add(physicalMaterial.iridescenceThicknessRange, '0').min(0).max(1000).step(1).name('Iridescence Thickness Max')
+physicalGroup.add(physicalMaterial.iridescenceThicknessRange, '1').min(0).max(1000).step(1).name('Iridescence Thickness Max')
 
 
 
@@ -186,6 +232,7 @@ const tweaks = {
 }
 const materials = {
     Standard: standardMaterial,
+    Physical: physicalMaterial,
     Basic: basicMaterial,
     Normal: normalMaterial,
     Matcap: matcapMaterial,
@@ -195,38 +242,8 @@ const materials = {
     Toon: toonMaterial
 }
 
-gui
-.add(tweaks, 'material', [
-    'Standard',
-    'Basic',
-    'Normal',
-    'Matcap',
-    'Depth',
-    'Lambert',
-    'Phong',
-    'Toon'
-])
-.name('Material')
-.onFinishChange(() =>{
-
-    // if material is Standard, remove ambient light and point light
-    if(tweaks.material === 'Standard'){
-        scene.remove(ambientLight)
-        scene.remove(pointLight)
-    }else{
-        scene.add(ambientLight)
-        scene.add(pointLight)
-    }
-
-    sphere.material.dispose()
-    sphere.material = materials[tweaks.material]
-    plane.material.dispose()
-    plane.material = materials[tweaks.material]
-    torus.material.dispose()
-    torus.material = materials[tweaks.material]
-});
-
-gui.add(tweaks, 'matcap', {
+const matcapGroup = gui.addFolder('Matcap Material').close()
+matcapGroup.add(tweaks, 'matcap', {
     Matcap1: '1',
     Matcap2: '2',
     Matcap3: '3',
@@ -246,11 +263,43 @@ gui.add(tweaks, 'matcap', {
     });
 });
 
+gui
+.add(tweaks, 'material', [
+    'Standard',
+    'Physical',
+    'Basic',
+    'Normal',
+    'Matcap',
+    'Depth',
+    'Lambert',
+    'Phong',
+    'Toon'
+])
+.name('Material')
+.onFinishChange(() =>{
+
+    // if material is Standard, remove ambient light and point light
+    if(['Standard', 'Physical'].includes(tweaks.material)) {
+        scene.remove(ambientLight)
+        scene.remove(pointLight)
+    }else{
+        scene.add(ambientLight)
+        scene.add(pointLight)
+    }
+
+    sphere.material.dispose()
+    sphere.material = materials[tweaks.material]
+    plane.material.dispose()
+    plane.material = materials[tweaks.material]
+    torus.material.dispose()
+    torus.material = materials[tweaks.material]
+});
+
 /**
  * Environment map
  */
 const rgbeloader = new RGBELoader()
-rgbeloader.load('/textures/environmentMap/hill_2k.hdr', (envMap) => {
+rgbeloader.load('/textures/environmentMap/2k.hdr', (envMap) => {
     envMap.mapping = THREE.EquirectangularReflectionMapping
     scene.background = envMap
     scene.environment = envMap

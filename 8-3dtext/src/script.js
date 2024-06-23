@@ -111,6 +111,8 @@ console.time('generateObjects');
 // Cache geometries for performance optimization
 const cacheGeometries = {};
 
+const donuts = [];
+
 for (let i = 0; i < 1000; i++) {
   const randomIndex = Math.floor(Math.random() * matcapTextures.length + 1);
 
@@ -136,6 +138,7 @@ for (let i = 0; i < 1000; i++) {
   randomPosition(donut);
   randomPosition(sphere);
   scene.add(donut);
+  donuts.push(donut);
   scene.add(sphere);
 }
 console.timeEnd('generateObjects');
@@ -191,13 +194,25 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const clock = new THREE.Clock();
 
 const tick = () => {
+  stats.begin();
   const elapsedTime = clock.getElapsedTime();
+
+  // Rotate donuts
+  donuts.forEach((donut, index) => {
+    const factors = [0.1, 0.5, 1, 1.5, 2, 2.5];
+    const factor = factors[index % factors.length] * (index % 2 === 0 ? 1 : -1);
+    donut.rotation.x = elapsedTime * factor;
+    donut.rotation.y = elapsedTime * factor;
+    donut.rotation.z = elapsedTime * factor;
+  });
 
   // Update controls
   controls.update();
 
   // Render
   renderer.render(scene, camera);
+
+  stats.end();
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);

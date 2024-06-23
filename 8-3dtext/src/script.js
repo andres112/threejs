@@ -102,15 +102,35 @@ const randomPosition = (geometry) => {
     (Math.random() - 0.5) * 50
   );
   geometry.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+  const randomScale = Math.random();
+  geometry.scale.set(randomScale, randomScale, randomScale);
 };
 
+console.time('generateObjects');
+
+// Cache geometries for performance optimization
+const cacheGeometries = {};
+
 for (let i = 0; i < 1000; i++) {
-  const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
-  const sphereGeometry = new THREE.SphereGeometry(0.15, 32, 32);
-  const donutMaterial = new THREE.MeshMatcapMaterial();
-  const sphereMaterial = new THREE.MeshMatcapMaterial();
-  donutMaterial.matcap = matcapTextures[Math.floor(Math.random() * matcapTextures.length + 1)];
-  sphereMaterial.matcap = matcapTextures[Math.floor(Math.random() * matcapTextures.length + 1)];
+  const randomIndex = Math.floor(Math.random() * matcapTextures.length + 1);
+
+  if (!cacheGeometries[randomIndex]) {
+    const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
+    const sphereGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+    const donutMaterial = new THREE.MeshMatcapMaterial();
+    const sphereMaterial = new THREE.MeshMatcapMaterial();
+    donutMaterial.matcap = matcapTextures[Math.floor(Math.random() * matcapTextures.length + 1)];
+    sphereMaterial.matcap = matcapTextures[Math.floor(Math.random() * matcapTextures.length + 1)];
+    cacheGeometries[randomIndex] = {
+      donutGeometry,
+      sphereGeometry,
+      donutMaterial,
+      sphereMaterial,
+    };
+  }
+
+  const { donutGeometry, sphereGeometry, donutMaterial, sphereMaterial } =
+    cacheGeometries[randomIndex];
   const donut = new THREE.Mesh(donutGeometry, donutMaterial);
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
   randomPosition(donut);
@@ -118,6 +138,7 @@ for (let i = 0; i < 1000; i++) {
   scene.add(donut);
   scene.add(sphere);
 }
+console.timeEnd('generateObjects');
 
 /**
  * Sizes

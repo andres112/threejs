@@ -88,18 +88,28 @@ fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
  * Object
  */
 
-for (let i = 0; i < 100; i++) {
-  const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
-  const donutMaterial = new THREE.MeshMatcapMaterial();
-  donutMaterial.matcap = matcapTextures[Math.floor(Math.random() * matcapTextures.length + 1)];
-  const donut = new THREE.Mesh(donutGeometry, donutMaterial);
-  donut.position.set(
+const randomPosition = (geometry) => {
+  geometry.position.set(
     (Math.random() - 0.5) * 12,
     (Math.random() - 0.5) * 12,
     (Math.random() - 0.5) * 12
   );
-  donut.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+  geometry.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+};
+
+for (let i = 0; i < 100; i++) {
+  const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
+  const sphereGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+  const donutMaterial = new THREE.MeshMatcapMaterial();
+  const sphereMaterial = new THREE.MeshMatcapMaterial();
+  donutMaterial.matcap = matcapTextures[Math.floor(Math.random() * matcapTextures.length + 1)];
+  sphereMaterial.matcap = matcapTextures[Math.floor(Math.random() * matcapTextures.length + 1)];
+  const donut = new THREE.Mesh(donutGeometry, donutMaterial);
+  const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  randomPosition(donut);
+  randomPosition(sphere);
   scene.add(donut);
+  scene.add(sphere);
 }
 
 /**

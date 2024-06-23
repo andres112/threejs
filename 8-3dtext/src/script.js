@@ -29,7 +29,7 @@ const scene = new THREE.Scene();
 
 // Axes helper
 const axesHelper = new THREE.AxesHelper(1);
-scene.add(axesHelper);
+// scene.add(axesHelper);
 
 /**
  * Textures
@@ -37,7 +37,9 @@ scene.add(axesHelper);
 const textureLoader = new THREE.TextureLoader();
 const matcapTextures = [];
 for (let i = 0; i < 9; i++) {
-  matcapTextures.push(textureLoader.load(`/textures/matcaps/${i}.png`));
+  const texture = textureLoader.load(`/textures/matcaps/${i}.png`);
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  matcapTextures.push(texture);
   //   matcapTextures[i].colorSpace = THREE.sRGBEncoding;
 }
 
@@ -47,16 +49,18 @@ for (let i = 0; i < 9; i++) {
 const fontLoader = new FontLoader();
 const BEVEL_SIZE = 0.02;
 fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
-  const textGeometry = new TextGeometry('Andres Dorado', {
+  // date in format 'YYYY-MM-DD'
+  const date = new Date().toISOString().split('T')[0];
+  const textGeometry = new TextGeometry(date, {
     font,
-    size: 0.3,
+    size: 0.5,
     depth: 0.2,
     curveSegments: 5, // defines the resolution of the curve
     bevelEnabled: true,
     bevelThickness: 0.03,
     bevelSize: BEVEL_SIZE,
     bevelOffset: 0,
-    bevelSegments: 4, // defines the resolution of the bevel curve
+    bevelSegments: 5, // defines the resolution of the bevel curve
   });
   //   // compute bounding box for getting the size of the text
   //   textGeometry.computeBoundingBox();
@@ -74,7 +78,7 @@ fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
 
   const textMaterial = new THREE.MeshMatcapMaterial();
   textMaterial.wireframe = false;
-  textMaterial.matcap = matcapTextures[3];
+  textMaterial.matcap = matcapTextures[7];
   const text = new THREE.Mesh(textGeometry, textMaterial);
   scene.add(text);
 
@@ -170,9 +174,9 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.x = 1;
+camera.position.x = -1;
 camera.position.y = 1;
-camera.position.z = 2;
+camera.position.z = 4;
 scene.add(camera);
 
 // Controls

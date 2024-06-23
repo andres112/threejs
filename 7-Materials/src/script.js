@@ -11,6 +11,11 @@ const canvas = document.querySelector('canvas.webgl')
 
 // GUI
 const gui = new GUI();
+const tweaks = {
+    material: 'Standard',
+    matcap: '1',
+    sheenColor: '#f2c87e'
+}
 
 // Scene
 const scene = new THREE.Scene()
@@ -182,11 +187,13 @@ physicalGroup.add(physicalMaterial, 'clearcoat').min(0).max(1).step(0.0001).name
 // Add a soft reflection on the material, like a velvet
 physicalMaterial.sheen = 1
 physicalMaterial.sheenRoughness = 0.25
-physicalMaterial.sheenColor.set('#ff0000')
+physicalMaterial.sheenColor.set('#f2c87e')
 
 physicalGroup.add(physicalMaterial, 'sheen').min(0).max(1).step(0.0001).name('Sheen')
 physicalGroup.add(physicalMaterial, 'sheenRoughness').min(0).max(1).step(0.0001).name('Sheen Roughness')
-physicalGroup.addColor(physicalMaterial, 'sheenColor').name('Sheen Color')
+physicalGroup.addColor(tweaks, 'sheenColor').name('Sheen Color').onChange(() => {
+    physicalMaterial.sheenColor.set(tweaks.sheenColor)
+})
 
 // Irirdescence
 // Add a rainbow reflection on the material
@@ -270,10 +277,6 @@ const axesHelper = new THREE.AxesHelper(2);
 scene.add(axesHelper);
 
 // GUI
-const tweaks = {
-    material: 'Standard',
-    matcap: '1'
-}
 const materials = {
     Standard: standardMaterial,
     Physical: physicalMaterial,
@@ -298,7 +301,6 @@ matcapGroup.add(tweaks, 'matcap', {
     Matcap7: '7',
     Matcap8: '8',
     Matcap9: '9',
-    Matcap10: '10',
 }).name('MatCap').onChange(() => {
     matcapTexture.dispose()
     // Load the new texture and then update the material

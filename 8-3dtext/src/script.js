@@ -55,12 +55,12 @@ fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
     font,
     size: 0.5,
     depth: 0.2,
-    curveSegments: 5, // defines the resolution of the curve
+    curveSegments: 40, // defines the resolution of the curve
     bevelEnabled: true,
     bevelThickness: 0.03,
     bevelSize: BEVEL_SIZE,
     bevelOffset: 0,
-    bevelSegments: 5, // defines the resolution of the bevel curve
+    bevelSegments: 8, // defines the resolution of the bevel curve
   });
   //   // compute bounding box for getting the size of the text
   //   textGeometry.computeBoundingBox();

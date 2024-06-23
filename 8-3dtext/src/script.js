@@ -3,6 +3,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+import Stats from 'stats.js';
+
+const stats = new Stats();
+
+stats.showPanel(0);
+
+document.body.appendChild(stats.dom);
 
 /**
  * Base
@@ -90,14 +97,14 @@ fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
 
 const randomPosition = (geometry) => {
   geometry.position.set(
-    (Math.random() - 0.5) * 12,
-    (Math.random() - 0.5) * 12,
-    (Math.random() - 0.5) * 12
+    (Math.random() - 0.5) * 50,
+    (Math.random() - 0.5) * 50,
+    (Math.random() - 0.5) * 50
   );
   geometry.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
 };
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 1000; i++) {
   const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
   const sphereGeometry = new THREE.SphereGeometry(0.15, 32, 32);
   const donutMaterial = new THREE.MeshMatcapMaterial();

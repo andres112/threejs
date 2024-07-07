@@ -27,7 +27,6 @@ ambientLight.intensity = 1
 ambientLight.color = new THREE.Color(0xffffff)
 scene.add(ambientLight)
 
-// GUI debug for light intensity
 gui.add(ambientLight, 'intensity').min(0).max(5).step(0.1).name('ambientLightIntensity')
 
 // Directional light: it comes from a specific direction, it's like the sun
@@ -37,19 +36,32 @@ directionalLight.color = new THREE.Color(0xF7DC6F)
 directionalLight.position.set(-1, 1, 0)
 scene.add(directionalLight)
 
-// GUI debug for light intensity
 gui.add(directionalLight, 'intensity').min(0).max(5).step(0.1).name('directionalLightIntensity')
 
 // Hemisphere light: it's like the sun, but it's not directional, it's like a gradient
 const hemisphereLight = new THREE.HemisphereLight()
 hemisphereLight.intensity = 0.9
 hemisphereLight.color = new THREE.Color(0x27BABD)
-hemisphereLight.groundColor = new THREE.Color(0x196F3D )
+hemisphereLight.groundColor = new THREE.Color(0x60BD27  )
 hemisphereLight.position.set(0, 2, 0)
 scene.add(hemisphereLight)
 
-// GUI debug for light intensity
 gui.add(hemisphereLight, 'intensity').min(0).max(5).step(0.1).name('hemisphereLightIntensity')
+
+// Point light: it comes from a specific point, it's like a light bulb
+const pointLight = new THREE.PointLight()
+pointLight.intensity = 2
+pointLight.color = new THREE.Color(0xB127BD)
+pointLight.position.set(1, -0.5, 1)
+// distance - Maximum range of the light. Default is 0 (no limit).
+// decay - The amount the light dims along the distance of the light. Default is 2.
+pointLight.distance = 10
+pointLight.decay = 0.5
+scene.add(pointLight)
+
+gui.add(pointLight, 'intensity').min(0).max(5).step(0.1).name('pointLightIntensity')
+gui.add(pointLight, 'distance').min(0).max(10).step(0.1).name('pointLightDistance')
+gui.add(pointLight, 'decay').min(0).max(2).step(0.1).name('pointLightDecay')
 
 /**
  * Objects

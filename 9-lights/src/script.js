@@ -14,17 +14,42 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+// Axes helper
+const axesHelper = new THREE.AxesHelper(2)
+scene.add(axesHelper)
+
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
+// Ambient light: it comes from all directions, it's like a global light
+const ambientLight = new THREE.AmbientLight()
+ambientLight.intensity = 1
+ambientLight.color = new THREE.Color(0xffffff)
 scene.add(ambientLight)
 
-const pointLight = new THREE.PointLight(0xffffff, 50)
-pointLight.position.x = 2
-pointLight.position.y = 3
-pointLight.position.z = 4
-scene.add(pointLight)
+// GUI debug for light intensity
+gui.add(ambientLight, 'intensity').min(0).max(5).step(0.1).name('ambientLightIntensity')
+
+// Directional light: it comes from a specific direction, it's like the sun
+const directionalLight = new THREE.DirectionalLight()
+directionalLight.intensity = 0.9
+directionalLight.color = new THREE.Color(0xF7DC6F)
+directionalLight.position.set(-1, 1, 0)
+scene.add(directionalLight)
+
+// GUI debug for light intensity
+gui.add(directionalLight, 'intensity').min(0).max(5).step(0.1).name('directionalLightIntensity')
+
+// Hemisphere light: it's like the sun, but it's not directional, it's like a gradient
+const hemisphereLight = new THREE.HemisphereLight()
+hemisphereLight.intensity = 0.9
+hemisphereLight.color = new THREE.Color(0x27BABD)
+hemisphereLight.groundColor = new THREE.Color(0x196F3D )
+hemisphereLight.position.set(0, 2, 0)
+scene.add(hemisphereLight)
+
+// GUI debug for light intensity
+gui.add(hemisphereLight, 'intensity').min(0).max(5).step(0.1).name('hemisphereLightIntensity')
 
 /**
  * Objects
@@ -90,7 +115,7 @@ window.addEventListener('resize', () =>
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 1
 camera.position.y = 1
-camera.position.z = 2
+camera.position.z = 3
 scene.add(camera)
 
 // Controls

@@ -27,16 +27,19 @@ ambientLight.intensity = 1
 ambientLight.color = new THREE.Color(0xffffff)
 scene.add(ambientLight)
 
-gui.add(ambientLight, 'intensity').min(0).max(5).step(0.1).name('ambientLightIntensity')
+const afolder = gui.addFolder('ambientLight')
+afolder.add(ambientLight, 'intensity').min(0).max(5).step(0.1).name('ambientLightIntensity')
+afolder.add(ambientLight, 'visible').name('ambientLightVisible')
 
 // Directional light: it comes from a specific direction, it's like the sun
 const directionalLight = new THREE.DirectionalLight()
-directionalLight.intensity = 0.9
+directionalLight.intensity = 1.5
 directionalLight.color = new THREE.Color(0xF7DC6F)
 directionalLight.position.set(-1, 1, 0)
 scene.add(directionalLight)
 
-gui.add(directionalLight, 'intensity').min(0).max(5).step(0.1).name('directionalLightIntensity')
+const dfolder = gui.addFolder('directionalLight')
+dfolder.add(directionalLight, 'intensity').min(0).max(5).step(0.1).name('directionalLightIntensity')
 
 // Hemisphere light: it's like the sun, but it's not directional, it's like a gradient
 const hemisphereLight = new THREE.HemisphereLight()
@@ -46,22 +49,62 @@ hemisphereLight.groundColor = new THREE.Color(0x60BD27  )
 hemisphereLight.position.set(0, 2, 0)
 scene.add(hemisphereLight)
 
-gui.add(hemisphereLight, 'intensity').min(0).max(5).step(0.1).name('hemisphereLightIntensity')
+const hfolder = gui.addFolder('hemisphereLight')
+
+hfolder.add(hemisphereLight, 'intensity').min(0).max(5).step(0.1).name('hemisphereLightIntensity')
 
 // Point light: it comes from a specific point, it's like a light bulb
 const pointLight = new THREE.PointLight()
 pointLight.intensity = 2
 pointLight.color = new THREE.Color(0xB127BD)
-pointLight.position.set(1, -0.5, 1)
+pointLight.position.set(1, -0.5, 2)
 // distance - Maximum range of the light. Default is 0 (no limit).
 // decay - The amount the light dims along the distance of the light. Default is 2.
 pointLight.distance = 10
 pointLight.decay = 0.5
 scene.add(pointLight)
 
-gui.add(pointLight, 'intensity').min(0).max(5).step(0.1).name('pointLightIntensity')
-gui.add(pointLight, 'distance').min(0).max(10).step(0.1).name('pointLightDistance')
-gui.add(pointLight, 'decay').min(0).max(2).step(0.1).name('pointLightDecay')
+const pfolder = gui.addFolder('pointLight')
+pfolder.add(pointLight, 'intensity').min(0).max(5).step(0.1).name('pointLightIntensity')
+pfolder.add(pointLight, 'distance').min(0).max(10).step(0.1).name('pointLightDistance')
+pfolder.add(pointLight, 'decay').min(0).max(5).step(0.1).name('pointLightDecay')
+
+// RectArea light: it comes from a specific direction, it's like a light bulb but it's rectangular
+// this light ONLY works with MeshStandardMaterial and MeshPhysicalMaterial
+const rectAreaLight = new THREE.RectAreaLight()
+rectAreaLight.intensity = 3
+rectAreaLight.color = new THREE.Color(0x27BD4F)
+rectAreaLight.position.set(-1.5, -0.5, 2)
+// lookAt - The target position of the light. Default is the origin.
+rectAreaLight.lookAt(new THREE.Vector3())
+rectAreaLight.width = 1
+rectAreaLight.height = 2
+scene.add(rectAreaLight)
+
+const rfolder = gui.addFolder('rectAreaLight')
+rfolder.add(rectAreaLight, 'intensity').min(0).max(5).step(0.1).name('rectAreaLightIntensity')
+rfolder.add(rectAreaLight, 'width').min(0).max(5).step(0.1).name('rectAreaLightWidth')
+
+// Spot light: it comes from a specific point, it's like a flashlight
+const spotLight = new THREE.SpotLight()
+spotLight.intensity = 3
+spotLight.color = new THREE.Color(0xFF0000)
+spotLight.position.set(0, -0.6, -2)
+spotLight.angle = Math.PI * 0.15
+spotLight.penumbra = 0
+spotLight.decay = 0.5
+scene.add(spotLight)
+
+// target - The target position of the light. Default is the origin.
+spotLight.target.position.x = 1
+spotLight.target.position.y = 0.2
+scene.add(spotLight.target)
+
+const sfolder = gui.addFolder('spotLight')
+sfolder.add(spotLight, 'intensity').min(0).max(5).step(0.1).name('spotLightIntensity')
+sfolder.add(spotLight, 'angle').min(0).max(Math.PI).step(0.1).name('spotLightAngle')
+sfolder.add(spotLight, 'penumbra').min(0).max(1).step(0.1).name('spotLightPenumbra')
+sfolder.add(spotLight, 'decay').min(0).max(5).step(0.1).name('spotLightDecay')
 
 /**
  * Objects

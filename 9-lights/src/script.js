@@ -35,7 +35,9 @@ afolder.add(ambientLight, 'visible').name('ambientLightVisible')
 const directionalLight = new THREE.DirectionalLight()
 directionalLight.intensity = 1.5
 directionalLight.color = new THREE.Color(0xF7DC6F)
-directionalLight.position.set(-1, 1, 0)
+directionalLight.position.set(-2, 2, 0)
+// target - The target position of the light. Default is the origin.
+directionalLight.target.position.x = 1
 scene.add(directionalLight)
 
 const dfolder = gui.addFolder('directionalLight')
@@ -110,6 +112,14 @@ sfolder.add(spotLight, 'decay').min(0).max(5).step(0.1).name('spotLightDecay')
 const  hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 0.2)
 scene.add(hemisphereLightHelper)
 
+const  directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.3)
+scene.add(directionalLightHelper)
+
+const  pointLightHelper = new THREE.PointLightHelper(pointLight, 0.3)
+scene.add(pointLightHelper)
+
+const  spotLightHelper = new THREE.SpotLightHelper(spotLight)
+scene.add(spotLightHelper)
 
 /**
  * Objects

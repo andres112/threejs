@@ -80,7 +80,7 @@ standardMaterial.displacementScale = 0.25
  * Objects
  */
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 64, 64),
+    new THREE.SphereGeometry(0.75, 64, 64),
     standardMaterial
 )
 sphere.position.y = 0.75
@@ -140,6 +140,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.shadowMap.enabled = true
 
 /**
  * Animate

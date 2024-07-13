@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
 
 /**
  * Base
@@ -78,7 +79,7 @@ rectAreaLight.intensity = 3
 rectAreaLight.color = new THREE.Color(0x27BD4F)
 rectAreaLight.position.set(-1.5, -0.5, 2)
 // lookAt - The target position of the light. Default is the origin.
-rectAreaLight.lookAt(new THREE.Vector3())
+rectAreaLight.lookAt(new THREE.Vector3( 0, 1, 0))
 rectAreaLight.width = 1
 rectAreaLight.height = 2
 scene.add(rectAreaLight)
@@ -120,6 +121,9 @@ scene.add(pointLightHelper)
 
 const  spotLightHelper = new THREE.SpotLightHelper(spotLight)
 scene.add(spotLightHelper)
+
+const  rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight)
+scene.add(rectAreaLightHelper)
 
 /**
  * Objects

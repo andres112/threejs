@@ -30,8 +30,13 @@ gui.add(directionalLight, 'intensity').min(0).max(3).step(0.001)
 gui.add(directionalLight.position, 'x').min(- 5).max(5).step(0.001)
 gui.add(directionalLight.position, 'y').min(- 5).max(5).step(0.001)
 gui.add(directionalLight.position, 'z').min(- 5).max(5).step(0.001)
-directionalLight.castShadow = true
 scene.add(directionalLight)
+// *** Manage shadows
+// castShadow - Set to true if the light will cast shadows. Warning: This is expensive and requires tweaking to get shadows looking right.
+directionalLight.castShadow = true
+// shadow.mapSize - Set the shadow map size in pixels. The higher the resolution, the better the shadows, but the more computational power is needed.
+directionalLight.shadow.mapSize.width = 2048
+directionalLight.shadow.mapSize.height = 2048
 
 const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2)
 scene.add(directionalLightHelper)
@@ -85,6 +90,7 @@ const sphere = new THREE.Mesh(
     standardMaterial
 )
 sphere.position.y = 0.5
+// If set to true the object will cast shadows.
 sphere.castShadow = true
 
 const plane = new THREE.Mesh(
@@ -93,6 +99,7 @@ const plane = new THREE.Mesh(
 )
 plane.rotation.x = - Math.PI * 0.5
 plane.position.y = - 0.5
+// If set to true the object will receive shadows.
 plane.receiveShadow = true
 
 

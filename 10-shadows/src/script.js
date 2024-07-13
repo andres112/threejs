@@ -37,6 +37,14 @@ directionalLight.castShadow = true
 // shadow.mapSize - Set the shadow map size in pixels. The higher the resolution, the better the shadows, but the more computational power is needed.
 directionalLight.shadow.mapSize.width = 2048
 directionalLight.shadow.mapSize.height = 2048
+// shadow.camera - Configures the camera used to create shadows.
+// In Three.js, this property allows you to adjust the parameters of the shadow camera,
+// including the field of view (FOV), aspect ratio, and near and far planes.
+directionalLight.shadow.camera.near = 1
+directionalLight.shadow.camera.far = 11
+
+const directionalLightShadowCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+scene.add(directionalLightShadowCameraHelper)
 
 const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2)
 scene.add(directionalLightHelper)
@@ -94,7 +102,7 @@ sphere.position.y = 0.5
 sphere.castShadow = true
 
 const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(5, 5),
+    new THREE.PlaneGeometry(10, 10),
     material
 )
 plane.rotation.x = - Math.PI * 0.5

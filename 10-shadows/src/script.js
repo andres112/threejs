@@ -20,11 +20,12 @@ const scene = new THREE.Scene()
 // Ambient light
 const ambientLight = new THREE.AmbientLight(0xffffff, 1)
 gui.add(ambientLight, 'intensity').min(0).max(3).step(0.001)
-scene.add(ambientLight)
+// leave only the directional light
+// scene.add(ambientLight)
 
 // Directional light
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5)
-directionalLight.position.set(2, 2, - 1)
+directionalLight.position.set(2, 2.5, - 1)
 gui.add(directionalLight, 'intensity').min(0).max(3).step(0.001)
 gui.add(directionalLight.position, 'x').min(- 5).max(5).step(0.001)
 gui.add(directionalLight.position, 'y').min(- 5).max(5).step(0.001)
@@ -73,17 +74,16 @@ standardMaterial.roughnessMap = brainRoughnessTexture
 standardMaterial.aoMap = brainAmbientOcclusionTexture
 standardMaterial.aoMapIntensity = 1
 standardMaterial.displacementMap = brainHeightTexture
-standardMaterial.displacementScale = 0.2
+standardMaterial.displacementScale = 0.25
 
 /**
  * Objects
  */
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 64, 64),
+    new THREE.SphereGeometry(1, 64, 64),
     standardMaterial
 )
-
-sphere.position.y = 0.5
+sphere.position.y = 0.75
 
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 5),
@@ -125,7 +125,7 @@ window.addEventListener('resize', () =>
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 1
 camera.position.y = 1
-camera.position.z = 2
+camera.position.z = 4
 scene.add(camera)
 
 // Controls

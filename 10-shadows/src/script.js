@@ -49,13 +49,9 @@ directionalLight.shadow.camera.right = 3
 directionalLight.shadow.camera.bottom = - 2
 directionalLight.shadow.camera.left = - 3
 // shadow.radius - The shadow map's radius. Increase this for softer shadows, but at the cost of precision.
-directionalLight.shadow.radius = 5
-// shadow.algorithms - The shadow map's filtering algorithm. Default is THREE.PCFShadowMap.
-// BasicShadowMap gives unfiltered shadow maps - fastest, but lowest quality.
-// PCFShadowMap filters shadow maps using the Percentage-Closer Filtering (PCF) algorithm (default).
-// PCFSoftShadowMap filters shadow maps using the Percentage-Closer Filtering (PCF) algorithm with better soft shadows especially when using low-resolution shadow maps.
-// VSMShadowMap filters shadow maps using the Variance Shadow Map (VSM) algorithm. When using VSMShadowMap all shadow receivers will also cast shadows.
-directionalLight.shadow.algorithm = THREE.PCFSoftShadowMap
+// this radios is not supported by all shadow types (PCFSoftShadowMap, VSMShadowMap) defined in the renderer.shadowMap.type
+directionalLight.shadow.radius = 10
+
 
 const directionalLightShadowCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
 scene.add(directionalLightShadowCameraHelper)
@@ -173,7 +169,12 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+// BasicShadowMap gives unfiltered shadow maps - fastest, but lowest quality.
+// PCFShadowMap filters shadow maps using the Percentage-Closer Filtering (PCF) algorithm (default).
+// PCFSoftShadowMap filters shadow maps using the Percentage-Closer Filtering (PCF) algorithm with better soft shadows especially when using low-resolution shadow maps.
+// VSMShadowMap filters shadow maps using the Variance Shadow Map (VSM) algorithm. When using VSMShadowMap all shadow receivers will also cast shadows.
 renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 /**
  * Animate

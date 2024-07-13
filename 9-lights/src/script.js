@@ -106,6 +106,11 @@ sfolder.add(spotLight, 'angle').min(0).max(Math.PI).step(0.1).name('spotLightAng
 sfolder.add(spotLight, 'penumbra').min(0).max(1).step(0.1).name('spotLightPenumbra')
 sfolder.add(spotLight, 'decay').min(0).max(5).step(0.1).name('spotLightDecay')
 
+// Light helpers
+const  hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 0.2)
+scene.add(hemisphereLightHelper)
+
+
 /**
  * Objects
  */

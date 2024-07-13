@@ -19,9 +19,11 @@ const scene = new THREE.Scene()
  */
 // Ambient light
 const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+ambientLight.visible = false
 gui.add(ambientLight, 'intensity').min(0).max(3).step(0.001)
+gui.add(ambientLight, 'visible').name('ambientLightVisible')
 // leave only the directional light
-// scene.add(ambientLight)
+scene.add(ambientLight)
 
 // Directional light
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5)
@@ -41,7 +43,19 @@ directionalLight.shadow.mapSize.height = 2048
 // In Three.js, this property allows you to adjust the parameters of the shadow camera,
 // including the field of view (FOV), aspect ratio, and near and far planes.
 directionalLight.shadow.camera.near = 1
-directionalLight.shadow.camera.far = 11
+directionalLight.shadow.camera.far = 7
+directionalLight.shadow.camera.top = 2
+directionalLight.shadow.camera.right = 3
+directionalLight.shadow.camera.bottom = - 2
+directionalLight.shadow.camera.left = - 3
+// shadow.radius - The shadow map's radius. Increase this for softer shadows, but at the cost of precision.
+directionalLight.shadow.radius = 5
+// shadow.algorithms - The shadow map's filtering algorithm. Default is THREE.PCFShadowMap.
+// BasicShadowMap gives unfiltered shadow maps - fastest, but lowest quality.
+// PCFShadowMap filters shadow maps using the Percentage-Closer Filtering (PCF) algorithm (default).
+// PCFSoftShadowMap filters shadow maps using the Percentage-Closer Filtering (PCF) algorithm with better soft shadows especially when using low-resolution shadow maps.
+// VSMShadowMap filters shadow maps using the Variance Shadow Map (VSM) algorithm. When using VSMShadowMap all shadow receivers will also cast shadows.
+directionalLight.shadow.algorithm = THREE.PCFSoftShadowMap
 
 const directionalLightShadowCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
 scene.add(directionalLightShadowCameraHelper)
@@ -54,8 +68,9 @@ scene.add(directionalLightHelper)
 */
 const modifyTexture = (texture) => {
     texture.flipY = false
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping
-    texture.repeat.set(3, 2)
+    texture.wrapS = THREE.RepeatWrapping
+    texture.wrapT = THREE.RepeatWrapping
+    texture.repeat.set(4, 2)
 }
 
 const textureLoader = new THREE.TextureLoader()
@@ -102,7 +117,7 @@ sphere.position.y = 0.5
 sphere.castShadow = true
 
 const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(10, 10),
+    new THREE.PlaneGeometry(6, 6),
     material
 )
 plane.rotation.x = - Math.PI * 0.5

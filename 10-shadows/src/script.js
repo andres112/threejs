@@ -31,21 +31,59 @@ gui.add(directionalLight.position, 'y').min(- 5).max(5).step(0.001)
 gui.add(directionalLight.position, 'z').min(- 5).max(5).step(0.001)
 scene.add(directionalLight)
 
+const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2)
+scene.add(directionalLightHelper)
+
+/**
+ * Textures
+*/
+const modifyTexture = (texture) => {
+    texture.flipY = false
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+    texture.repeat.set(3, 2)
+}
+
+const textureLoader = new THREE.TextureLoader()
+const brainColorTexture = textureLoader.load('/textures/brain/basecolor.png')
+modifyTexture(brainColorTexture)
+brainColorTexture.magFilter= brainColorTexture.minFilter = THREE.NearestFilter
+brainColorTexture.mipmaps = false
+const brainNormalTexture = textureLoader.load('/textures/brain/normal.png')
+modifyTexture(brainNormalTexture)
+const brainRoughnessTexture = textureLoader.load('/textures/brain/roughness.png')
+modifyTexture(brainRoughnessTexture)
+const brainAmbientOcclusionTexture = textureLoader.load('/textures/brain/ambientOcclusion.png')
+modifyTexture(brainAmbientOcclusionTexture)
+const brainHeightTexture = textureLoader.load('/textures/brain/height.png')
+modifyTexture(brainHeightTexture)
+
 /**
  * Materials
  */
 const material = new THREE.MeshStandardMaterial()
 material.roughness = 0.7
+material.side = THREE.DoubleSide
 gui.add(material, 'metalness').min(0).max(1).step(0.001)
 gui.add(material, 'roughness').min(0).max(1).step(0.001)
+
+const standardMaterial = new THREE.MeshStandardMaterial()
+standardMaterial.map = brainColorTexture
+standardMaterial.normalMap = brainNormalTexture
+standardMaterial.roughnessMap = brainRoughnessTexture
+standardMaterial.aoMap = brainAmbientOcclusionTexture
+standardMaterial.aoMapIntensity = 1
+standardMaterial.displacementMap = brainHeightTexture
+standardMaterial.displacementScale = 0.2
 
 /**
  * Objects
  */
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 32, 32),
-    material
+    new THREE.SphereGeometry(0.5, 64, 64),
+    standardMaterial
 )
+
+sphere.position.y = 0.5
 
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 5),
@@ -53,6 +91,7 @@ const plane = new THREE.Mesh(
 )
 plane.rotation.x = - Math.PI * 0.5
 plane.position.y = - 0.5
+
 
 scene.add(sphere, plane)
 

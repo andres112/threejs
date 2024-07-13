@@ -44,7 +44,7 @@ directionalLight.shadow.mapSize.height = 2048
 // including the field of view (FOV), aspect ratio, and near and far planes.
 directionalLight.shadow.camera.near = 1
 directionalLight.shadow.camera.far = 7
-directionalLight.shadow.camera.top = 2
+directionalLight.shadow.camera.top = 3
 directionalLight.shadow.camera.right = 3
 directionalLight.shadow.camera.bottom = - 2
 directionalLight.shadow.camera.left = - 3
@@ -52,7 +52,7 @@ directionalLight.shadow.camera.left = - 3
 // this radios is not supported by all shadow types (PCFSoftShadowMap, VSMShadowMap) defined in the renderer.shadowMap.type
 directionalLight.shadow.radius = 10
 
-
+// Helpers
 const directionalLightShadowCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
 scene.add(directionalLightShadowCameraHelper)
 

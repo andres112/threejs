@@ -60,17 +60,30 @@ const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight
 scene.add(directionalLightHelper)
 
 // Spot light
-const spotLight = new THREE.SpotLight(0x990011, 1)
+const spotLight = new THREE.SpotLight(0x990011, 3)
 spotLight.angle = Math.PI * 0.2
 spotLight.penumbra = 0.2
 spotLight.decay = 2
-spotLight.distance = 5
-spotLight.position.set(-2, 1, 1)
+spotLight.distance = 10
+spotLight.position.set(-2, 3, 1)
+// Shadow management
+spotLight.castShadow = true
+spotLight.shadow.mapSize.set(1024, 1024)
+spotLight.shadow.camera.near = 1
+spotLight.shadow.camera.far = 5
 scene.add(spotLight)
+
+spotLight.target.position.x = 0
+spotLight.target.position.y = 0.5
+scene.add(spotLight.target)
+
 
 // Spot light helper
 const spotLightHelper = new THREE.SpotLightHelper(spotLight)
 scene.add(spotLightHelper)
+
+const spotLightShadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera)
+scene.add(spotLightShadowCameraHelper)
 
 /**
  * Textures

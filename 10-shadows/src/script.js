@@ -220,7 +220,7 @@ plane.receiveShadow = true;
 
 scene.add(plane);
 
-const sphereShadow = new THREE.Mesh(
+const brainShadow = new THREE.Mesh(
   new THREE.PlaneGeometry(2, 2),
   new THREE.MeshBasicMaterial({
     alphaMap: simpleShadowTexture,
@@ -228,9 +228,9 @@ const sphereShadow = new THREE.Mesh(
     color: 0x000000,
   })
 );
-sphereShadow.rotation.x = -Math.PI * 0.5;
-sphereShadow.position.y = plane.position.y + 0.01;
-scene.add(sphereShadow);
+brainShadow.rotation.x = -Math.PI * 0.5;
+brainShadow.position.y = plane.position.y + 0.01;
+scene.add(brainShadow);
 
 /**
  * Sizes
@@ -280,7 +280,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 // PCFShadowMap filters shadow maps using the Percentage-Closer Filtering (PCF) algorithm (default).
 // PCFSoftShadowMap filters shadow maps using the Percentage-Closer Filtering (PCF) algorithm with better soft shadows especially when using low-resolution shadow maps.
 // VSMShadowMap filters shadow maps using the Variance Shadow Map (VSM) algorithm. When using VSMShadowMap all shadow receivers will also cast shadows.
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = false;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 /**
@@ -298,9 +298,11 @@ const tick = () => {
     brain.position.z = Math.sin(elapsedTime * 0.5) * 2;
     brain.rotation.y = elapsedTime * 0.5;
     // Update sphere shadow
-    sphereShadow.position.x =brain.position.x;
-    sphereShadow.position.z = brain.position.z;
-    sphereShadow.material.opacity = 1.5 - brain.position.y;
+    brainShadow.position.x =brain.position.x;
+    brainShadow.position.z = brain.position.z;
+    brainShadow.material.opacity = 1.5 - brain.position.y;
+    brainShadow.scale.x = 1 + brain.position.y;
+    brainShadow.scale.y = 1 + brain.position.y;
   }
 
 

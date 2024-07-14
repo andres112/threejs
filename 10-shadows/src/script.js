@@ -26,7 +26,7 @@ gui.add(ambientLight, 'visible').name('ambientLightVisible')
 scene.add(ambientLight)
 
 // Directional light
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5)
+const directionalLight = new THREE.DirectionalLight(0x005599, 1)
 directionalLight.position.set(2, 2.5, - 1)
 gui.add(directionalLight, 'intensity').min(0).max(3).step(0.001)
 gui.add(directionalLight.position, 'x').min(- 5).max(5).step(0.001)
@@ -43,7 +43,7 @@ directionalLight.shadow.mapSize.height = 2048
 // In Three.js, this property allows you to adjust the parameters of the shadow camera,
 // including the field of view (FOV), aspect ratio, and near and far planes.
 directionalLight.shadow.camera.near = 1
-directionalLight.shadow.camera.far = 7
+directionalLight.shadow.camera.far = 10
 directionalLight.shadow.camera.top = 3
 directionalLight.shadow.camera.right = 3
 directionalLight.shadow.camera.bottom = - 2
@@ -60,21 +60,22 @@ const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight
 scene.add(directionalLightHelper)
 
 // Spot light
-const spotLight = new THREE.SpotLight(0x990011, 3)
+const spotLight = new THREE.SpotLight(0xaa0000, 5)
 spotLight.angle = Math.PI * 0.2
 spotLight.penumbra = 0.2
-spotLight.decay = 2
-spotLight.distance = 10
-spotLight.position.set(-2, 3, 1)
+spotLight.decay = 1
+spotLight.distance = 7
+spotLight.position.set(-2.5, 3, 1)
 // Shadow management
 spotLight.castShadow = true
 spotLight.shadow.mapSize.set(1024, 1024)
 spotLight.shadow.camera.near = 1
-spotLight.shadow.camera.far = 5
+spotLight.shadow.camera.far = 10
+spotLight.shadow.camera.fov = 45
 scene.add(spotLight)
 
-spotLight.target.position.x = 0
-spotLight.target.position.y = 0.5
+spotLight.target.position.x = -0.5
+spotLight.target.position.y = 0
 scene.add(spotLight.target)
 
 

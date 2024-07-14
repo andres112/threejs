@@ -91,7 +91,6 @@ spotLight.castShadow = true;
 spotLight.shadow.mapSize.set(1024, 1024);
 spotLight.shadow.camera.near = 1;
 spotLight.shadow.camera.far = 10;
-spotLight.shadow.camera.fov = 45;
 scene.add(spotLight);
 
 spotLight.target.position.x = -0.5;
@@ -151,11 +150,19 @@ modifyTexture(brainAmbientOcclusionTexture);
 const brainHeightTexture = textureLoader.load('/textures/brain/height.png');
 modifyTexture(brainHeightTexture);
 
+// Backed texture. MapCap texture
+const backedTexture = textureLoader.load('/textures/bakedShadow.jpg');
+backedTexture.colorSpace = THREE.SRGBColorSpace;
+
+// Simple shadow texture
+const simpleShadowTexture = textureLoader.load('/textures/simpleShadow.jpg');
+simpleShadowTexture.colorSpace = THREE.SRGBColorSpace;
+
 /**
  * Materials
  */
 const material = new THREE.MeshStandardMaterial();
-material.roughness = 0.7;
+material.map = backedTexture;
 
 const standardMaterial = new THREE.MeshStandardMaterial();
 standardMaterial.map = brainColorTexture;
@@ -178,16 +185,17 @@ materialFolder.add(standardMaterial, 'displacementBias').min(-1).max(1).step(0.0
  */
 // Load the GLTF model
 const loader = new GLTFLoader();
+let brain;
 loader.load(
   'model/ImageToStl.com_brain.gltf', // Replace with the path to your exported model
   function (gltf) {
-    const model = gltf.scene;
-    model.scale.set(0.02, 0.02, 0.02);
-    model.position.set(0, 0.5, 0);
-    model.rotation.reorder('YXZ');
-    model.rotation.x = -Math.PI * 0.5;
+    brain = gltf.scene;
+    brain.scale.set(0.02, 0.02, 0.02);
+    brain.position.set(0, 0.5, 0);
+    brain.rotation.reorder('YXZ');
+    brain.rotation.x = -Math.PI * 0.5;
 
-    model.traverse((node) => {
+    brain.traverse((node) => {
       if (node.isMesh) {
         node.material = standardMaterial;
         node.castShadow = true;
@@ -196,7 +204,7 @@ loader.load(
     });
 
     // Add the loaded model to the scene
-    scene.add(model);
+    scene.add(brain);
   },
   undefined,
   function (error) {
@@ -271,6 +279,10 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  // Update brain
+  if (brain)
+    brain.rotation.y = elapsedTime * 0.5; 
 
   // Update controls
   controls.update();

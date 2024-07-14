@@ -7,6 +7,17 @@ import GUI from 'lil-gui'
  */
 // Debug
 const gui = new GUI()
+const debugObject = {
+    directionalHelper: () => {
+        directionalLightHelper.visible = !directionalLightHelper.visible
+        directionalLightShadowCameraHelper.visible = !directionalLightShadowCameraHelper.visible
+    },
+    spotHelper: () => {
+        spotLightHelper.visible = !spotLightHelper.visible
+        spotLightShadowCameraHelper.visible = !spotLightShadowCameraHelper.visible
+    }
+}
+const helperFolder = gui.addFolder('helpers')
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -20,18 +31,20 @@ const scene = new THREE.Scene()
 // Ambient light
 const ambientLight = new THREE.AmbientLight(0xffffff, 1)
 ambientLight.visible = false
-gui.add(ambientLight, 'intensity').min(0).max(3).step(0.001)
-gui.add(ambientLight, 'visible').name('ambientLightVisible')
+const ambientLightFolder = gui.addFolder('ambientLight')
+ambientLightFolder.add(ambientLight, 'intensity').min(0).max(3).step(0.001)
+ambientLightFolder.add(ambientLight, 'visible').name('ambientLightVisible')
 // leave only the directional light
 scene.add(ambientLight)
 
 // Directional light
 const directionalLight = new THREE.DirectionalLight(0x005599, 1)
 directionalLight.position.set(2, 2.5, - 1)
-gui.add(directionalLight, 'intensity').min(0).max(3).step(0.001)
-gui.add(directionalLight.position, 'x').min(- 5).max(5).step(0.001)
-gui.add(directionalLight.position, 'y').min(- 5).max(5).step(0.001)
-gui.add(directionalLight.position, 'z').min(- 5).max(5).step(0.001)
+const directionalLightFolder = gui.addFolder('directionalLight')
+directionalLightFolder.add(directionalLight, 'intensity').min(0).max(3).step(0.001)
+directionalLightFolder.add(directionalLight.position, 'x').min(- 5).max(5).step(0.001)
+directionalLightFolder.add(directionalLight.position, 'y').min(- 5).max(5).step(0.001)
+directionalLightFolder.add(directionalLight.position, 'z').min(- 5).max(5).step(0.001)
 scene.add(directionalLight)
 // *** Manage shadows
 // castShadow - Set to true if the light will cast shadows. Warning: This is expensive and requires tweaking to get shadows looking right.
@@ -59,6 +72,8 @@ scene.add(directionalLightShadowCameraHelper)
 const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2)
 scene.add(directionalLightHelper)
 
+helperFolder.add(debugObject, 'directionalHelper')
+
 // Spot light
 const spotLight = new THREE.SpotLight(0xaa0000, 5)
 spotLight.angle = Math.PI * 0.2
@@ -85,6 +100,8 @@ scene.add(spotLightHelper)
 
 const spotLightShadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera)
 scene.add(spotLightShadowCameraHelper)
+
+helperFolder.add(debugObject, 'spotHelper')
 
 /**
  * Textures
@@ -116,8 +133,6 @@ modifyTexture(brainHeightTexture)
 const material = new THREE.MeshStandardMaterial()
 material.roughness = 0.7
 material.side = THREE.DoubleSide
-gui.add(material, 'metalness').min(0).max(1).step(0.001)
-gui.add(material, 'roughness').min(0).max(1).step(0.001)
 
 const standardMaterial = new THREE.MeshStandardMaterial()
 standardMaterial.map = brainColorTexture
@@ -127,6 +142,12 @@ standardMaterial.aoMap = brainAmbientOcclusionTexture
 standardMaterial.aoMapIntensity = 1
 standardMaterial.displacementMap = brainHeightTexture
 standardMaterial.displacementScale = 0.25
+
+const materialFolder = gui.addFolder('material')
+materialFolder.add(standardMaterial, 'metalness').min(0).max(1).step(0.001)
+materialFolder.add(standardMaterial, 'roughness').min(0).max(1).step(0.001)
+materialFolder.add(standardMaterial, 'displacementScale').min(0).max(1).step(0.001)
+materialFolder.add(standardMaterial, 'displacementBias').min(-1).max(1).step(0.001)
 
 /**
  * Objects

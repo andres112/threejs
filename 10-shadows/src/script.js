@@ -212,7 +212,6 @@ loader.load(
   }
 );
 
-
 const plane = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), material);
 plane.rotation.x = -Math.PI * 0.5;
 plane.position.y = -0.5;
@@ -220,6 +219,18 @@ plane.position.y = -0.5;
 plane.receiveShadow = true;
 
 scene.add(plane);
+
+const sphereShadow = new THREE.Mesh(
+  new THREE.PlaneGeometry(2, 2),
+  new THREE.MeshBasicMaterial({
+    alphaMap: simpleShadowTexture,
+    transparent: true,
+    color: 0x000000,
+  })
+);
+sphereShadow.rotation.x = -Math.PI * 0.5;
+sphereShadow.position.y = plane.position.y + 0.01;
+scene.add(sphereShadow);
 
 /**
  * Sizes
@@ -281,8 +292,17 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
   // Update brain
-  if (brain)
-    brain.rotation.y = elapsedTime * 0.5; 
+  if (brain) {
+    brain.position.y = Math.abs(Math.sin(elapsedTime * 3)) + 0.25;
+    brain.position.x = Math.cos(elapsedTime * 0.5) * 2;
+    brain.position.z = Math.sin(elapsedTime * 0.5) * 2;
+    brain.rotation.y = elapsedTime * 0.5;
+    // Update sphere shadow
+    sphereShadow.position.x =brain.position.x;
+    sphereShadow.position.z = brain.position.z;
+    sphereShadow.material.opacity = 1.5 - brain.position.y;
+  }
+
 
   // Update controls
   controls.update();

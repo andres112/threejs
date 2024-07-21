@@ -1,17 +1,17 @@
-import { PlaneGeometry, Mesh, MeshStandardMaterial } from 'three';
+import { PlaneGeometry, Mesh, MeshStandardMaterial, Vector2 } from 'three';
 
 // Floor is a singleton class that creates only one instance of the floor
 export class Floor extends Mesh {
   private static instance: Floor | null = null;
 
-  private constructor(public width: number, public height: number) {
-    super(new PlaneGeometry(width, height), new MeshStandardMaterial());
+  private constructor(size: Vector2) {
+    super(new PlaneGeometry(size.width, size.height), new MeshStandardMaterial());
     this.rotation.x = -Math.PI * 0.5;
   }
 
-  public static getInstance(width: number, height: number): Floor {
+  public static getInstance(size: Vector2): Floor {
     if (!Floor.instance) {
-      Floor.instance = new Floor(width, height);
+      Floor.instance = new Floor(size);
     }
     return Floor.instance;
   }

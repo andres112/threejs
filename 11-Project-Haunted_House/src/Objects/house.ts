@@ -1,11 +1,12 @@
 import {
   Mesh,
-  SphereGeometry,
   MeshStandardMaterial,
   Group,
   BoxGeometry,
   ConeGeometry,
+  Vector3,
 } from 'three';
+import { Bush } from './bush';
 
 const WALLS_DIMENSION = { width: 4, height: 2.5, depth: 4 };
 const ROOF_DIMENSION = { radius: 3.3, height: 1.5 };
@@ -17,6 +18,7 @@ export class House extends Group {
   private roof = new Mesh();
   private chimney = new Mesh();
   private door = new Mesh();
+  private bushes: Bush[] = [];
 
   constructor() {
     super();
@@ -25,6 +27,7 @@ export class House extends Group {
     this.buildChimney();
     this.buildDoor();
     this.buildHouse();
+    this.fillBushes();
   }
 
   private buildHouse(): void {
@@ -37,7 +40,7 @@ export class House extends Group {
   private buildWalls(): void {
     this.walls = new Mesh(
       new BoxGeometry(WALLS_DIMENSION.width, WALLS_DIMENSION.height, WALLS_DIMENSION.depth),
-      new MeshStandardMaterial({ wireframe: true })
+      new MeshStandardMaterial()
     );
     this.walls.position.y = WALLS_DIMENSION.height * 0.5;
   }
@@ -63,9 +66,24 @@ export class House extends Group {
   private buildDoor(): void {
     this.door = new Mesh(
       new BoxGeometry(DOOR_DIMENSION.width, DOOR_DIMENSION.height, DOOR_DIMENSION.depth),
-      new MeshStandardMaterial()
+      new MeshStandardMaterial( { color: 0x000000 })
     );
     this.door.position.y = DOOR_DIMENSION.height * 0.5;
     this.door.position.z = WALLS_DIMENSION.depth * 0.5;
+  }
+
+  private fillBushes(): void {
+    // Add bushes around the house
+    this.bushes = [
+      new Bush(new Vector3(-1.4, 0.1, 2.1), 0.25),
+      new Bush(new Vector3(-2, 0.1, 2), 0.5),
+      new Bush(new Vector3(-2.1, 0.2, -1.5), 0.4),
+      new Bush(new Vector3(-2, 0.1, -2), 0.25),
+      new Bush(new Vector3(-2.1, 0, -1), 0.2),
+
+      new Bush(new Vector3(2, 0.2, 0.5), 0.5),
+      new Bush(new Vector3(2.1, 0.1, -0.4), 0.4),
+    ];
+    this.bushes.forEach((bush) => this.add(bush));
   }
 }

@@ -1,16 +1,18 @@
 import GUI from 'lil-gui';
-import { PerspectiveCamera, Scene, WebGLRenderer, Group, AxesHelper } from 'three';
+import { PerspectiveCamera, Scene, WebGLRenderer, Group, AxesHelper, Vector2 } from 'three';
 import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createControls } from './components/controls';
 import { createRenderer } from './components/renderer';
 import { createAmbientLight, createDirectionalLight } from './components/light';
-import { Size } from './models/main';
 import { Timer } from 'three/examples/jsm/misc/Timer';
 
 // Objects
 import { House } from './Objects/house';
 import { Floor } from './Objects/floor';
+
+// Models
+import { Size } from './models/main';
 
 export class App {
   private scene: Scene;
@@ -59,13 +61,20 @@ export class App {
 
   private setupObjects() {
     // Create the plane terrain
-    const floor = Floor.getInstance(20, 20);
+    const floorDimension = new Vector2(30, 30);
+    const floor = Floor.getInstance(floorDimension);
     this.scene.add(floor);
 
     // Create the house
     const house = new House();
     this.scene.add(house);
+
+    const farHouse = new House();
+    farHouse.position.set(-12, 0, -12)
+    farHouse.scale.set(0.75, 0.75, 0.75);
+    this.scene.add(farHouse);
   }
+
   private setupEventListeners() {
     window.addEventListener('resize', () => {
       // Update sizes

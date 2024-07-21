@@ -13,6 +13,7 @@ import { Floor } from './Objects/floor';
 
 // Models
 import { Size } from './models/main';
+import { Graves } from './Objects/graves';
 
 export class App {
   private scene: Scene;
@@ -61,18 +62,23 @@ export class App {
 
   private setupObjects() {
     // Create the plane terrain
-    const floorDimension = new Vector2(30, 30);
+    const floorDimension = new Vector2(25, 25);
     const floor = Floor.getInstance(floorDimension);
     this.scene.add(floor);
 
-    // Create the house
+    // Create the houses
     const house = new House();
     this.scene.add(house);
 
     const farHouse = new House();
-    farHouse.position.set(-12, 0, -12)
+    farHouse.position.set(-9, 0, -9)
     farHouse.scale.set(0.75, 0.75, 0.75);
     this.scene.add(farHouse);
+
+    // Create the graves
+    const housePositions = [house.position, farHouse.position];
+    const graves = Graves.getInstance(floorDimension, housePositions);
+    this.scene.add(graves);
   }
 
   private setupEventListeners() {

@@ -48,7 +48,7 @@ export class House extends Group {
   private buildRoof(): void {
     this.roof = new Mesh(
       new ConeGeometry(ROOF_DIMENSION.radius, ROOF_DIMENSION.height, 4),
-      new MeshStandardMaterial()
+      new MeshStandardMaterial({ color: 0x800000 })
     );
     this.roof.position.y = WALLS_DIMENSION.height + ROOF_DIMENSION.height * 0.5;
     this.roof.rotation.y = Math.PI * 0.25;

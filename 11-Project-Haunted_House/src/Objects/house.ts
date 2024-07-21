@@ -1,5 +1,7 @@
 import { Mesh, SphereGeometry, MeshStandardMaterial } from 'three';
 
+
+
 export const createSphere = (): Mesh => {
   const mesh = new Mesh(
     new SphereGeometry(1, 32, 32),

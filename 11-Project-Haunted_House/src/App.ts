@@ -9,8 +9,8 @@ import { Size } from './models/main';
 import { Timer } from 'three/examples/jsm/misc/Timer';
 
 // Objects
-import { createSphere } from './Objects/sphere';
-import { createFloor } from './Objects/floor';
+import { createSphere } from './Objects/house';
+import { Floor } from './Objects/floor';
 
 export class App {
   private scene: Scene;
@@ -57,7 +57,7 @@ export class App {
     const sphere = createSphere();
     this.scene.add(sphere);
 
-    const floor = createFloor();
+    const floor = Floor.getInstance(20, 20);
     this.scene.add(floor);
   }
   private setupEventListeners() {

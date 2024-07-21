@@ -1,5 +1,5 @@
 import GUI from 'lil-gui';
-import { PerspectiveCamera, Scene, WebGLRenderer, Group } from 'three';
+import { PerspectiveCamera, Scene, WebGLRenderer, Group, AxesHelper } from 'three';
 import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createControls } from './components/controls';
@@ -9,7 +9,7 @@ import { Size } from './models/main';
 import { Timer } from 'three/examples/jsm/misc/Timer';
 
 // Objects
-import { createSphere, House } from './Objects/house';
+import { House } from './Objects/house';
 import { Floor } from './Objects/floor';
 
 export class App {
@@ -44,6 +44,10 @@ export class App {
     this.setupObjects();
     this.setupEventListeners();
     this.animate();
+
+    // Axes helper
+    const axesHelper = new AxesHelper(10);
+    this.scene.add(axesHelper);
   }
 
   private setupScene() {

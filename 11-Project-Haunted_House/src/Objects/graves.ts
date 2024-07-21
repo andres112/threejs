@@ -34,9 +34,9 @@ export class Graves extends Group {
       const grave = new Grave();
       grave.position.set(gravePosition.x, gravePosition.y, gravePosition.z);
       // add small random rotation positive or negative in z axis
-        grave.rotation.z = (Math.random() - 0.5) * 0.1 * Math.PI;
-        grave.rotation.y = (Math.random() - 0.5) * 0.5 * Math.PI;
-        grave.rotation.x = Math.random() - 0.5
+        grave.rotation.z = (Math.random() - 0.5) * 0.3 ;
+        grave.rotation.y = (Math.random() - 0.5) * 0.7 ;
+        grave.rotation.x = (Math.random() - 0.5) * 0.5 ;
       this.add(grave);
     }
   }

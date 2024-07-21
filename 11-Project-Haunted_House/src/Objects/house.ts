@@ -18,7 +18,6 @@ export class House extends Group {
   private roof = new Mesh();
   private chimney = new Mesh();
   private door = new Mesh();
-  private bushes: Bush[] = [];
 
   constructor() {
     super();
@@ -27,7 +26,6 @@ export class House extends Group {
     this.buildChimney();
     this.buildDoor();
     this.buildHouse();
-    this.fillBushes();
   }
 
   private buildHouse(): void {
@@ -35,6 +33,8 @@ export class House extends Group {
     this.add(this.roof as Mesh);
     this.add(this.chimney as Mesh);
     this.add(this.door as Mesh);
+
+    this.fillBushes();
   }
 
   private buildWalls(): void {
@@ -74,7 +74,7 @@ export class House extends Group {
 
   private fillBushes(): void {
     // Add bushes around the house
-    this.bushes = [
+    const bushes = [
       new Bush(new Vector3(-1.4, 0.1, 2.1), 0.25),
       new Bush(new Vector3(-2, 0.1, 2), 0.5),
       new Bush(new Vector3(-2.1, 0.2, -1.5), 0.4),
@@ -84,6 +84,7 @@ export class House extends Group {
       new Bush(new Vector3(2, 0.2, 0.5), 0.5),
       new Bush(new Vector3(2.1, 0.1, -0.4), 0.4),
     ];
-    this.bushes.forEach((bush) => this.add(bush));
+
+    this.add(...bushes);
   }
 }

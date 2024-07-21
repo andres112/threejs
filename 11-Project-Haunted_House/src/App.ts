@@ -9,7 +9,7 @@ import { Size } from './models/main';
 import { Timer } from 'three/examples/jsm/misc/Timer';
 
 // Objects
-import { createSphere } from './Objects/house';
+import { createSphere, House } from './Objects/house';
 import { Floor } from './Objects/floor';
 
 export class App {
@@ -54,11 +54,13 @@ export class App {
   }
 
   private setupObjects() {
-    const sphere = createSphere();
-    this.scene.add(sphere);
-
+    // Create the plane terrain
     const floor = Floor.getInstance(20, 20);
     this.scene.add(floor);
+
+    // Create the house
+    const house = new House();
+    this.scene.add(house);
   }
   private setupEventListeners() {
     window.addEventListener('resize', () => {

@@ -1,11 +1,22 @@
-import { Mesh, SphereGeometry, MeshStandardMaterial } from 'three';
+import { Mesh, SphereGeometry, MeshStandardMaterial, Group, BoxGeometry } from 'three';
 
+export class House extends Group {
+  private walls= new Mesh();
 
+  constructor() {
+    super();
+    this.buildWalls();
+    this.buildHouse();
+  }
 
-export const createSphere = (): Mesh => {
-  const mesh = new Mesh(
-    new SphereGeometry(1, 32, 32),
-    new MeshStandardMaterial({ roughness: 0.7 })
-  );
-  return mesh;
-};
+  private buildHouse(): void {
+    this.add(this.walls as Mesh);
+  }
+
+  private buildWalls(): void {
+    this.walls = new Mesh(
+      new BoxGeometry(4, 2.5, 4), 
+      new MeshStandardMaterial()
+    );
+  }
+}

@@ -9,10 +9,14 @@ export class Floor extends Mesh {
     super(new PlaneGeometry(size.width, size.height), new MeshStandardMaterial(
       {
         alphaMap: CustomTexture.floor.alpha,
+        map: CustomTexture.floor.color,
+        normalMap: CustomTexture.floor.normal,
+        aoMap: CustomTexture.floor.arm,
+        displacementMap: CustomTexture.floor.displacement,
+        displacementScale: 0.15,
         transparent: true,
       }
     ));
-    console.log('Floor created', CustomTexture.floor.alpha);
     this.rotation.x = -Math.PI * 0.5;
   }
 

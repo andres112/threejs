@@ -1,4 +1,3 @@
-import GUI from 'lil-gui';
 import {
   PerspectiveCamera,
   Scene,
@@ -32,7 +31,6 @@ export class App {
   private renderer: WebGLRenderer;
   private sizes: Size;
   private timer: Timer;
-  private gui: GUI;
 
   constructor() {
     this.scene = new Scene();
@@ -45,7 +43,6 @@ export class App {
     this.controls = createControls(this.camera, this.canvas);
     this.renderer = createRenderer(this.canvas, this.sizes);
     this.timer = new Timer();
-    this.gui = new GUI();
 
     this.init();
   }

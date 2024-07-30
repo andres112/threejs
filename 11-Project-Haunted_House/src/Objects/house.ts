@@ -1,5 +1,7 @@
 import { Mesh, MeshStandardMaterial, Group, BoxGeometry, ConeGeometry, Vector3 } from 'three';
 import { Bush } from './bush';
+import { CustomTexture } from '../textures/main';
+import { HouseFolder } from '../utils/gui';
 
 const WALLS_DIMENSION = { width: 4, height: 2.5, depth: 4 };
 const ROOF_DIMENSION = { radius: 3.3, height: 1.5 };
@@ -21,6 +23,8 @@ export class House extends Group {
     this.buildHouse();
     this.setPosition(position);
     this.setScale(scale);
+
+    this.setGui();
   }
 
   private buildHouse(): void {
@@ -43,7 +47,15 @@ export class House extends Group {
   private buildWalls(): void {
     this.walls = new Mesh(
       new BoxGeometry(WALLS_DIMENSION.width, WALLS_DIMENSION.height, WALLS_DIMENSION.depth),
-      new MeshStandardMaterial()
+      new MeshStandardMaterial({
+        map: CustomTexture.houseWalls.color,
+        normalMap: CustomTexture.houseWalls.normal,
+        aoMap: CustomTexture.houseWalls.arm,
+        roughnessMap: CustomTexture.houseWalls.arm,
+        metalnessMap: CustomTexture.houseWalls.arm,
+        displacementMap: CustomTexture.houseWalls.displacement,
+        displacementBias: -0.877,
+      })
     );
     this.walls.position.y = WALLS_DIMENSION.height * 0.5;
   }
@@ -90,4 +102,6 @@ export class House extends Group {
 
     this.add(...bushes);
   }
+
+  private setGui() {}
 }

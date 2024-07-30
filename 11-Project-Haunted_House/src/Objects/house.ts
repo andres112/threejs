@@ -1,11 +1,4 @@
-import {
-  Mesh,
-  MeshStandardMaterial,
-  Group,
-  BoxGeometry,
-  ConeGeometry,
-  Vector3,
-} from 'three';
+import { Mesh, MeshStandardMaterial, Group, BoxGeometry, ConeGeometry, Vector3 } from 'three';
 import { Bush } from './bush';
 
 const WALLS_DIMENSION = { width: 4, height: 2.5, depth: 4 };
@@ -19,13 +12,15 @@ export class House extends Group {
   private chimney = new Mesh();
   private door = new Mesh();
 
-  constructor() {
+  constructor(position: Vector3 = new Vector3(0, 0, 0), scale: Vector3 = new Vector3(1, 1, 1)) {
     super();
     this.buildWalls();
     this.buildRoof();
     this.buildChimney();
     this.buildDoor();
     this.buildHouse();
+    this.setPosition(position);
+    this.setScale(scale);
   }
 
   private buildHouse(): void {
@@ -35,6 +30,14 @@ export class House extends Group {
     this.add(this.door as Mesh);
 
     this.fillBushes();
+  }
+
+  private setPosition(position: Vector3): void {
+    this.position.set(position.x, position.y, position.z);
+  }
+
+  private setScale(scale: Vector3): void {
+    this.scale.set(scale.x, scale.y, scale.z);
   }
 
   private buildWalls(): void {
@@ -66,7 +69,7 @@ export class House extends Group {
   private buildDoor(): void {
     this.door = new Mesh(
       new BoxGeometry(DOOR_DIMENSION.width, DOOR_DIMENSION.height, DOOR_DIMENSION.depth),
-      new MeshStandardMaterial( { color: 0x000000 })
+      new MeshStandardMaterial({ color: 0x000000 })
     );
     this.door.position.y = DOOR_DIMENSION.height * 0.5;
     this.door.position.z = WALLS_DIMENSION.depth * 0.5;

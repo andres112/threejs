@@ -1,5 +1,13 @@
 import GUI from 'lil-gui';
-import { PerspectiveCamera, Scene, WebGLRenderer, Group, AxesHelper, Vector2 } from 'three';
+import {
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+  Group,
+  AxesHelper,
+  Vector2,
+  Vector3,
+} from 'three';
 import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createControls } from './components/controls';
@@ -70,9 +78,7 @@ export class App {
     const house = new House();
     this.scene.add(house);
 
-    const farHouse = new House();
-    farHouse.position.set(-9, 0, -9)
-    farHouse.scale.set(0.75, 0.75, 0.75);
+    const farHouse = new House(new Vector3(-9, 0, -9), new Vector3(0.7, 0.7, 0.7));
     this.scene.add(farHouse);
 
     // Create the graves

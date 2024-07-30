@@ -17,11 +17,11 @@ export class TextureFactory {
 
   public static createBushTextures(): { [key: string]: Texture } {
     return {
-      ao: loadTexture('../textures/bush/Hedge_001_AmbientOcclusion.jpg', new Vector2(4, 4)),
-      color: loadTexture('../textures/bush/Hedge_001_BaseColor.jpg', new Vector2(4, 4), true),
-      normal: loadTexture('../textures/bush/Hedge_001_Normal.jpg', new Vector2(4, 4)),
-      roughness: loadTexture('../textures/bush/Hedge_001_Roughness.jpg', new Vector2(4, 4)),
-      height: loadTexture('../textures/bush/Hedge_001_Height.png', new Vector2(4, 4)),
+      ao: loadTexture('../textures/bush/Hedge_001_AmbientOcclusion.jpg', new Vector2(3, 3)),
+      color: loadTexture('../textures/bush/Hedge_001_BaseColor.jpg', new Vector2(3, 3), true),
+      normal: loadTexture('../textures/bush/Hedge_001_Normal.jpg', new Vector2(3, 3)),
+      roughness: loadTexture('../textures/bush/Hedge_001_Roughness.jpg', new Vector2(3, 3)),
+      height: loadTexture('../textures/bush/Hedge_001_Height.png', new Vector2(3, 3)),
     };
   }
 }

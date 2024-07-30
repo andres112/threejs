@@ -42,7 +42,7 @@ export class Graves extends Group {
   }
 
   private gravePosition(): Vector3 {
-    const radius = 3; // Radius around each house to avoid
+    const radius = 4; // Radius around each house to avoid
     let positionValid = false;
     let position = new Vector2();
 

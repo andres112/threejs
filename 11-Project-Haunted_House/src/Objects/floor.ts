@@ -6,14 +6,18 @@ export class Floor extends Mesh {
   private static instance: Floor | null = null;
 
   private constructor(size: Vector2) {
-    super(new PlaneGeometry(size.width, size.height), new MeshStandardMaterial(
+    super(new PlaneGeometry(size.width, size.height, 100, 100), new MeshStandardMaterial(
       {
         alphaMap: CustomTexture.floor.alpha,
         map: CustomTexture.floor.color,
         normalMap: CustomTexture.floor.normal,
         aoMap: CustomTexture.floor.arm,
+        roughnessMap: CustomTexture.floor.arm,
+        metalnessMap: CustomTexture.floor.arm,
+        // displacement or height moves the vertices of the geometry along the normal of the vertex
+        // therefore is required to set more vertices to the geometry
         displacementMap: CustomTexture.floor.displacement,
-        displacementScale: 0.15,
+        displacementScale: 0.2,
         transparent: true,
       }
     ));

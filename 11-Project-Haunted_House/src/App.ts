@@ -78,7 +78,7 @@ export class App {
     const house = new House();
     this.scene.add(house);
 
-    const farHouse = new House(new Vector3(-9, 0, -9), new Vector3(0.7, 0.7, 0.7));
+    const farHouse = new House(new Vector3(-9, 0, -6), new Vector3(0.7, 0.7, 0.7));
     this.scene.add(farHouse);
 
     // Create the graves

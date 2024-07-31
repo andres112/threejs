@@ -46,7 +46,14 @@ export class House extends Group {
 
   private buildWalls(): void {
     this.walls = new Mesh(
-      new BoxGeometry(WALLS_DIMENSION.width, WALLS_DIMENSION.height, WALLS_DIMENSION.depth, 100, 100, 100),
+      new BoxGeometry(
+        WALLS_DIMENSION.width,
+        WALLS_DIMENSION.height,
+        WALLS_DIMENSION.depth,
+        100,
+        100,
+        100
+      ),
       new MeshStandardMaterial({
         map: CustomTexture.houseWalls.color,
         normalMap: CustomTexture.houseWalls.normal,
@@ -72,8 +79,24 @@ export class House extends Group {
 
   private buildChimney(): void {
     this.chimney = new Mesh(
-      new BoxGeometry(CHIMNEY_DIMENSION.width, CHIMNEY_DIMENSION.height, CHIMNEY_DIMENSION.depth),
-      new MeshStandardMaterial()
+      new BoxGeometry(
+        CHIMNEY_DIMENSION.width,
+        CHIMNEY_DIMENSION.height,
+        CHIMNEY_DIMENSION.depth,
+        50,
+        50,
+        50
+      ),
+      new MeshStandardMaterial({
+        map: CustomTexture.houseChimney.color,
+        normalMap: CustomTexture.houseChimney.normal,
+        aoMap: CustomTexture.houseChimney.arm,
+        roughnessMap: CustomTexture.houseChimney.arm,
+        metalnessMap: CustomTexture.houseChimney.arm,
+        displacementMap: CustomTexture.houseChimney.displacement,
+        displacementScale: 0.1,
+        displacementBias: -0.08,
+      })
     );
     this.chimney.position.y = CHIMNEY_DIMENSION.height * 0.5;
     this.chimney.position.x = WALLS_DIMENSION.width * 0.5;

@@ -72,7 +72,7 @@ export class App {
     this.scene.add(floor);
 
     // Create the houses
-    const house = new House(new Vector3(0, -0.1, 0));
+    const house = new House();
     this.scene.add(house);
 
     const farHouse = new House(new Vector3(-9, -0.1, -6), new Vector3(0.7, 0.7, 0.7));

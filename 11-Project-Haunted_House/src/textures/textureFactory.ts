@@ -84,4 +84,15 @@ export class TextureFactory {
       height: loadTexture('../textures/bush/Hedge_001_Height.png', { repeat: new Vector2(3, 3) }),
     };
   }
+
+  public static createGraveTextures(): { [key: string]: Texture } {
+    return {
+      arm: loadTexture('../textures/grave/plastered_stone_wall_arm_1k.jpg'),
+      color: loadTexture('../textures/grave/plastered_stone_wall_diff_1k.jpg', {
+        colorSpace: true,
+      }),
+      normal: loadTexture('../textures/grave/plastered_stone_wall_nor_gl_1k.jpg'),
+      displacement: loadTexture('../textures/grave/plastered_stone_wall_disp_1k.png'),
+    };
+  }
 }

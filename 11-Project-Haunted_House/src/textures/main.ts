@@ -7,4 +7,5 @@ export class CustomTexture {
   public static readonly houseChimney: { [k: string]: Texture } = TextureFactory.createHouseChimneyTextures();
   public static readonly houseRoof: { [k: string]: Texture } = TextureFactory.createHouseRoofTextures();
   public static readonly bush: { [k: string]: Texture } = TextureFactory.createBushTextures();
+  public static readonly grave: { [k: string]: Texture } = TextureFactory.createGraveTextures();
 }

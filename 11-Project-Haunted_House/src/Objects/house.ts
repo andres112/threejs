@@ -1,11 +1,11 @@
-import { Mesh, MeshStandardMaterial, Group, BoxGeometry, ConeGeometry, Vector3 } from 'three';
+import { Mesh, MeshStandardMaterial, Group, BoxGeometry, ConeGeometry, Vector3, PlaneGeometry } from 'three';
 import { Bush } from './bush';
 import { CustomTexture } from '../textures/main';
 import { HouseFolder } from '../utils/gui';
 
 const WALLS_DIMENSION = { width: 4, height: 2.5, depth: 4 };
 const ROOF_DIMENSION = { radius: 3.5, height: 1.5 };
-const DOOR_DIMENSION = { width: 1, height:1.6, depth: 0.05 };
+const DOOR_DIMENSION = { width: 1, height:1.6 };
 const CHIMNEY_DIMENSION = { width: 0.5, height: 3.2, depth: 0.5 };
 
 export class House extends Group {
@@ -77,8 +77,6 @@ export class House extends Group {
           normalMap: CustomTexture.houseRoof.normal,
           aoMap: CustomTexture.houseRoof.arm,
           roughnessMap: CustomTexture.houseRoof.arm,
-          metalnessMap: CustomTexture.houseRoof.arm,
-          bumpMap: CustomTexture.houseRoof.bump,
           displacementMap: CustomTexture.houseRoof.displacement,
           displacementScale: 0.3,
           displacementBias: -0.15,
@@ -116,11 +114,20 @@ export class House extends Group {
 
   private buildDoor(): void {
     this.door = new Mesh(
-      new BoxGeometry(DOOR_DIMENSION.width, DOOR_DIMENSION.height, DOOR_DIMENSION.depth),
-      new MeshStandardMaterial({ color: 0x000000 })
+      new PlaneGeometry(DOOR_DIMENSION.width, DOOR_DIMENSION.height, 50, 50),
+      new MeshStandardMaterial({
+        map: CustomTexture.door.color,
+        normalMap: CustomTexture.door.normal,
+        aoMap: CustomTexture.door.ao,
+        roughnessMap: CustomTexture.door.roughness,
+        metalnessMap: CustomTexture.door.metallic,
+        displacementMap: CustomTexture.door.displacement,
+        displacementScale: 0.1,
+        displacementBias: -0.1,
+      })
     );
     this.door.position.y = DOOR_DIMENSION.height * 0.5;
-    this.door.position.z = WALLS_DIMENSION.depth * 0.5;
+    this.door.position.z = WALLS_DIMENSION.depth * 0.5 + 0.1;
   }
 
   private fillBushes(): void {

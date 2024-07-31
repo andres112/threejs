@@ -54,7 +54,6 @@ export class TextureFactory {
   public static createHouseRoofTextures(): { [key: string]: Texture } {
     return {
       arm: loadTexture('../textures/roof/roof_07_arm_1k.png', { repeat: new Vector2(3, 1) }),
-      bump: loadTexture('../textures/roof/roof_07_bump_1k.png', { repeat: new Vector2(3, 1) }),
       color: loadTexture('../textures/roof/roof_07_diff_1k.jpg', {
         colorSpace: true,
         repeat: new Vector2(3, 1),
@@ -65,6 +64,17 @@ export class TextureFactory {
       displacement: loadTexture('../textures/roof/roof_07_disp_1k.png', {
         repeat: new Vector2(3, 1),
       }),
+    };
+  }
+
+  public static createHouseDoorTextures(): { [key: string]: Texture } {
+    return {
+      ao: loadTexture('../textures/door/Wood_Door_002_ambientOcclusion.jpg'),
+      color: loadTexture('../textures/door/Wood_Door_002_basecolor.jpg', { colorSpace: true }),
+      normal: loadTexture('../textures/door/Wood_Door_002_normal.jpg'),
+      displacement: loadTexture('../textures/door/Wood_Door_002_height.png'),
+      metallic: loadTexture('../textures/door/Wood_Door_002_metallic.jpg'),
+      roughness: loadTexture('../textures/door/Wood_Door_002_roughness.jpg'),
     };
   }
 

@@ -21,20 +21,14 @@ export class TextureFactory {
 
   public static createHouseWallsTextures(): { [key: string]: Texture } {
     return {
-      arm: loadTexture('../textures/wall/castle_wall_varriation_arm_1k.png', new Vector2(2, 2)),
+      arm: loadTexture('../textures/wall/castle_brick_broken_06_arm_1k.png'),
       color: loadTexture(
-        '../textures/wall/castle_wall_varriation_diff_1k.jpg',
-        new Vector2(2, 2),
+        '../textures/wall/castle_brick_broken_06_diff_1k.jpg',
+        new Vector2(1, 1),
         true
       ),
-      normal: loadTexture(
-        '../textures/wall/castle_wall_varriation_nor_gl_1k.png',
-        new Vector2(2, 2)
-      ),
-      displacement: loadTexture(
-        '../textures/wall/castle_wall_varriation_disp_1k.png',
-        new Vector2(2, 2)
-      ),
+      normal: loadTexture('../textures/wall/castle_brick_broken_06_nor_gl_1k.png'),
+      displacement: loadTexture('../textures/wall/castle_brick_broken_06_disp_1k.png'),
     };
   }
 

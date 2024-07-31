@@ -20,7 +20,7 @@ export class Floor extends Mesh {
         // therefore is required to set more vertices to the geometry
         displacementMap: CustomTexture.floor.displacement,
         displacementScale: 0.3,
-        displacementBias: -0.2,
+        displacementBias: -0.1,
         transparent: true,
       })
     );

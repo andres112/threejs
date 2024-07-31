@@ -46,7 +46,7 @@ export class House extends Group {
 
   private buildWalls(): void {
     this.walls = new Mesh(
-      new BoxGeometry(WALLS_DIMENSION.width, WALLS_DIMENSION.height, WALLS_DIMENSION.depth),
+      new BoxGeometry(WALLS_DIMENSION.width, WALLS_DIMENSION.height, WALLS_DIMENSION.depth, 100, 100, 100),
       new MeshStandardMaterial({
         map: CustomTexture.houseWalls.color,
         normalMap: CustomTexture.houseWalls.normal,
@@ -54,7 +54,8 @@ export class House extends Group {
         roughnessMap: CustomTexture.houseWalls.arm,
         metalnessMap: CustomTexture.houseWalls.arm,
         displacementMap: CustomTexture.houseWalls.displacement,
-        displacementBias: -0.877,
+        displacementScale: 0.1,
+        displacementBias: -0.1,
       })
     );
     this.walls.position.y = WALLS_DIMENSION.height * 0.5;

@@ -4,8 +4,8 @@ import { CustomTexture } from '../textures/main';
 import { HouseFolder } from '../utils/gui';
 
 const WALLS_DIMENSION = { width: 4, height: 2.5, depth: 4 };
-const ROOF_DIMENSION = { radius: 3.3, height: 1.5 };
-const DOOR_DIMENSION = { width: 1.5, height: 2, depth: 0.1 };
+const ROOF_DIMENSION = { radius: 3.5, height: 1.5 };
+const DOOR_DIMENSION = { width: 1, height:1.6, depth: 0.05 };
 const CHIMNEY_DIMENSION = { width: 0.5, height: 3.2, depth: 0.5 };
 
 export class House extends Group {
@@ -70,8 +70,20 @@ export class House extends Group {
 
   private buildRoof(): void {
     this.roof = new Mesh(
-      new ConeGeometry(ROOF_DIMENSION.radius, ROOF_DIMENSION.height, 4),
-      new MeshStandardMaterial({ color: 0x800000 })
+      new ConeGeometry(ROOF_DIMENSION.radius, ROOF_DIMENSION.height, 4, 50),
+      new MeshStandardMaterial(
+        {
+          map: CustomTexture.houseRoof.color,
+          normalMap: CustomTexture.houseRoof.normal,
+          aoMap: CustomTexture.houseRoof.arm,
+          roughnessMap: CustomTexture.houseRoof.arm,
+          metalnessMap: CustomTexture.houseRoof.arm,
+          bumpMap: CustomTexture.houseRoof.bump,
+          displacementMap: CustomTexture.houseRoof.displacement,
+          displacementScale: 0.3,
+          displacementBias: -0.15,
+        }
+      )
     );
     this.roof.position.y = WALLS_DIMENSION.height + ROOF_DIMENSION.height * 0.5;
     this.roof.rotation.y = Math.PI * 0.25;
@@ -114,14 +126,14 @@ export class House extends Group {
   private fillBushes(): void {
     // Add bushes around the house
     const bushes = [
-      new Bush(new Vector3(-1.4, 0.1, 2.1), 0.25),
-      new Bush(new Vector3(-2, 0.1, 2), 0.5),
-      new Bush(new Vector3(-2.1, 0.2, -1.5), 0.4),
-      new Bush(new Vector3(-2, 0.1, -2), 0.25),
+      new Bush(new Vector3(-1.4, 0.1, 2.1), 0.25, new Vector3(-0.75, 0, 0)),
+      new Bush(new Vector3(-2, 0.1, 2), 0.5, new Vector3(-0.75, 0, -0.25)),
+      new Bush(new Vector3(-2.1, 0.2, -1.5), 0.4, new Vector3(0, 0, -0.5)),
+      new Bush(new Vector3(-2, 0.1, -2), 0.25, new Vector3(0.5, 0, 0)),
       new Bush(new Vector3(-2.1, 0, -1), 0.2),
 
-      new Bush(new Vector3(2, 0.2, 0.5), 0.5),
-      new Bush(new Vector3(2.1, 0.1, -0.4), 0.4),
+      new Bush(new Vector3(2, 0.2, 0.5), 0.5, new Vector3(0, 0, 0.5)),
+      new Bush(new Vector3(2.1, 0.1, -0.4), 0.4 , new Vector3(0, 0, 0.5)),
     ];
 
     this.add(...bushes);

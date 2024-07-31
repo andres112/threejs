@@ -51,6 +51,23 @@ export class TextureFactory {
     };
   }
 
+  public static createHouseRoofTextures(): { [key: string]: Texture } {
+    return {
+      arm: loadTexture('../textures/roof/roof_07_arm_1k.png', { repeat: new Vector2(3, 1) }),
+      bump: loadTexture('../textures/roof/roof_07_bump_1k.png', { repeat: new Vector2(3, 1) }),
+      color: loadTexture('../textures/roof/roof_07_diff_1k.jpg', {
+        colorSpace: true,
+        repeat: new Vector2(3, 1),
+      }),
+      normal: loadTexture('../textures/roof/roof_07_nor_gl_1k.png', {
+        repeat: new Vector2(3, 1),
+      }),
+      displacement: loadTexture('../textures/roof/roof_07_disp_1k.png', {
+        repeat: new Vector2(3, 1),
+      }),
+    };
+  }
+
   public static createBushTextures(): { [key: string]: Texture } {
     return {
       ao: loadTexture('../textures/bush/Hedge_001_AmbientOcclusion.jpg', {

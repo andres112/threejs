@@ -22,6 +22,9 @@ import { Floor } from './Objects/floor';
 import { Size } from './models/main';
 import { Graves } from './Objects/graves';
 
+// stats
+import { stats } from './utils/gui';
+
 export class App {
   private scene: Scene;
   private meshGroup?: Group;
@@ -56,6 +59,10 @@ export class App {
     // Axes helper
     const axesHelper = new AxesHelper(10);
     this.scene.add(axesHelper);
+
+    // Stats
+    stats.showPanel(0);
+    document.body.appendChild(stats.dom);
   }
 
   private setupScene() {

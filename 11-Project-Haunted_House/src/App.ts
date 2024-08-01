@@ -7,6 +7,7 @@ import {
   Vector2,
   Vector3,
   DirectionalLightHelper,
+  PointLightHelper,
 } from 'three';
 import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -18,13 +19,16 @@ import { Timer } from 'three/examples/jsm/misc/Timer';
 // Objects
 import { House } from './Objects/house';
 import { Floor } from './Objects/floor';
+import { Graves } from './Objects/graves';
+import { Ghost, ghostPaths } from './Objects/ghost';
 
 // Models
 import { Size } from './models/main';
-import { Graves } from './Objects/graves';
 
 // stats
 import { stats } from './utils/gui';
+
+const FLOOR_DIMENSIONS = new Vector2(25, 25);
 
 export class App {
   private scene: Scene;
@@ -35,6 +39,8 @@ export class App {
   private renderer: WebGLRenderer;
   private sizes: Size;
   private timer: Timer;
+
+  private ghosts: Ghost[] = [];
 
   constructor() {
     this.scene = new Scene();
@@ -47,8 +53,6 @@ export class App {
     this.controls = createControls(this.camera, this.canvas);
     this.renderer = createRenderer(this.canvas, this.sizes);
     this.timer = new Timer();
-
-    this.init();
   }
 
   public init() {
@@ -73,14 +77,13 @@ export class App {
     this.scene.add(ambientLight, directionalLight);
 
     // light helper
-    const  directionalLightHelper = new DirectionalLightHelper(directionalLight, 1)
-    this.scene.add(directionalLightHelper)
+    const directionalLightHelper = new DirectionalLightHelper(directionalLight, 1);
+    this.scene.add(directionalLightHelper);
   }
 
   private setupObjects() {
     // Create the plane terrain
-    const floorDimension = new Vector2(25, 25);
-    const floor = Floor.getInstance(floorDimension);
+    const floor = Floor.getInstance(FLOOR_DIMENSIONS);
     this.scene.add(floor);
 
     // Create the houses
@@ -92,8 +95,19 @@ export class App {
 
     // Create the graves
     const housePositions = [house.position, farHouse.position];
-    const graves = Graves.getInstance(floorDimension, housePositions);
+    const graves = Graves.getInstance(FLOOR_DIMENSIONS, housePositions);
     this.scene.add(graves);
+
+    // Create the ghosts
+    for (let i = 0; i < 5; i++) {
+      const ghost = new Ghost('#b7d2e2', 6);
+      this.scene.add(ghost);
+      this.ghosts.push(ghost);
+
+      // ghost light helper
+      // const ghostLightHelper = new PointLightHelper(ghost, 1);
+      // this.scene.add(ghostLightHelper);
+    }
   }
 
   private setupEventListeners() {
@@ -117,6 +131,15 @@ export class App {
       // Timer
       this.timer.update();
       const elapsedTime = this.timer.getElapsed();
+
+      // animate ghosts
+      this.ghosts.forEach((ghost, index) => {
+        ghost.animateGhosts(
+          elapsedTime * 0.3,
+          FLOOR_DIMENSIONS,
+          ghostPaths[index % ghostPaths.length]
+        );
+      });
 
       // Update controls
       this.controls.update();

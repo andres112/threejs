@@ -13,7 +13,7 @@ export const createDirectionalLight = (): DirectionalLight => {
 export const createPointLight = (
   color: string,
   intensity: number = 1,
-  position: Vector3
+  position: Vector3 = new Vector3(0, 0, 0)
 ): PointLight => {
   const pointLight = new PointLight(color, intensity, 4);
   pointLight.position.set(position.x, position.y, position.z);

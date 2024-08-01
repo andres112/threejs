@@ -73,7 +73,6 @@ const setColorSpace = (texture: Texture): Texture => {
 
 const rotateTexture = (texture: Texture, angle: number): Texture => {
   texture.rotation = angle;
-  console.log(texture);
 
   return texture;
 };

@@ -6,6 +6,7 @@ import {
   AxesHelper,
   Vector2,
   Vector3,
+  DirectionalLightHelper,
 } from 'three';
 import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -70,6 +71,10 @@ export class App {
     const ambientLight = createAmbientLight();
     const directionalLight = createDirectionalLight();
     this.scene.add(ambientLight, directionalLight);
+
+    // light helper
+    const  directionalLightHelper = new DirectionalLightHelper(directionalLight, 1)
+    this.scene.add(directionalLightHelper)
   }
 
   private setupObjects() {

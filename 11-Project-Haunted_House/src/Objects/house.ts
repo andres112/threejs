@@ -1,11 +1,21 @@
-import { Mesh, MeshStandardMaterial, Group, BoxGeometry, ConeGeometry, Vector3, PlaneGeometry } from 'three';
+import {
+  Mesh,
+  MeshStandardMaterial,
+  Group,
+  BoxGeometry,
+  ConeGeometry,
+  Vector3,
+  PlaneGeometry,
+  PointLight,
+} from 'three';
 import { Bush } from './bush';
 import { CustomTexture } from '../textures/main';
 import { HouseFolder } from '../utils/gui';
+import { createPointLight } from '../components/light';
 
 const WALLS_DIMENSION = { width: 4, height: 2.5, depth: 4 };
 const ROOF_DIMENSION = { radius: 3.5, height: 1.5 };
-const DOOR_DIMENSION = { width: 1, height:1.6 };
+const DOOR_DIMENSION = { width: 1.1, height: 1.8 };
 const CHIMNEY_DIMENSION = { width: 0.5, height: 3.2, depth: 0.5 };
 
 export class House extends Group {
@@ -13,6 +23,8 @@ export class House extends Group {
   private roof = new Mesh();
   private chimney = new Mesh();
   private door = new Mesh();
+
+  private doorLight?: PointLight;
 
   constructor(position: Vector3 = new Vector3(0, 0, 0), scale: Vector3 = new Vector3(1, 1, 1)) {
     super();
@@ -23,6 +35,8 @@ export class House extends Group {
     this.buildHouse();
     this.setPosition(position);
     this.setScale(scale);
+
+    this.setDoorLight();
 
     this.setGui();
   }
@@ -71,17 +85,16 @@ export class House extends Group {
   private buildRoof(): void {
     this.roof = new Mesh(
       new ConeGeometry(ROOF_DIMENSION.radius, ROOF_DIMENSION.height, 4, 50),
-      new MeshStandardMaterial(
-        {
-          map: CustomTexture.houseRoof.color,
-          normalMap: CustomTexture.houseRoof.normal,
-          aoMap: CustomTexture.houseRoof.arm,
-          roughnessMap: CustomTexture.houseRoof.arm,
-          displacementMap: CustomTexture.houseRoof.displacement,
-          displacementScale: 0.3,
-          displacementBias: -0.15,
-        }
-      )
+      new MeshStandardMaterial({
+        map: CustomTexture.houseRoof.color,
+        normalMap: CustomTexture.houseRoof.normal,
+        aoMap: CustomTexture.houseRoof.arm,
+        metalness: 0,
+        roughness: 0.8,
+        displacementMap: CustomTexture.houseRoof.displacement,
+        displacementScale: 0.3,
+        displacementBias: -0.15,
+      })
     );
     this.roof.position.y = WALLS_DIMENSION.height + ROOF_DIMENSION.height * 0.5;
     this.roof.rotation.y = Math.PI * 0.25;
@@ -140,10 +153,19 @@ export class House extends Group {
       new Bush(new Vector3(-2.1, 0, -1), 0.2),
 
       new Bush(new Vector3(2, 0.2, 0.5), 0.5, new Vector3(0, 0, 0.5)),
-      new Bush(new Vector3(2.1, 0.1, -0.4), 0.4 , new Vector3(0, 0, 0.5)),
+      new Bush(new Vector3(2.1, 0.1, -0.4), 0.4, new Vector3(0, 0, 0.5)),
     ];
 
     this.add(...bushes);
+  }
+
+  private setDoorLight(): void {
+    this.doorLight = createPointLight(
+      '#ff7d46',
+      3,
+      new Vector3(0, DOOR_DIMENSION.height + 0.6, WALLS_DIMENSION.depth * 0.5 + 0.1)
+    );
+    this.add(this.doorLight);
   }
 
   private setGui() {}

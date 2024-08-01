@@ -8,6 +8,7 @@ export class TextureFactory {
       color: loadTexture('../textures/floor/coast_sand_rocks_02_diff_1k.jpg', {
         repeat: new Vector2(8, 8),
         colorSpace: true,
+        magFilter: true,
       }),
       normal: loadTexture('../textures/floor/coast_sand_rocks_02_nor_gl_1k.png', {
         repeat: new Vector2(8, 8),
@@ -26,6 +27,7 @@ export class TextureFactory {
       arm: loadTexture('../textures/wall/castle_brick_broken_06_arm_1k.png'),
       color: loadTexture('../textures/wall/castle_brick_broken_06_diff_1k.jpg', {
         colorSpace: true,
+        magFilter: true,
       }),
       normal: loadTexture('../textures/wall/castle_brick_broken_06_nor_gl_1k.png'),
       displacement: loadTexture('../textures/wall/castle_brick_broken_06_disp_1k.png'),
@@ -57,6 +59,7 @@ export class TextureFactory {
       color: loadTexture('../textures/roof/roof_07_diff_1k.jpg', {
         colorSpace: true,
         repeat: new Vector2(3, 1),
+        magFilter: true,
       }),
       normal: loadTexture('../textures/roof/roof_07_nor_gl_1k.png', {
         repeat: new Vector2(3, 1),
@@ -70,7 +73,9 @@ export class TextureFactory {
   public static createHouseDoorTextures(): { [key: string]: Texture } {
     return {
       ao: loadTexture('../textures/door/Wood_Door_002_ambientOcclusion.jpg'),
-      color: loadTexture('../textures/door/Wood_Door_002_basecolor.jpg', { colorSpace: true }),
+      color: loadTexture('../textures/door/Wood_Door_002_basecolor.jpg', {
+        colorSpace: true,
+      }),
       normal: loadTexture('../textures/door/Wood_Door_002_normal.jpg'),
       displacement: loadTexture('../textures/door/Wood_Door_002_height.png'),
       metallic: loadTexture('../textures/door/Wood_Door_002_metallic.jpg'),
@@ -86,6 +91,7 @@ export class TextureFactory {
       color: loadTexture('../textures/bush/Hedge_001_BaseColor.jpg', {
         repeat: new Vector2(3, 3),
         colorSpace: true,
+        magFilter: true,
       }),
       normal: loadTexture('../textures/bush/Hedge_001_Normal.jpg', { repeat: new Vector2(3, 3) }),
       roughness: loadTexture('../textures/bush/Hedge_001_Roughness.jpg', {
@@ -100,6 +106,7 @@ export class TextureFactory {
       arm: loadTexture('../textures/grave/plastered_stone_wall_arm_1k.jpg'),
       color: loadTexture('../textures/grave/plastered_stone_wall_diff_1k.jpg', {
         colorSpace: true,
+        magFilter: true,
       }),
       normal: loadTexture('../textures/grave/plastered_stone_wall_nor_gl_1k.jpg'),
       displacement: loadTexture('../textures/grave/plastered_stone_wall_disp_1k.png'),

@@ -62,8 +62,8 @@ export class App {
     this.animate();
 
     // Axes helper
-    const axesHelper = new AxesHelper(10);
-    this.scene.add(axesHelper);
+    // const axesHelper = new AxesHelper(10);
+    // this.scene.add(axesHelper);
 
     // Stats
     stats.showPanel(0);

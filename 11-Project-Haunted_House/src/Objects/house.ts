@@ -163,7 +163,8 @@ export class House extends Group {
     this.doorLight = createPointLight(
       '#ff7d46',
       3,
-      new Vector3(0, DOOR_DIMENSION.height + 0.6, WALLS_DIMENSION.depth * 0.5 + 0.1)
+      new Vector3(0, DOOR_DIMENSION.height + 0.6, WALLS_DIMENSION.depth * 0.5 + 0.1),
+      false
     );
     this.add(this.doorLight);
   }

@@ -13,7 +13,7 @@ import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createControls } from './components/controls';
 import { createRenderer } from './components/renderer';
-import { createAmbientLight, createDirectionalLight } from './components/light';
+import { createAmbientLight, createDirectionalLight, shadowInit } from './components/light';
 import { Timer } from 'three/examples/jsm/misc/Timer';
 
 // Objects
@@ -61,6 +61,8 @@ export class App {
     this.setupEventListeners();
     this.animate();
 
+    shadowInit(this.renderer);
+
     // Axes helper
     // const axesHelper = new AxesHelper(10);
     // this.scene.add(axesHelper);
@@ -100,7 +102,7 @@ export class App {
 
     // Create the ghosts
     for (let i = 0; i < 5; i++) {
-      const ghost = new Ghost('#b7d2e2', 6);
+      const ghost = new Ghost('#d5d48e', 6);
       this.scene.add(ghost);
       this.ghosts.push(ghost);
 

@@ -10,7 +10,6 @@ import {
 } from 'three';
 import { Bush } from './bush';
 import { CustomTexture } from '../textures/main';
-import { HouseFolder } from '../utils/gui';
 import { createPointLight } from '../components/light';
 
 const WALLS_DIMENSION = { width: 4, height: 2.5, depth: 4 };

@@ -10,4 +10,3 @@ const gui = new GUI({
 });
 
 export const FloorFolder = gui.addFolder("Floor");
-export const HouseFolder = gui.addFolder("House");

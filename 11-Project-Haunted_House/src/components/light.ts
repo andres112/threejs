@@ -19,9 +19,21 @@ export const createAmbientLight = (): AmbientLight => {
 export const createDirectionalLight = (): DirectionalLight => {
   const directionalLight = new DirectionalLight('#86cdff', 2);
   directionalLight.position.set(5, 5, -10);
-  directionalLight.castShadow = true;
+  setDirectionalLightShadow(directionalLight);
   return directionalLight;
 };
+
+const setDirectionalLightShadow = (directionalLight: DirectionalLight): void => {
+  directionalLight.castShadow = true;
+  directionalLight.shadow.mapSize.width = 256;
+  directionalLight.shadow.mapSize.height = 256;
+  directionalLight.shadow.camera.far = 25;
+  directionalLight.shadow.camera.near = 1;
+  directionalLight.shadow.camera.left = -13;
+  directionalLight.shadow.camera.right = 13;
+  directionalLight.shadow.camera.top = 8;
+  directionalLight.shadow.camera.bottom = -5;
+}
 
 export const createPointLight = (
   color: string,

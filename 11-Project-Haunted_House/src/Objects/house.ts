@@ -80,6 +80,10 @@ export class House extends Group {
       })
     );
     this.walls.position.y = WALLS_DIMENSION.height * 0.5;
+
+    // enable shadows for the walls
+    this.walls.castShadow = true;
+    this.walls.receiveShadow = true;
   }
 
   private buildRoof(): void {
@@ -98,6 +102,9 @@ export class House extends Group {
     );
     this.roof.position.y = WALLS_DIMENSION.height + ROOF_DIMENSION.height * 0.5;
     this.roof.rotation.y = Math.PI * 0.25;
+
+    // enable shadows for the roof
+    this.roof.castShadow = true;
   }
 
   private buildChimney(): void {
@@ -123,6 +130,10 @@ export class House extends Group {
     );
     this.chimney.position.y = CHIMNEY_DIMENSION.height * 0.5;
     this.chimney.position.x = WALLS_DIMENSION.width * 0.5;
+
+    // enable shadows for the chimney
+    this.chimney.castShadow = true;
+    this.chimney.receiveShadow = true;
   }
 
   private buildDoor(): void {

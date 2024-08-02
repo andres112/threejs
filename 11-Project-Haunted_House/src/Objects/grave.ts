@@ -17,5 +17,6 @@ export class Grave extends Mesh {
         displacementBias: -0.03,
       })
     );
+    this.castShadow = true;
   }
 }

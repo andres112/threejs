@@ -56,12 +56,12 @@ export class App {
   }
 
   public init() {
+    shadowInit(this.renderer); // must be called before any light is created
     this.setupScene();
     this.setupObjects();
     this.setupEventListeners();
     this.animate();
 
-    shadowInit(this.renderer);
 
     // Axes helper
     // const axesHelper = new AxesHelper(10);
@@ -74,6 +74,7 @@ export class App {
 
   private setupScene() {
     this.scene.add(this.camera);
+
     const ambientLight = createAmbientLight();
     const directionalLight = createDirectionalLight();
     this.scene.add(ambientLight, directionalLight);
@@ -86,6 +87,7 @@ export class App {
   private setupObjects() {
     // Create the plane terrain
     const floor = Floor.getInstance(FLOOR_DIMENSIONS);
+    floor.receiveShadow = true;
     this.scene.add(floor);
 
     // Create the houses

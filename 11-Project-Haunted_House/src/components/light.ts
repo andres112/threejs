@@ -17,8 +17,8 @@ export const createAmbientLight = (): AmbientLight => {
 };
 
 export const createDirectionalLight = (): DirectionalLight => {
-  const directionalLight = new DirectionalLight('#86cdff', 1.5);
-  directionalLight.position.set(5, 3, -8);
+  const directionalLight = new DirectionalLight('#86cdff', 2);
+  directionalLight.position.set(5, 5, -10);
   directionalLight.castShadow = true;
   return directionalLight;
 };

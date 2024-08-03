@@ -11,7 +11,7 @@ export class SkyBox extends Sky {
   public static getInstance(): Sky {
     if (!SkyBox.instance) {
       SkyBox.instance = new Sky();
-      SkyBox.instance.scale.setScalar(30);
+      SkyBox.instance.scale.setScalar(100);
       SkyBox.instance.material.uniforms['turbidity'].value = 10;
       SkyBox.instance.material.uniforms['rayleigh'].value = 3;
       SkyBox.instance.material.uniforms['mieCoefficient'].value = 0.1;

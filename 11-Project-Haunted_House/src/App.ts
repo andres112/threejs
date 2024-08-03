@@ -28,6 +28,7 @@ import { Size } from './models/main';
 
 // stats
 import { stats } from './utils/gui';
+import { Lamp } from './Objects/lamp';
 
 const FLOOR_DIMENSIONS = new Vector2(25, 25);
 
@@ -89,7 +90,7 @@ export class App {
     // this.scene.add(directionalLightShadowCameraHelper);
   }
 
-  private setupObjects() {
+  private async setupObjects() {
     // Create the plane terrain
     const floor = Floor.getInstance(FLOOR_DIMENSIONS);
     floor.receiveShadow = true;
@@ -116,6 +117,15 @@ export class App {
       // // ghost light helper
       // const ghostLightHelper = new PointLightHelper(ghost, 1);
       // this.scene.add(ghostLightHelper);
+    }
+
+    // Lamp
+    const lamp  = new Lamp()
+    try {
+      const lampInstance = await lamp.load();
+      this.scene.add(lampInstance);
+    } catch (error) {
+      console.error(error);
     }
   }
 

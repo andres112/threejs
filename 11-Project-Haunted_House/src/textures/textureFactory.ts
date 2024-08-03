@@ -112,4 +112,14 @@ export class TextureFactory {
       displacement: loadTexture('../textures/grave/plastered_stone_wall_disp_1k.png'),
     };
   }
+
+  public static createLampTextures(): { [key: string]: Texture } {
+    return {
+      bump: loadTexture('../textures/lamp/wood_bump.jpg'),
+      color: loadTexture('../textures/lamp/wood_texture.jpg', {
+        colorSpace: true,
+        magFilter: true,
+      }),
+    };
+  }
 }

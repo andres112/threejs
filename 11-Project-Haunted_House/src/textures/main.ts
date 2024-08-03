@@ -9,4 +9,5 @@ export class CustomTexture {
   public static readonly door: { [k: string]: Texture } = TextureFactory.createHouseDoorTextures();
   public static readonly bush: { [k: string]: Texture } = TextureFactory.createBushTextures();
   public static readonly grave: { [k: string]: Texture } = TextureFactory.createGraveTextures();
+  public static readonly lamp: { [k: string]: Texture } = TextureFactory.createLampTextures();
 }

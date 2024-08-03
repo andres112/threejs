@@ -43,6 +43,14 @@ export const createPointLight = (
 ): PointLight => {
   const pointLight = new PointLight(color, intensity, 4);
   pointLight.position.set(position.x, position.y, position.z);
-  pointLight.castShadow = isCastShadow;
+  setPointLightShadow(pointLight, isCastShadow);
   return pointLight;
 };
+
+export const setPointLightShadow = (pointLight: PointLight, isCastShadow = true): void => {
+  pointLight.castShadow = isCastShadow;
+  pointLight.shadow.mapSize.width = 256;
+  pointLight.shadow.mapSize.height = 256;
+  pointLight.shadow.camera.far = 10;
+  pointLight.shadow.camera.near = 1;
+}

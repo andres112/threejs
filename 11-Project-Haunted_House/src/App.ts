@@ -113,7 +113,7 @@ export class App {
       this.scene.add(ghost);
       this.ghosts.push(ghost);
 
-      // ghost light helper
+      // // ghost light helper
       // const ghostLightHelper = new PointLightHelper(ghost, 1);
       // this.scene.add(ghostLightHelper);
     }

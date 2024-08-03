@@ -1,3 +1,4 @@
+import { setPointLightShadow } from '../components/light';
 import { PointLight, Vector2 } from 'three';
 
 // Define the array of strings
@@ -11,6 +12,7 @@ const LIMIT_FACTOR = 0.3;
 export class Ghost extends PointLight {
   constructor(color: string, intensity: number) {
     super(color, intensity);
+    setPointLightShadow(this);
   }
 
   public animateGhosts(speed: number, limits: Vector2, pattern: GhostPath): void {

@@ -9,6 +9,7 @@ import {
   DirectionalLightHelper,
   PointLightHelper,
   CameraHelper,
+  FogExp2,
 } from 'three';
 import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -88,12 +89,16 @@ export class App {
     // // Helpers
     // const directionalLightShadowCameraHelper = new CameraHelper(directionalLight.shadow.camera);
     // this.scene.add(directionalLightShadowCameraHelper);
-  }
 
-  private async setupObjects() {
     // Add the sky
     const sky = SkyBox.getInstance();
     this.scene.add(sky);
+
+    // Add fog
+    this.addFog();
+  }
+
+  private async setupObjects() {
 
     // Create the plane terrain
     const floor = Floor.getInstance(FLOOR_DIMENSIONS);
@@ -131,6 +136,10 @@ export class App {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  private addFog() {
+    this.scene.fog = new FogExp2('#262837', 0.05);
   }
 
   private setupEventListeners() {

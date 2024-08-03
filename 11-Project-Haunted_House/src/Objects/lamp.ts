@@ -21,7 +21,6 @@ export class Lamp {
           this.instance.rotation.y = -Math.PI * 0.5;
 
           this.instance.traverse((child: Object3D<Object3DEventMap>) => {
-            console.log(child);
             if (child.isMesh) {
               child.castShadow = true;
               child.receiveShadow = true;

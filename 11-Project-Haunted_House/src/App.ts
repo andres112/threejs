@@ -22,13 +22,14 @@ import { House } from './Objects/house';
 import { Floor } from './Objects/floor';
 import { Graves } from './Objects/graves';
 import { Ghost, ghostPaths } from './Objects/ghost';
+import { Lamp } from './Objects/lamp';
+import { SkyBox } from './Objects/sky';
 
 // Models
 import { Size } from './models/main';
 
 // stats
 import { stats } from './utils/gui';
-import { Lamp } from './Objects/lamp';
 
 const FLOOR_DIMENSIONS = new Vector2(25, 25);
 
@@ -64,7 +65,6 @@ export class App {
     this.setupEventListeners();
     this.animate();
 
-
     // TODO: create a GUI for the helpers and move animations to its file
     // Axes helper
     // const axesHelper = new AxesHelper(10);
@@ -91,6 +91,10 @@ export class App {
   }
 
   private async setupObjects() {
+    // Add the sky
+    const sky = SkyBox.getInstance();
+    this.scene.add(sky);
+
     // Create the plane terrain
     const floor = Floor.getInstance(FLOOR_DIMENSIONS);
     floor.receiveShadow = true;
@@ -120,7 +124,7 @@ export class App {
     }
 
     // Lamp
-    const lamp  = new Lamp()
+    const lamp = new Lamp();
     try {
       const lampInstance = await lamp.load();
       this.scene.add(lampInstance);

@@ -30,7 +30,7 @@ export class Lamp {
             }
             if(['Cube001', 'Cube002', 'Cube003', 'Cube004'].includes(child.name)) {
               child.material.map = CustomTexture.lamp.color;
-              child.material.bumpMap = CustomTexture.lamp.bump;
+              child.material.roughness = 1;
             }
             // add point light on the top of this cylinder
             if(child.name === 'Cylinder004') {

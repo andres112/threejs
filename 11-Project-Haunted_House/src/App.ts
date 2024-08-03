@@ -119,7 +119,7 @@ export class App {
 
     // Create the ghosts
     for (let i = 0; i < 5; i++) {
-      const ghost = new Ghost('#d5d48e', 6);
+      const ghost = new Ghost('#c3e4e2', 3);
       this.scene.add(ghost);
       this.ghosts.push(ghost);
 
@@ -139,7 +139,7 @@ export class App {
   }
 
   private addFog() {
-    this.scene.fog = new FogExp2('#262837', 0.05);
+    this.scene.fog = new FogExp2('#023e4b', 0.05);
   }
 
   private setupEventListeners() {
@@ -167,7 +167,7 @@ export class App {
       // animate ghosts
       this.ghosts.forEach((ghost, index) => {
         ghost.animateGhosts(
-          elapsedTime * 0.3,
+          elapsedTime * 0.2,
           FLOOR_DIMENSIONS,
           ghostPaths[index % ghostPaths.length]
         );

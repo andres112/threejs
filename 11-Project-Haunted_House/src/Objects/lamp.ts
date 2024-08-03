@@ -17,8 +17,8 @@ export class Lamp {
         (gltf) => {
           this.instance = gltf.scene;
           this.instance.scale.set(0.09, 0.09, 0.09);
-          this.instance.position.set(1.3, -0.4, 3);
-          this.instance.rotation.y = -Math.PI * 0.5;
+          this.instance.position.set(1.3, -0.4, 3.5);
+          this.instance.rotation.y = -Math.PI * 0.25;
 
           this.instance.traverse((child: Object3D<Object3DEventMap>) => {
             if (child.isMesh) {
@@ -34,7 +34,7 @@ export class Lamp {
             }
             // add point light on the top of this cylinder
             if(child.name === 'Cylinder004') {
-              const pointLight = createPointLight('#d3aa14', 6, new Vector3(0, 0.5, 0));
+              const pointLight = createPointLight('#d3aa14', 10, new Vector3(0, 0.5, 0));
               pointLight.position.set(0, 0.1, 1);
               child.add(pointLight);
             }

@@ -10,6 +10,9 @@ import {
   PointLightHelper,
   CameraHelper,
   FogExp2,
+  AudioListener,
+  PositionalAudio,
+  AudioLoader
 } from 'three';
 import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -43,6 +46,7 @@ export class App {
   private renderer: WebGLRenderer;
   private sizes: Size;
   private timer: Timer;
+  private soundTrack: PositionalAudio;
 
   private ghosts: Ghost[] = [];
 
@@ -74,10 +78,17 @@ export class App {
     // Stats
     stats.showPanel(0);
     document.body.appendChild(stats.dom);
-  }
 
+  }
+  
   private setupScene() {
     this.scene.add(this.camera);
+
+    // TODO: move this to a different file
+    // Audio listener
+    const listener = new AudioListener();
+    this.camera.add(listener);
+    this.soundTrack = new PositionalAudio(listener);
 
     const ambientLight = createAmbientLight();
     const directionalLight = createDirectionalLight();
@@ -111,6 +122,19 @@ export class App {
 
     const farHouse = new House(new Vector3(-9, -0.1, -6), new Vector3(0.7, 0.7, 0.7));
     this.scene.add(farHouse);
+
+    // Load a sound and set it as the PositionalAudio object's buffer
+    const sound = this.soundTrack
+    const audioLoader = new AudioLoader();
+    audioLoader.load('./audios/soundtrack.mp3', function(buffer) {
+        sound.setBuffer(buffer);
+        sound.setRefDistance(1);
+        sound.setLoop(true);
+        sound.setVolume(0.9);
+        sound.play();
+    });
+
+    farHouse.add(this.soundTrack);
 
     // Create the graves
     const housePositions = [house.position, farHouse.position];

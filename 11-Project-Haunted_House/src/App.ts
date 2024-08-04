@@ -2,7 +2,6 @@ import {
   PerspectiveCamera,
   Scene,
   WebGLRenderer,
-  Group,
   AxesHelper,
   Vector2,
   Vector3,
@@ -11,8 +10,8 @@ import {
   CameraHelper,
   FogExp2,
   AudioListener,
-  PositionalAudio,
-  AudioLoader
+  AudioLoader,
+  PositionalAudio
 } from 'three';
 import { createCamera } from './components/camera';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -31,6 +30,7 @@ import { SkyBox } from './Objects/sky';
 
 // Models
 import { Size } from './models/main';
+import { createAudioListener, createPositionalAudio } from './components/audios';
 
 // stats
 import { stats } from './utils/gui';
@@ -39,14 +39,14 @@ const FLOOR_DIMENSIONS = new Vector2(25, 25);
 
 export class App {
   private scene: Scene;
-  private meshGroup?: Group;
   private canvas: HTMLCanvasElement | null;
   private camera: PerspectiveCamera;
   private controls: OrbitControls;
   private renderer: WebGLRenderer;
   private sizes: Size;
   private timer: Timer;
-  private soundTrack: PositionalAudio;
+  private audioListener: AudioListener;
+  private soundtrack?: PositionalAudio;
 
   private ghosts: Ghost[] = [];
 
@@ -60,6 +60,7 @@ export class App {
     this.camera = createCamera(this.sizes);
     this.controls = createControls(this.camera, this.canvas);
     this.renderer = createRenderer(this.canvas, this.sizes);
+    this.audioListener = createAudioListener();
     this.timer = new Timer();
   }
 
@@ -84,11 +85,8 @@ export class App {
   private setupScene() {
     this.scene.add(this.camera);
 
-    // TODO: move this to a different file
     // Audio listener
-    const listener = new AudioListener();
-    this.camera.add(listener);
-    this.soundTrack = new PositionalAudio(listener);
+    this.camera.add(this.audioListener);
 
     const ambientLight = createAmbientLight();
     const directionalLight = createDirectionalLight();
@@ -124,17 +122,17 @@ export class App {
     this.scene.add(farHouse);
     
     // Load a sound and set it as the PositionalAudio object's buffer
-    const sound = this.soundTrack
+    const sound = createPositionalAudio(this.audioListener, './audios/soundtrack.mp3');
     const audioLoader = new AudioLoader();
     audioLoader.load('./audios/soundtrack.mp3', function(buffer) {
         sound.setBuffer(buffer);
         sound.setRefDistance(1);
         sound.setLoop(true);
         sound.setVolume(0.9);
-        sound.play();
     });
 
-    house.add(this.soundTrack);
+    house.add(sound);
+    this.soundtrack = sound;
 
     // Create the graves
     const housePositions = [house.position, farHouse.position];
@@ -180,6 +178,12 @@ export class App {
       this.renderer.setSize(this.sizes.width, this.sizes.height);
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
+
+    // Set a click listener to play the sound to this button <button class="soundBtn">Play</button>
+    const soundBtn = document.querySelector('.soundBtn');
+    soundBtn?.addEventListener('click', () => {
+      this.soundtrack?.play();
+    } );   
   }
 
   private animate(): void {

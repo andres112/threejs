@@ -122,7 +122,7 @@ export class App {
 
     const farHouse = new House(new Vector3(-9, -0.1, -6), new Vector3(0.7, 0.7, 0.7));
     this.scene.add(farHouse);
-
+    
     // Load a sound and set it as the PositionalAudio object's buffer
     const sound = this.soundTrack
     const audioLoader = new AudioLoader();
@@ -134,7 +134,7 @@ export class App {
         sound.play();
     });
 
-    farHouse.add(this.soundTrack);
+    house.add(this.soundTrack);
 
     // Create the graves
     const housePositions = [house.position, farHouse.position];

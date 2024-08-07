@@ -93,7 +93,7 @@ const pointsMaterial = new THREE.PointsMaterial({
   // depthTest generates a bug when another object is behind the particles
   depthWrite: false, // To avoid depth fighting between particles
   // depth and blending(transparency) do not work together. If you want to use both, you need to use a custom shader.
-  // blending: THREE.AdditiveBlending,
+  blending: THREE.AdditiveBlending,
   vertexColors: true,
 });
 

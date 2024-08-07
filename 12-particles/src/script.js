@@ -24,20 +24,49 @@ const textureLoader = new THREE.TextureLoader()
  */
 
 // Geometry
-const particlesGeometry = new THREE.BufferGeometry()
-const count = 10000
+// Create a spiral galaxy
+const particlesGeometry = new THREE.BufferGeometry();
+const count = 1000000;
 
-const positions = new Float32Array(count * 3)
+const positions = new Float32Array(count * 3);
 
-for(let i = 0; i < count * 3; i++){
-    positions[i] = (Math.random() - 0.5) * 10
+// Spiral parameters
+const spiralTurns = 100;
+const maxRadius = 100;
+const heightVariation = 0.2; // To add some 3D depth to the spiral
+const armOffset = Math.PI; // Offset for the second arm
+
+for (let i = 0; i < count / 2; i++) {
+    const angle = spiralTurns * Math.PI * 2 * (i / (count / 2));
+    const radius = maxRadius * Math.sqrt(i / (count / 2)); // Logarithmic spiral
+    const randomFactor = (Math.random() - 0.5) * 0.5;
+
+    // First arm
+    let x = (radius + randomFactor) * Math.cos(angle);
+    let y = (Math.random() - 0.5) * heightVariation;
+    let z = (radius + randomFactor) * Math.sin(angle);
+
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
+
+    // Second arm
+    x = (radius + randomFactor) * Math.cos(angle + armOffset);
+    y = (Math.random() - 0.5) * heightVariation;
+    z = (radius + randomFactor) * Math.sin(angle + armOffset);
+
+    positions[(i + count / 2) * 3] = x;
+    positions[(i + count / 2) * 3 + 1] = y;
+    positions[(i + count / 2) * 3 + 2] = z;
 }
-particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
 const pointsMaterial = new THREE.PointsMaterial({
-    size: 0.01,
-    sizeAttenuation: true
-})
+    size: 0.02,
+    sizeAttenuation: true,
+    color: 0xff88cc
+});
 
 // Points
 const particles = new THREE.Points(particlesGeometry, pointsMaterial)
@@ -70,8 +99,9 @@ window.addEventListener('resize', () =>
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.z = 3
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 500)
+camera.position.z = 50
+camera.position.y = 10
 scene.add(camera)
 
 // Controls
@@ -95,6 +125,9 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // Update particles
+    particles.rotation.y = elapsedTime * 0.2
 
     // Update controls
     controls.update()

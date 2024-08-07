@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import GUI from 'lil-gui';
 
 /**
@@ -42,6 +42,7 @@ const particlesGeometry = new THREE.BufferGeometry();
 const count = 1000000;
 
 const positions = new Float32Array(count * 3);
+const colors = new Float32Array(count * 3);
 
 // Spiral parameters
 const spiralTurns = 100;
@@ -71,14 +72,19 @@ for (let i = 0; i < count / 2; i++) {
   positions[(i + count / 2) * 3] = x;
   positions[(i + count / 2) * 3 + 1] = y;
   positions[(i + count / 2) * 3 + 2] = z;
+
+  // Colors
+  colors[i * 3] = colors[i + count * 0.5 * 3] = Math.random();
+  colors[i * 3 + 1] = colors[i + count * 0.5 * 3 + 1] = Math.random();
+  colors[i * 3 + 2] = colors[i + count * 0.5 * 3 + 2] = Math.random();
 }
 
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
 const pointsMaterial = new THREE.PointsMaterial({
   size: 0.02,
   sizeAttenuation: true,
-  color: 0xffff,
   alphaMap: particleTexture,
   transparent: true,
   // alphaTest: 0.001, // To avoid rendering the background of the texture, using a threshold
@@ -86,8 +92,9 @@ const pointsMaterial = new THREE.PointsMaterial({
   // depthTest: false, // To avoid depth fighting between particles
   // depthTest generates a bug when another object is behind the particles
   depthWrite: false, // To avoid depth fighting between particles
-
   // depth and blending(transparency) do not work together. If you want to use both, you need to use a custom shader.
+  // blending: THREE.AdditiveBlending,
+  vertexColors: true,
 });
 
 // Points
@@ -164,16 +171,16 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 /**
  * Post-processing
  */
-const composer = new EffectComposer(renderer)
-composer.addPass(new RenderPass(scene, camera))
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
 
 const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(sizes.width, sizes.height),
-    2,  // strength
-    1,  // radius
-    0.65  // threshold
-)
-composer.addPass(bloomPass)
+  new THREE.Vector2(sizes.width, sizes.height),
+  1.5, // strength
+  0.8, // radius
+  0.5 // threshold
+);
+composer.addPass(bloomPass);
 
 /**
  * Animate
@@ -190,10 +197,10 @@ const tick = () => {
   // Update controls
   controls.update();
 
-//   // Render
-//   renderer.render(scene, camera);
-    // Render
-    composer.render()
+  //   // Render
+  //   renderer.render(scene, camera);
+  // Render
+  composer.render();
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);

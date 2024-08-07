@@ -28,7 +28,7 @@ sunTexture.colorSpace = THREE.SRGBColorSpace;
 /**
  * Lights
  */
-const sunLight = new THREE.PointLight(0xffcc00, 100, 100, 2);
+const sunLight = new THREE.PointLight(0xffcc00, 30, 100, 2);
 sunLight.position.set(0, 1, 0);
 scene.add(sunLight);
 
@@ -115,7 +115,7 @@ const plane = new THREE.Mesh(
 );
 plane.rotation.x = -Math.PI * 0.5;
 plane.position.y = -5;
-// scene.add(plane);
+scene.add(plane);
 
 /**
  * Sizes

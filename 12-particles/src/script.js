@@ -28,8 +28,8 @@ sunTexture.colorSpace = THREE.SRGBColorSpace;
 /**
  * Lights
  */
-const sunLight = new THREE.PointLight(0xffcc00, 30, 100, 2);
-sunLight.position.set(0, 1, 0);
+const sunLight = new THREE.PointLight(0xffcc00, 30, 100, 1.5);
+sunLight.position.set(0, 2, 0);
 scene.add(sunLight);
 
 /**
@@ -46,13 +46,13 @@ const colors = new Float32Array(count * 3);
 
 // Spiral parameters
 const spiralTurns = 100;
-const maxRadius = 50;
-const heightVariation = 0.5; // To add some 3D depth to the spiral
+const maxRadius = 100;
+const heightVariation = 1; // To add some 3D depth to the spiral
 const armOffset = Math.PI; // Offset for the second arm
 
-for (let i = 0; i < count / 2; i++) {
-  const angle = spiralTurns * Math.PI * 2 * (i / (count / 2));
-  const radius = maxRadius * Math.sqrt(i / (count / 2)); // Logarithmic spiral
+for (let i = 0; i < count * 0.5; i++) {
+  const angle = spiralTurns * Math.PI * 2 * (i / (count * 0.5));
+  const radius = maxRadius * Math.sqrt((3*i) / (count * 0.5)); // Logarithmic spiral
   const randomFactor = (Math.random() - 0.5) * 0.5;
 
   // First arm
@@ -69,9 +69,9 @@ for (let i = 0; i < count / 2; i++) {
   y = (Math.random() - 0.5) * heightVariation;
   z = (radius + randomFactor) * Math.sin(angle + armOffset);
 
-  positions[(i + count / 2) * 3] = x;
-  positions[(i + count / 2) * 3 + 1] = y;
-  positions[(i + count / 2) * 3 + 2] = z;
+  positions[(i + count * 0.5) * 3] = x;
+  positions[(i + count * 0.5) * 3 + 1] = y;
+  positions[(i + count * 0.5) * 3 + 2] = z;
 
   // Colors
   colors[i * 3] = colors[i + count * 0.5 * 3] = Math.random();
@@ -106,7 +106,7 @@ scene.add(particles);
  */
 
 const sun = new THREE.Mesh(
-  new THREE.SphereGeometry(1.5, 32, 32),
+  new THREE.SphereGeometry(3, 32, 32),
   new THREE.MeshBasicMaterial({
     map: sunTexture,
     emissive: 0xffcc00, // Emissive color to simulate self-illumination
@@ -117,7 +117,7 @@ scene.add(sun);
 
 // Plane
 const plane = new THREE.Mesh(
-  new THREE.PlaneGeometry(100, 100, 100, 100),
+  new THREE.PlaneGeometry(200, 200),
   new THREE.MeshStandardMaterial({ color: 'white' })
 );
 plane.rotation.x = -Math.PI * 0.5;
@@ -151,8 +151,8 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 500);
-camera.position.z = 25;
-camera.position.y = 10;
+camera.position.z = 50;
+camera.position.y = 15;
 scene.add(camera);
 
 // Controls
@@ -177,7 +177,7 @@ composer.addPass(new RenderPass(scene, camera));
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(sizes.width, sizes.height),
   1.5, // strength
-  0.8, // radius
+  1.2, // radius
   0.5 // threshold
 );
 composer.addPass(bloomPass);
@@ -193,6 +193,16 @@ const tick = () => {
   // Update particles
   particles.rotation.y = elapsedTime * 0.2;
   sun.rotation.y = -elapsedTime * 0.1;
+
+  // The following is Heavy on the GPU
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+    const x = particlesGeometry.attributes.position.array[i3];
+    const z = particlesGeometry.attributes.position.array[i3 + 2];
+
+    particlesGeometry.attributes.position.array[i3 + 1] = Math.sin(elapsedTime + x + z) * 0.5;
+  }
+  particlesGeometry.attributes.position.needsUpdate = true;
 
   // Update controls
   controls.update();

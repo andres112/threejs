@@ -18,6 +18,7 @@ const scene = new THREE.Scene()
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
+const particleTexture = textureLoader.load('/textures/particles/9.png')
 
 /**
  * Particles
@@ -32,8 +33,8 @@ const positions = new Float32Array(count * 3);
 
 // Spiral parameters
 const spiralTurns = 100;
-const maxRadius = 100;
-const heightVariation = 0.2; // To add some 3D depth to the spiral
+const maxRadius = 50;
+const heightVariation = 0.5; // To add some 3D depth to the spiral
 const armOffset = Math.PI; // Offset for the second arm
 
 for (let i = 0; i < count / 2; i++) {
@@ -65,7 +66,11 @@ particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 
 const pointsMaterial = new THREE.PointsMaterial({
     size: 0.02,
     sizeAttenuation: true,
-    color: 0xff88cc
+    color: 0xff88cc,
+    alphaMap: particleTexture,
+    transparent: true,
+    depthWrite: false, // To avoid depth fighting between particles
+    // depthWrite generates a bug when another object is behind the particles
 });
 
 // Points
@@ -100,7 +105,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 500)
-camera.position.z = 50
+camera.position.z = 25
 camera.position.y = 10
 scene.add(camera)
 

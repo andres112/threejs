@@ -19,6 +19,15 @@ const scene = new THREE.Scene()
  */
 const textureLoader = new THREE.TextureLoader()
 const particleTexture = textureLoader.load('/textures/particles/9.png')
+const sunTexture = textureLoader.load('/textures/2k_sun.jpg')
+sunTexture.colorSpace = THREE.SRGBColorSpace
+
+/**
+ * Lights
+ */
+const sunLight = new THREE.PointLight(0xffcc00, 100, 100, 2)
+sunLight.position.set(0, 1, 0)
+scene.add(sunLight)
 
 /**
  * Particles
@@ -66,16 +75,40 @@ particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 
 const pointsMaterial = new THREE.PointsMaterial({
     size: 0.02,
     sizeAttenuation: true,
-    color: 0xff88cc,
+    color: 0xffff,
     alphaMap: particleTexture,
     transparent: true,
+    // alphaTest: 0.001, // To avoid rendering the background of the texture, using a threshold
+    // alphaTest generates not an ideal result, but it's a good approximation
+    // depthTest: false, // To avoid depth fighting between particles
+    // depthTest generates a bug when another object is behind the particles
     depthWrite: false, // To avoid depth fighting between particles
-    // depthWrite generates a bug when another object is behind the particles
+
+    // depth and blending(transparency) do not work together. If you want to use both, you need to use a custom shader.
 });
 
 // Points
 const particles = new THREE.Points(particlesGeometry, pointsMaterial)
 scene.add(particles)
+
+/**
+ * Object: Sun
+ */
+
+const sun = new THREE.Mesh(
+    new THREE.SphereGeometry(1.5, 32, 32),
+    new THREE.MeshBasicMaterial({  map: sunTexture })
+)
+scene.add(sun)
+
+// Plane
+const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(100, 100, 100, 100),
+    new THREE.MeshStandardMaterial({ color: "white" })
+)
+plane.rotation.x = -Math.PI * 0.5
+plane.position.y = -5
+scene.add(plane)
 
 /**
  * Sizes
@@ -133,6 +166,7 @@ const tick = () =>
 
     // Update particles
     particles.rotation.y = elapsedTime * 0.2
+    sun.rotation.y = -elapsedTime * 0.1
 
     // Update controls
     controls.update()

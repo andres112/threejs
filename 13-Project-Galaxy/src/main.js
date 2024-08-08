@@ -56,13 +56,37 @@ controls.dampingFactor = 0.1;
 /**
  * Mesh - Galaxy 
  */
+const parameters = {
+    count: 100000,
+    size: 0.02,
+}
 
 const generateGalaxy = () => {
-    const cube = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-    const galaxy = new THREE.Mesh(cube, material);
-    scene.add(galaxy);
+    // Geometry
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(parameters.count * 3);
+
+    for(let i = 0; i < parameters.count * 3; i++) {
+        const i3 = i * 3;
+        positions[i3] = (Math.random() - 0.5) * 10;
+        positions[i3 + 1] = (Math.random() - 0.5) * 10;
+        positions[i3 + 2] = (Math.random() - 0.5) * 10;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    
+    // Material
+    const material = new THREE.PointsMaterial({
+        size: parameters.size,
+        sizeAttenuation: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+    });
+
+    // Points
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
 }
 
 generateGalaxy();

@@ -92,6 +92,11 @@ const generateGalaxy = () => {
 generateGalaxy();
 
 /**
+ * GUI
+ */
+gui.add(parameters, 'count').min(100).max(100000).step(100).onFinishChange(generateGalaxy);
+
+/**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({

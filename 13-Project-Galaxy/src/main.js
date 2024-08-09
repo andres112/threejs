@@ -119,6 +119,8 @@ const generateGalaxy = () => {
     positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
     // Color
+    // Interpolate between coreColor and farColor based on the radius of the particle
+    // mixedColor avoids modifying the original color
     const mixedColor = coreColor.clone();
     mixedColor.lerp(farColor, radius / parameters.radius);
     colors[i3] = mixedColor.r;

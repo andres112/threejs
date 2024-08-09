@@ -127,7 +127,7 @@ folder
       debugObject.subdivision,
       debugObject.subdivision
     );
-    // IMPORTANTY: Dispose the old geometry to avoid memory leaks
+    // IMPORTANT: Dispose the old geometry to avoid memory leaks
     mesh.geometry.dispose();
     mesh.geometry = newGeometry;
   });

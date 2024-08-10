@@ -158,6 +158,10 @@ scene.add(camera);
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
+controls.enableZoom = true;
+controls.maxDistance = 200;
+controls.maxPolarAngle = Math.PI / 2;
+controls.minPolarAngle = 0;
 
 /**
  * Renderer

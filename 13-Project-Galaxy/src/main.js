@@ -52,6 +52,8 @@ controls.enablePan = false;
 // controls.enableZoom = false;
 controls.maxPolarAngle = Math.PI / 2;
 controls.minPolarAngle = 0;
+controls.minDistance = 2;
+controls.maxDistance = 20;
 
 /**
  * Mesh - Galaxy
@@ -198,6 +200,9 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  // Rotate the galaxy
+  points.rotation.y = elapsedTime * 0.1;
 
   // Update controls
   controls.update();

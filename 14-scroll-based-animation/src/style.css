@@ -54,6 +54,20 @@ section:nth-child(odd) {
   justify-content: flex-end;
 }
 
+.section h1 {
+  margin-bottom: 0.5em;
+  font-size: 7vmin;
+
+  @media (min-width: 768px) {
+    font-size: 10vmin;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 12vmin;
+    max-width: 80%;
+  }
+}
+
 .start-button {
   padding: 0.8em 1.7em;
   background-color: transparent;

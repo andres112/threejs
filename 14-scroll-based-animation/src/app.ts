@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import GUI from 'lil-gui';
 import { CustomMesh } from './CustomMesh';
+import { createParticles } from './Particles';
 
 /**
  * Debug
@@ -13,7 +14,12 @@ export const parameters = {
   particlesCount: 1000,
 };
 
-const DISTANCE_BETWEEN_MESHES = 4;
+// Texture loader
+export const textureLoader = new THREE.TextureLoader();
+
+export const DISTANCE_BETWEEN_MESHES = 6;
+
+// This variable helps to calculate the delta time regardless of the frame rate
 let previousTime = 0;
 
 export class App {
@@ -31,8 +37,6 @@ export class App {
 
   // Particles
   private particlePoints?: THREE.Points;
-  private particlesGeometry: THREE.BufferGeometry;
-  private particlesMaterial: THREE.PointsMaterial;
 
   private clock = new THREE.Clock();
 
@@ -53,9 +57,6 @@ export class App {
       height: window.innerHeight,
     };
     this.dirLight = new THREE.DirectionalLight();
-
-    this.particlesGeometry = new THREE.BufferGeometry();
-    this.particlesMaterial = new THREE.PointsMaterial();
     this.init();
   }
 
@@ -113,39 +114,11 @@ export class App {
   }
 
   private setParticles() {
-    // If points already exist, remove them
     if (this.particlePoints) {
-      this.particlesGeometry?.dispose();
-      this.particlesMaterial?.dispose();
       this.scene.remove(this.particlePoints);
     }
-    const positions = new Float32Array(parameters.particlesCount * 3);
-    const colors = new Float32Array(parameters.particlesCount * 3);
-    const colorParticles = new THREE.Color(parameters.materialColor);
 
-    for (let i = 0; i < parameters.particlesCount; i++) {
-      const i3 = i * 3;
-      positions[i3] = (Math.random() - 0.5) * 10;
-      positions[i3 + 1] =
-        DISTANCE_BETWEEN_MESHES * 0.5 - Math.random() * DISTANCE_BETWEEN_MESHES * 4;
-      positions[i3 + 2] = (Math.random() - 0.5) * 10;
-
-      colors[i3] = colorParticles.r;
-      colors[i3 + 1] = colorParticles.g;
-      colors[i3 + 2] = colorParticles.b;
-    }
-
-    this.particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    this.particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    
-    this.particlesMaterial.size = 0.02;
-    this.particlesMaterial.sizeAttenuation = true;
-    this.particlesMaterial.transparent = true;
-    this.particlesMaterial.depthWrite = false;
-    this.particlesMaterial.blending = THREE.AdditiveBlending;
-    this.particlesMaterial.vertexColors = true;
-
-    this.particlePoints = new THREE.Points(this.particlesGeometry, this.particlesMaterial);
+    this.particlePoints = createParticles();
     this.scene.add(this.particlePoints);
   }
 
@@ -184,6 +157,15 @@ export class App {
           document.documentElement.style.setProperty('--secondary-color', parameters.materialColor);
         });
 
+        this.setParticles();
+      });
+
+    gui
+      .add(parameters, 'particlesCount')
+      .min(100)
+      .max(10000)
+      .step(100)
+      .onFinishChange(() => {
         this.setParticles();
       });
   }

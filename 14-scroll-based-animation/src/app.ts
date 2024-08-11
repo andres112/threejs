@@ -29,7 +29,7 @@ export class App {
     this.camera = new THREE.PerspectiveCamera();
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      alpha: true
+      alpha: true,
     });
     this.sizes = {
       width: window.innerWidth,
@@ -101,10 +101,9 @@ export class App {
 
   private setDebug() {
     gui.addColor(parameters, 'materialColor').onChange(() => {
-      this.scene.traverse((child) => {
-        if (child instanceof CustomMesh) {
-          child.material.color.set(parameters.materialColor);
-        }
+      this.Meshes.forEach((mesh) => {
+        const child = mesh.children[0] as THREE.Mesh;
+        child.material.color.set(parameters.materialColor);
       });
     });
   }
@@ -135,4 +134,3 @@ export class App {
     window.requestAnimationFrame(this.animate.bind(this));
   }
 }
-

@@ -10,6 +10,7 @@ const gui = new GUI();
 export const parameters = {
   materialColor: '#ed6f35',
   backgroundColor: '#6151d2',
+  particlesCount: 1000,
 };
 
 const DISTANCE_BETWEEN_MESHES = 4;
@@ -26,7 +27,12 @@ export class App {
   private scrollY: number = 0;
   private cursor: { x: number; y: number } = { x: 0, y: 0 };
 
-  private Meshes: CustomMesh[] = [];
+  private meshes: CustomMesh[] = [];
+
+  // Particles
+  private particlePoints?: THREE.Points;
+  private particlesGeometry: THREE.BufferGeometry;
+  private particlesMaterial: THREE.PointsMaterial;
 
   private clock = new THREE.Clock();
 
@@ -47,6 +53,9 @@ export class App {
       height: window.innerHeight,
     };
     this.dirLight = new THREE.DirectionalLight();
+
+    this.particlesGeometry = new THREE.BufferGeometry();
+    this.particlesMaterial = new THREE.PointsMaterial();
     this.init();
   }
 
@@ -56,6 +65,7 @@ export class App {
     this.setRenderer();
     this.setDebug();
     this.setObjects();
+    this.setParticles();
     this.setLight();
 
     // Resize listener
@@ -85,25 +95,62 @@ export class App {
     const torusKnot = new CustomMesh();
     torusKnot.createTorusKnot();
     torusKnot.initialRotation(new THREE.Vector3(Math.PI * 0.25, 0, Math.PI * 0.25));
-    this.Meshes.push(torusKnot);
+    this.meshes.push(torusKnot);
 
     const torus = new CustomMesh();
     torus.createTorus();
     torus.initialRotation(new THREE.Vector3(Math.PI * 0.25, 0, 0));
-    this.Meshes.push(torus);
+    this.meshes.push(torus);
 
     const sphere = new CustomMesh();
     sphere.createSphere();
     sphere.initialRotation(new THREE.Vector3(0, 0, Math.PI * 0.25));
-    this.Meshes.push(sphere);
+    this.meshes.push(sphere);
 
     this.positionMeshes();
 
-    this.scene.add(...this.Meshes);
+    this.scene.add(...this.meshes);
+  }
+
+  private setParticles() {
+    // If points already exist, remove them
+    if (this.particlePoints) {
+      this.particlesGeometry?.dispose();
+      this.particlesMaterial?.dispose();
+      this.scene.remove(this.particlePoints);
+    }
+    const positions = new Float32Array(parameters.particlesCount * 3);
+    const colors = new Float32Array(parameters.particlesCount * 3);
+    const colorParticles = new THREE.Color(parameters.materialColor);
+
+    for (let i = 0; i < parameters.particlesCount; i++) {
+      const i3 = i * 3;
+      positions[i3] = (Math.random() - 0.5) * 10;
+      positions[i3 + 1] =
+        DISTANCE_BETWEEN_MESHES * 0.5 - Math.random() * DISTANCE_BETWEEN_MESHES * 4;
+      positions[i3 + 2] = (Math.random() - 0.5) * 10;
+
+      colors[i3] = colorParticles.r;
+      colors[i3 + 1] = colorParticles.g;
+      colors[i3 + 2] = colorParticles.b;
+    }
+
+    this.particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    this.particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    
+    this.particlesMaterial.size = 0.02;
+    this.particlesMaterial.sizeAttenuation = true;
+    this.particlesMaterial.transparent = true;
+    this.particlesMaterial.depthWrite = false;
+    this.particlesMaterial.blending = THREE.AdditiveBlending;
+    this.particlesMaterial.vertexColors = true;
+
+    this.particlePoints = new THREE.Points(this.particlesGeometry, this.particlesMaterial);
+    this.scene.add(this.particlePoints);
   }
 
   private positionMeshes() {
-    this.Meshes.forEach((mesh, index) => {
+    this.meshes.forEach((mesh, index) => {
       mesh.position.y = index * -DISTANCE_BETWEEN_MESHES;
       mesh.position.x = Math.pow(-1, index) * 1.75;
     });
@@ -116,21 +163,29 @@ export class App {
   }
 
   private setDebug() {
-    gui.addColor(parameters, 'backgroundColor').name("Primary Color").onChange(() => {
-      this.Meshes.forEach((mesh) => {
-        // change also the color of the css --primary-color
-        document.documentElement.style.setProperty('--primary-color', parameters.backgroundColor);
+    gui
+      .addColor(parameters, 'backgroundColor')
+      .name('Primary Color')
+      .onChange(() => {
+        this.meshes.forEach((mesh) => {
+          // change also the color of the css --primary-color
+          document.documentElement.style.setProperty('--primary-color', parameters.backgroundColor);
+        });
       });
-    });
 
-    gui.addColor(parameters, 'materialColor').name("Secondary Color").onChange(() => {
-      this.Meshes.forEach((mesh) => {
-        const child = mesh.children[0] as THREE.Mesh;
-        child.material.color.set(parameters.materialColor);
-        // change also the color of the css --secondary-color
-        document.documentElement.style.setProperty('--secondary-color', parameters.materialColor);
+    gui
+      .addColor(parameters, 'materialColor')
+      .name('Secondary Color')
+      .onChange(() => {
+        this.meshes.forEach((mesh) => {
+          const child = mesh.children[0] as THREE.Mesh;
+          child.material.color.set(parameters.materialColor);
+          // change also the color of the css --secondary-color
+          document.documentElement.style.setProperty('--secondary-color', parameters.materialColor);
+        });
+
+        this.setParticles();
       });
-    });
   }
 
   private setListeners() {
@@ -175,7 +230,7 @@ export class App {
     this.cameraGroup.position.y += (-this.cursor.y - this.cameraGroup.position.y) * deltaTime * 4;
 
     // Update objects
-    this.Meshes.forEach((mesh) => {
+    this.meshes.forEach((mesh) => {
       mesh.rotation.y = elapsedTime * 0.2;
       mesh.rotation.z = elapsedTime * 0.1;
     });

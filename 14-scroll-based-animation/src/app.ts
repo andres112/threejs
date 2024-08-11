@@ -16,11 +16,13 @@ const DISTANCE_BETWEEN_MESHES = 4;
 export class App {
   private canvas: HTMLCanvasElement;
   private scene: THREE.Scene;
+  private cameraGroup: THREE.Group;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private dirLight: THREE.DirectionalLight;
   private sizes: { width: number; height: number };
   private scrollY: number = 0;
+  private cursor: { x: number; y: number } = { x: 0, y: 0 };
 
   private Meshes: CustomMesh[] = [];
 
@@ -29,6 +31,7 @@ export class App {
   constructor() {
     this.canvas = document.querySelector('canvas.webgl')!;
     this.scene = new THREE.Scene();
+    this.cameraGroup = new THREE.Group();
     this.camera = new THREE.PerspectiveCamera();
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -63,7 +66,9 @@ export class App {
     this.camera.near = 0.1;
     this.camera.far = 100;
     this.camera.position.z = 6;
-    this.scene.add(this.camera);
+
+    this.scene.add(this.cameraGroup);
+    this.cameraGroup.add(this.camera);
   }
 
   private setRenderer() {
@@ -74,7 +79,7 @@ export class App {
   private setObjects() {
     const torusKnot = new CustomMesh();
     torusKnot.createTorusKnot();
-    torusKnot.initialRotation(new THREE.Vector3( Math.PI * 0.25, 0, Math.PI * 0.25));
+    torusKnot.initialRotation(new THREE.Vector3(Math.PI * 0.25, 0, Math.PI * 0.25));
     this.Meshes.push(torusKnot);
 
     const torus = new CustomMesh();
@@ -132,17 +137,30 @@ export class App {
     window.addEventListener('scroll', () => {
       this.scrollY = window.scrollY;
     });
+
+    window.addEventListener('mousemove', (event) => {
+      this.cursor.x = (event.clientX / this.sizes.width - 0.5) * 0.25;
+      this.cursor.y = (event.clientY / this.sizes.height - 0.5) * 0.5;
+    });
   }
 
   private animate() {
     const elapsedTime = this.clock.getElapsedTime();
 
     // Update camera
+    // scrolling effect
     this.camera.position.y = (-this.scrollY / this.sizes.height) * DISTANCE_BETWEEN_MESHES;
+
+    // mouse effect - parallax
+    this.cameraGroup.position.x = this.cursor.x;
+    this.cameraGroup.position.y = -this.cursor.y;
+
+    console.log(this.cameraGroup.position.x);
 
     // Update objects
     this.Meshes.forEach((mesh) => {
       mesh.rotation.y = elapsedTime * 0.2;
+      mesh.rotation.z = elapsedTime * 0.1;
     });
 
     // Render

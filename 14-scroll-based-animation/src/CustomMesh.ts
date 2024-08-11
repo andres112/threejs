@@ -22,7 +22,7 @@ export class CustomMesh extends THREE.Mesh {
   }
 
   public createSphere() {
-    const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const geometry = new THREE.SphereGeometry(0.75, 32, 32);
     const sphere = new THREE.Mesh(geometry, this.material);
     this.add(sphere);
   }

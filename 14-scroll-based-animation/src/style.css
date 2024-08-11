@@ -1,11 +1,20 @@
+:root {
+    --primary-color: #6151d2;
+    --secondary-color: ##ed6f35;
+    --white: #ffeded;
+    --dark: #1d1d1d;
+  }
+
 * {
   margin: 0;
   padding: 0;
+
 }
 
 html,
 body {
   overflow-x: hidden;
+  background: var(--primary-color);
 }
 
 .webgl {
@@ -21,8 +30,10 @@ body {
   align-items: center;
   height: 100vh;
   position: relative;
-  font-family: 'Cabin', sans-serif;
-  color: #ffeded;
+  font-family:  ui-sans-serif, system-ui, -apple-system, system-ui, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  color: var(--white);
   text-transform: uppercase;
   font-size: 7vmin;
   padding-left: 10%;
@@ -37,3 +48,47 @@ body {
 section:nth-child(odd) {
   justify-content: flex-end;
 }
+
+.start-button {
+  background-color: var(--dark);
+  border: 0 solid var(--white);
+  box-sizing: border-box;
+  color: currentColor;
+  display: flex;
+  justify-content: center;
+  line-height: 1.75rem;
+  font-size: 1.25rem;
+  padding: 0.75rem 1.65rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none var(--white) solid;
+  text-decoration-thickness: auto;
+  width: 100%;
+  max-width: 350px;
+  position: relative;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.start-button:focus {
+  outline: 0;
+}
+
+.start-button:after {
+  content: '';
+  position: absolute;
+  border: 2px solid var(--white);
+  bottom: 4px;
+  left: 4px;
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
+}
+
+.start-button:hover:after {
+  bottom: 2px;
+  left: 2px;
+}
+

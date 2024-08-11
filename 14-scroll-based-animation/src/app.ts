@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 import GUI from 'lil-gui';
+import { CustomMesh } from './CustomMesh';
 
 /**
  * Debug
  */
 const gui = new GUI();
 
-const parameters = {
-  materialColor: '#ffeded',
+export const parameters = {
+  materialColor: '#ed6f35',
 };
 
 export class App {
@@ -15,7 +16,10 @@ export class App {
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
+  private dirLight: THREE.DirectionalLight;
   private sizes: { width: number; height: number };
+
+  private Meshes: CustomMesh[] = [];
 
   private clock = new THREE.Clock();
 
@@ -25,11 +29,13 @@ export class App {
     this.camera = new THREE.PerspectiveCamera();
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
+      alpha: true
     });
     this.sizes = {
       width: window.innerWidth,
       height: window.innerHeight,
     };
+    this.dirLight = new THREE.DirectionalLight();
     this.init();
   }
 
@@ -38,7 +44,8 @@ export class App {
     this.setCamera();
     this.setRenderer();
     this.setDebug();
-    this.setCube();
+    this.setObjects();
+    this.setLight();
 
     // Resize listener
     this.resizeListener();
@@ -48,8 +55,11 @@ export class App {
   }
 
   private setCamera() {
+    this.camera.fov = 35;
     this.camera.aspect = this.sizes.width / this.sizes.height;
-    this.camera.position.z = 3;
+    this.camera.near = 0.1;
+    this.camera.far = 100;
+    this.camera.position.z = 6;
     this.scene.add(this.camera);
   }
 
@@ -58,16 +68,45 @@ export class App {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   }
 
-  private setCube() {
-    const cube = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshBasicMaterial({ color: 'red' })
-    );
-    this.scene.add(cube);
+  private setObjects() {
+    const torusKnot = new CustomMesh();
+    torusKnot.createTorusKnot();
+    this.Meshes.push(torusKnot);
+
+    const torus = new CustomMesh();
+    torus.createTorus();
+    this.Meshes.push(torus);
+
+    const box = new CustomMesh();
+    box.createBox();
+    this.Meshes.push(box);
+
+    this.positionMeshes();
+
+    this.scene.add(...this.Meshes);
+  }
+
+  private positionMeshes() {
+    const distance = 4;
+    this.Meshes.forEach((mesh, index) => {
+      mesh.position.y = index * -distance;
+    });
+  }
+
+  private setLight() {
+    this.dirLight = new THREE.DirectionalLight(0xffffff, 4);
+    this.dirLight.position.set(2, 2, 0);
+    this.scene.add(this.dirLight);
   }
 
   private setDebug() {
-    gui.addColor(parameters, 'materialColor');
+    gui.addColor(parameters, 'materialColor').onChange(() => {
+      this.scene.traverse((child) => {
+        if (child instanceof CustomMesh) {
+          child.material.color.set(parameters.materialColor);
+        }
+      });
+    });
   }
 
   private resizeListener() {

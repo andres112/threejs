@@ -77,11 +77,24 @@ export class App {
   }
 
   private setCamera() {
-    this.camera.fov = 35;
-    this.camera.aspect = this.sizes.width / this.sizes.height;
+    const aspectRatio = this.sizes.width / this.sizes.height;
+
+    // Adjust the FOV based on the aspect ratio to maintain mesh proportions
+    if (aspectRatio <= 1) {
+      this.camera.fov = 50; // Default FOV for landscape mode
+    } else {
+       // Increase FOV to maintain proportion when width is larger than height
+       const hFov = 50; // Default FOV in degrees
+       const vFov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(hFov) / 2) / aspectRatio);
+       this.camera.fov = THREE.MathUtils.radToDeg(vFov);
+    }
+
+    this.camera.aspect = aspectRatio;
     this.camera.near = 0.1;
     this.camera.far = 100;
     this.camera.position.z = 6;
+
+    this.camera.updateProjectionMatrix();
 
     this.scene.add(this.cameraGroup);
     this.cameraGroup.add(this.camera);
@@ -123,9 +136,11 @@ export class App {
   }
 
   private positionMeshes() {
+    const aspectRatio = this.sizes.width / this.sizes.height;
     this.meshes.forEach((mesh, index) => {
       mesh.position.y = index * -DISTANCE_BETWEEN_MESHES;
-      mesh.position.x = Math.pow(-1, index) * 1.75;
+      mesh.position.x = Math.pow(-1, index) * (aspectRatio <= 1 ? 1 : 1.75);
+      console.log(mesh.position.x, index);
     });
   }
 

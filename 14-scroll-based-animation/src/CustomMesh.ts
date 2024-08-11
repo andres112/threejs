@@ -35,4 +35,5 @@ export class CustomMesh extends THREE.Mesh {
     this.rotation.reorder('YXZ');
     this.rotation.set(rotation.x, rotation.y, rotation.z);
   }
+
 }

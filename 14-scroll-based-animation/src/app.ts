@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import GUI from 'lil-gui';
+import gsap from 'gsap';
 import { CustomMesh } from './CustomMesh';
 import { createParticles } from './Particles';
 
@@ -211,6 +212,13 @@ export class App {
       const section = Math.round(this.scrollY / this.sizes.height);
       if (section !== this.currentSection) {
         this.currentSection = section;
+        this.triggerAnimation();
+
+        // auto scroll to the current section to the top
+        window.scrollTo({
+          top: this.currentSection * this.sizes.height,
+          behavior: 'smooth',
+        });
       }
     });
 
@@ -218,6 +226,17 @@ export class App {
       // Normalize the mouse position and reduce the value to 25% and 50%
       this.cursor.x = (event.clientX / this.sizes.width - 0.5) * 0.25;
       this.cursor.y = (event.clientY / this.sizes.height - 0.5) * 0.5;
+    });
+  }
+
+  private triggerAnimation() {
+    const selectedMesh = this.meshes.find((_, index) => index === this.currentSection)?.children[0] as THREE.Mesh;
+    gsap.to(selectedMesh.rotation, {
+      x: '+=5',
+      z: '+=2',
+      duration: 1.5,
+      ease: 'power2.out',
+      delay: 0.5,
     });
   }
 

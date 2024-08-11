@@ -93,6 +93,7 @@ export class App {
   private positionMeshes() {
     this.Meshes.forEach((mesh, index) => {
       mesh.position.y = index * -DISTANCE_BETWEEN_MESHES;
+      mesh.position.x = Math.pow(-1, index) * 2;
     });
   }
 

@@ -81,7 +81,7 @@ export class App {
     this.Meshes.push(torus);
 
     const box = new CustomMesh();
-    box.createBox();
+    box.createCone();
     box.initialRotation(new THREE.Vector3(Math.PI * 0.25, 0, Math.PI * 0.25));
     this.Meshes.push(box);
 
@@ -93,7 +93,7 @@ export class App {
   private positionMeshes() {
     this.Meshes.forEach((mesh, index) => {
       mesh.position.y = index * -DISTANCE_BETWEEN_MESHES;
-      mesh.position.x = Math.pow(-1, index) * 2;
+      mesh.position.x = Math.pow(-1, index) * 1.75;
     });
   }
 
@@ -140,7 +140,7 @@ export class App {
 
     // Update objects
     this.Meshes.forEach((mesh) => {
-      mesh.rotation.y = elapsedTime * 0.1;
+      mesh.rotation.y = elapsedTime * 0.2;
     });
 
     // Render

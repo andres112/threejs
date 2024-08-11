@@ -20,14 +20,14 @@ export class CustomMesh extends THREE.Mesh {
     this.add(torus);
   }
 
-  public createBox() {
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const box = new THREE.Mesh(geometry, this.material);
-    this.add(box);
+  public createCone() {
+    const geometry = new THREE.ConeGeometry(0.5, 1.5, 100);
+    const cone = new THREE.Mesh(geometry, this.material);
+    this.add(cone);
   }
 
   public createTorusKnot() {
-    const geometry = new THREE.TorusKnotGeometry(0.5, 0.2, 200, 16);
+    const geometry = new THREE.TorusKnotGeometry(0.4, 0.15, 200, 16);
     const torusKnot = new THREE.Mesh(geometry, this.material);
     this.add(torusKnot);
   }

@@ -1,36 +1,41 @@
 :root {
-    --primary-color: #6151d2;
-    --secondary-color: #ed6f35;
-    --white: #ffeded;
-    --dark: #3c3c3c;
-  }
+  --primary-color: #6151d2;
+  --secondary-color: #ed6f35;
+  --white: #ffeded;
+  --dark: #3c3c3c;
+}
 
 * {
   margin: 0;
   padding: 0;
-
 }
 
 html,
 body {
   overflow-x: hidden;
   background: var(--primary-color);
+  max-width: 1680px;
+  margin: 0 auto;
 }
 
 .webgl {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   outline: none;
   pointer-events: none;
+  max-width: 2180px;
+  margin: 0 auto;
 }
 
 .section {
+  max-width: 1680px;
   display: flex;
   align-items: center;
   height: 100vh;
   position: relative;
-  font-family:  ui-sans-serif, system-ui, -apple-system, system-ui, 'Segoe UI', Roboto,
+  font-family: ui-sans-serif, system-ui, -apple-system, system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
   color: var(--white);
@@ -50,56 +55,56 @@ section:nth-child(odd) {
 }
 
 .start-button {
-    padding: 0.8em 1.7em;
-    background-color: transparent;
-    border-radius: .3em;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: .5s;
-    font-weight: 700;
-    font-size: 2rem;
-    border: 1px solid;
-    font-family: inherit;
-    text-transform: uppercase;
-    color: var(--white);
-    z-index: 1;
-   }
-   
-   .start-button::before, .start-button::after {
-    content: '';
-    display: block;
-    width: 50px;
-    height: 50px;
-    transform: translate(-50%, -50%);
-    position: absolute;
-    border-radius: 50%;
-    z-index: -1;
-    background-color: var(--secondary-color);
-    transition: 1s ease;
-   }
-   
-   .start-button::before {
-    top: -1em;
-    left: -1em;
-   }
-   
-   .start-button::after {
-    left: calc(100% + 1em);
-    top: calc(100% + 1em);
-   }
-   
-   .start-button:hover::before, .start-button:hover::after {
-    height: 410px;
-    width: 410px;
-   }
-   
-   .start-button:hover {
-    color: var(--primary-color);
-   }
-   
-   .start-button:active {
-    filter: brightness(.8);
-   }
-   
+  padding: 0.8em 1.7em;
+  background-color: transparent;
+  border-radius: 0.3em;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.5s;
+  font-weight: 700;
+  font-size: 2rem;
+  border: 1px solid;
+  font-family: inherit;
+  text-transform: uppercase;
+  color: var(--white);
+  z-index: 1;
+}
 
+.start-button::before,
+.start-button::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1;
+  background-color: var(--secondary-color);
+  transition: 1s ease;
+}
+
+.start-button::before {
+  top: -1em;
+  left: -1em;
+}
+
+.start-button::after {
+  left: calc(100% + 1em);
+  top: calc(100% + 1em);
+}
+
+.start-button:hover::before,
+.start-button:hover::after {
+  height: 410px;
+  width: 410px;
+}
+
+.start-button:hover {
+  color: var(--primary-color);
+}
+
+.start-button:active {
+  filter: brightness(0.8);
+}

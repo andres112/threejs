@@ -12,6 +12,7 @@ export const parameters = {
 };
 
 const DISTANCE_BETWEEN_MESHES = 4;
+let previousTime = 0;
 
 export class App {
   private canvas: HTMLCanvasElement;
@@ -20,7 +21,7 @@ export class App {
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private dirLight: THREE.DirectionalLight;
-  private sizes: { width: number; height: number };
+  private sizes: { container: HTMLBodyElement; width: number; height: number };
   private scrollY: number = 0;
   private cursor: { x: number; y: number } = { x: 0, y: 0 };
 
@@ -37,8 +38,11 @@ export class App {
       canvas: this.canvas,
       alpha: true,
     });
+
+    const body = document.querySelector('body')!;
     this.sizes = {
-      width: window.innerWidth,
+      container: body,
+      width: body.clientWidth,
       height: window.innerHeight,
     };
     this.dirLight = new THREE.DirectionalLight();
@@ -122,7 +126,7 @@ export class App {
   private setListeners() {
     window.addEventListener('resize', () => {
       // Update sizes
-      this.sizes.width = window.innerWidth;
+      this.sizes.width = this.sizes.container.clientWidth;
       this.sizes.height = window.innerHeight;
 
       // Update camera
@@ -139,6 +143,7 @@ export class App {
     });
 
     window.addEventListener('mousemove', (event) => {
+      // Normalize the mouse position and reduce the value to 25% and 50%
       this.cursor.x = (event.clientX / this.sizes.width - 0.5) * 0.25;
       this.cursor.y = (event.clientY / this.sizes.height - 0.5) * 0.5;
     });
@@ -146,16 +151,18 @@ export class App {
 
   private animate() {
     const elapsedTime = this.clock.getElapsedTime();
+    // Delta time - time between frames regardless of the frame rate
+    const deltaTime = elapsedTime - previousTime;
+    previousTime = elapsedTime;
 
     // Update camera
     // scrolling effect
     this.camera.position.y = (-this.scrollY / this.sizes.height) * DISTANCE_BETWEEN_MESHES;
 
     // mouse effect - parallax
-    this.cameraGroup.position.x = this.cursor.x;
-    this.cameraGroup.position.y = -this.cursor.y;
-
-    console.log(this.cameraGroup.position.x);
+    // smooth effect just moving the camera a percentage of the distance between the cursor and the camera
+    this.cameraGroup.position.x += (this.cursor.x - this.cameraGroup.position.x) * deltaTime * 2;
+    this.cameraGroup.position.y += (-this.cursor.y - this.cameraGroup.position.y) * deltaTime * 4;
 
     // Update objects
     this.Meshes.forEach((mesh) => {

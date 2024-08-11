@@ -9,6 +9,7 @@ const gui = new GUI();
 
 export const parameters = {
   materialColor: '#ed6f35',
+  backgroundColor: '#6151d2',
 };
 
 const DISTANCE_BETWEEN_MESHES = 4;
@@ -115,10 +116,19 @@ export class App {
   }
 
   private setDebug() {
-    gui.addColor(parameters, 'materialColor').onChange(() => {
+    gui.addColor(parameters, 'backgroundColor').name("Primary Color").onChange(() => {
+      this.Meshes.forEach((mesh) => {
+        // change also the color of the css --primary-color
+        document.documentElement.style.setProperty('--primary-color', parameters.backgroundColor);
+      });
+    });
+
+    gui.addColor(parameters, 'materialColor').name("Secondary Color").onChange(() => {
       this.Meshes.forEach((mesh) => {
         const child = mesh.children[0] as THREE.Mesh;
         child.material.color.set(parameters.materialColor);
+        // change also the color of the css --secondary-color
+        document.documentElement.style.setProperty('--secondary-color', parameters.materialColor);
       });
     });
   }

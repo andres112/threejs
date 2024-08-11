@@ -11,6 +11,7 @@ export class CustomMesh extends THREE.Mesh {
     this.material = new THREE.MeshToonMaterial({
       color: parameters.materialColor,
       gradientMap: gradientTexture,
+      wireframe: true,
     });
   }
 
@@ -20,14 +21,14 @@ export class CustomMesh extends THREE.Mesh {
     this.add(torus);
   }
 
-  public createCone() {
-    const geometry = new THREE.ConeGeometry(0.5, 1.5, 100);
-    const cone = new THREE.Mesh(geometry, this.material);
-    this.add(cone);
+  public createSphere() {
+    const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const sphere = new THREE.Mesh(geometry, this.material);
+    this.add(sphere);
   }
 
   public createTorusKnot() {
-    const geometry = new THREE.TorusKnotGeometry(0.4, 0.15, 200, 16);
+    const geometry = new THREE.TorusKnotGeometry(0.5, 0.15, 200, 16);
     const torusKnot = new THREE.Mesh(geometry, this.material);
     this.add(torusKnot);
   }

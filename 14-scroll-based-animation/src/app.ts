@@ -74,16 +74,18 @@ export class App {
   private setObjects() {
     const torusKnot = new CustomMesh();
     torusKnot.createTorusKnot();
+    torusKnot.initialRotation(new THREE.Vector3( Math.PI * 0.25, 0, Math.PI * 0.25));
     this.Meshes.push(torusKnot);
 
     const torus = new CustomMesh();
     torus.createTorus();
+    torus.initialRotation(new THREE.Vector3(Math.PI * 0.25, 0, 0));
     this.Meshes.push(torus);
 
-    const box = new CustomMesh();
-    box.createCone();
-    box.initialRotation(new THREE.Vector3(Math.PI * 0.25, 0, Math.PI * 0.25));
-    this.Meshes.push(box);
+    const sphere = new CustomMesh();
+    sphere.createSphere();
+    sphere.initialRotation(new THREE.Vector3(0, 0, Math.PI * 0.25));
+    this.Meshes.push(sphere);
 
     this.positionMeshes();
 

@@ -30,7 +30,12 @@ export class App {
   private renderer: THREE.WebGLRenderer;
   private dirLight: THREE.DirectionalLight;
   private sizes: { container: HTMLBodyElement; width: number; height: number };
-  private scrollY: number = 0;
+
+  // Scrolling effect
+  private scrollY: number = window.scrollY;
+  private currentSection: number = 0;
+
+  // Parallax effect
   private cursor: { x: number; y: number } = { x: 0, y: 0 };
 
   private meshes: CustomMesh[] = [];
@@ -140,7 +145,6 @@ export class App {
     this.meshes.forEach((mesh, index) => {
       mesh.position.y = index * -DISTANCE_BETWEEN_MESHES;
       mesh.position.x = Math.pow(-1, index) * (aspectRatio <= 1 ? 1 : 1.75);
-      console.log(mesh.position.x, index);
     });
   }
 
@@ -202,6 +206,12 @@ export class App {
 
     window.addEventListener('scroll', () => {
       this.scrollY = window.scrollY;
+
+      // Calculate the current section
+      const section = Math.round(this.scrollY / this.sizes.height);
+      if (section !== this.currentSection) {
+        this.currentSection = section;
+      }
     });
 
     window.addEventListener('mousemove', (event) => {

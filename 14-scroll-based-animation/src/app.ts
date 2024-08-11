@@ -11,6 +11,8 @@ export const parameters = {
   materialColor: '#ed6f35',
 };
 
+const DISTANCE_BETWEEN_MESHES = 4;
+
 export class App {
   private canvas: HTMLCanvasElement;
   private scene: THREE.Scene;
@@ -18,6 +20,7 @@ export class App {
   private renderer: THREE.WebGLRenderer;
   private dirLight: THREE.DirectionalLight;
   private sizes: { width: number; height: number };
+  private scrollY: number = 0;
 
   private Meshes: CustomMesh[] = [];
 
@@ -48,7 +51,7 @@ export class App {
     this.setLight();
 
     // Resize listener
-    this.resizeListener();
+    this.setListeners();
 
     // animate
     this.animate();
@@ -79,6 +82,7 @@ export class App {
 
     const box = new CustomMesh();
     box.createBox();
+    box.initialRotation(new THREE.Vector3(Math.PI * 0.25, 0, Math.PI * 0.25));
     this.Meshes.push(box);
 
     this.positionMeshes();
@@ -87,9 +91,8 @@ export class App {
   }
 
   private positionMeshes() {
-    const distance = 4;
     this.Meshes.forEach((mesh, index) => {
-      mesh.position.y = index * -distance;
+      mesh.position.y = index * -DISTANCE_BETWEEN_MESHES;
     });
   }
 
@@ -108,7 +111,7 @@ export class App {
     });
   }
 
-  private resizeListener() {
+  private setListeners() {
     window.addEventListener('resize', () => {
       // Update sizes
       this.sizes.width = window.innerWidth;
@@ -122,10 +125,22 @@ export class App {
       this.renderer.setSize(this.sizes.width, this.sizes.height);
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
+
+    window.addEventListener('scroll', () => {
+      this.scrollY = window.scrollY;
+    });
   }
 
   private animate() {
     const elapsedTime = this.clock.getElapsedTime();
+
+    // Update camera
+    this.camera.position.y = (-this.scrollY / this.sizes.height) * DISTANCE_BETWEEN_MESHES;
+
+    // Update objects
+    this.Meshes.forEach((mesh) => {
+      mesh.rotation.y = elapsedTime * 0.1;
+    });
 
     // Render
     this.renderer.render(this.scene, this.camera);

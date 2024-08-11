@@ -31,4 +31,9 @@ export class CustomMesh extends THREE.Mesh {
     const torusKnot = new THREE.Mesh(geometry, this.material);
     this.add(torusKnot);
   }
+
+  public initialRotation(rotation: THREE.Vector3) {
+    this.rotation.reorder('YXZ');
+    this.rotation.set(rotation.x, rotation.y, rotation.z);
+  }
 }

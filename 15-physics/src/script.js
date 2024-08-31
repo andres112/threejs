@@ -38,6 +38,21 @@ const environmentMapTexture = cubeTextureLoader.load([
 const world = new CANNON.World();
 world.gravity.set(0, -1.62, 0);
 
+// Physics material
+const concretePhysicsMaterial = new CANNON.Material('concrete');
+const plasticPhysicsMaterial = new CANNON.Material('plastic');
+
+// Contact material
+const concretePlasticContactMaterial = new CANNON.ContactMaterial(
+  concretePhysicsMaterial,
+  plasticPhysicsMaterial,
+  {
+    friction: 0.1,
+    restitution: 0.7,
+  }
+);
+world.addContactMaterial(concretePlasticContactMaterial);
+
 // create the body as sphere
 // for cannon the body is the mesh in three.js and the shape is the geometry
 const sphereShape = new CANNON.Sphere(0.5); // same radius as the sphere in three.js

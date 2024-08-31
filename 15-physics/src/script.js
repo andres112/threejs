@@ -36,22 +36,31 @@ const environmentMapTexture = cubeTextureLoader.load([
  * Physics
  */
 const world = new CANNON.World();
-world.gravity.set(0, -1.62, 0);
+world.gravity.set(0, -9.82, 0);
 
 // Physics material
-const concretePhysicsMaterial = new CANNON.Material('concrete');
-const plasticPhysicsMaterial = new CANNON.Material('plastic');
+// const concretePhysicsMaterial = new CANNON.Material('concrete');
+// const plasticPhysicsMaterial = new CANNON.Material('plastic');
 
-// Contact material
-const concretePlasticContactMaterial = new CANNON.ContactMaterial(
-  concretePhysicsMaterial,
-  plasticPhysicsMaterial,
-  {
-    friction: 0.1,
-    restitution: 0.7,
-  }
-);
-world.addContactMaterial(concretePlasticContactMaterial);
+// // Contact material
+// const concretePlasticContactMaterial = new CANNON.ContactMaterial(
+//   concretePhysicsMaterial,
+//   plasticPhysicsMaterial,
+//   {
+//     friction: 0.1,
+//     restitution: 0.9,
+//   }
+// );
+// world.addContactMaterial(concretePlasticContactMaterial);
+
+// simpler way to create materials with default values
+const defaultMaterial = new CANNON.Material('default');
+const defaultContactMaterial = new CANNON.ContactMaterial(defaultMaterial, defaultMaterial, {
+  friction: 0.1,
+  restitution: 0.9,
+});
+world.addContactMaterial(defaultContactMaterial);
+world.defaultContactMaterial = defaultContactMaterial;
 
 // create the body as sphere
 // for cannon the body is the mesh in three.js and the shape is the geometry
@@ -60,6 +69,7 @@ const sphereBody = new CANNON.Body({
   mass: 1,
   position: new CANNON.Vec3(0, 3, 0),
   shape: sphereShape,
+//   material: plasticPhysicsMaterial,
 });
 
 // world in cannon is like the scene in three.js
@@ -70,6 +80,7 @@ const floorShape = new CANNON.Plane();
 const floorBody = new CANNON.Body(); // no mass for the floor 0 by default
 floorBody.addShape(floorShape);
 floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5); // rotate the plane to be horizontal
+// floorBody.material = concretePhysicsMaterial;
 world.addBody(floorBody);
 
 /**

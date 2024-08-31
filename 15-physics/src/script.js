@@ -33,6 +33,17 @@ const environmentMapTexture = cubeTextureLoader.load([
 ])
 
 /**
+ * Physics
+ */
+const world = new CANNON.World()
+world.gravity.set(0, - 9.82, 0)
+
+// create the body as sphere
+// for cannon the body is the mesh in three.js and the shape is the geometry
+const sphereShape = new CANNON.Sphere(0.5) // same radius as the sphere in three.js
+
+
+/**
  * Test sphere
  */
 const sphere = new THREE.Mesh(

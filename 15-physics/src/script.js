@@ -36,11 +36,19 @@ const environmentMapTexture = cubeTextureLoader.load([
  * Physics
  */
 const world = new CANNON.World()
-world.gravity.set(0, - 9.82, 0)
+world.gravity.set(0, - 1.62, 0)
 
 // create the body as sphere
 // for cannon the body is the mesh in three.js and the shape is the geometry
 const sphereShape = new CANNON.Sphere(0.5) // same radius as the sphere in three.js
+const sphereBody = new CANNON.Body({
+    mass: 1,
+    position: new CANNON.Vec3(0, 3, 0),
+    shape: sphereShape
+})
+
+// world in cannon is like the scene in three.js
+world.addBody(sphereBody)
 
 
 /**
@@ -152,9 +160,20 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
+// for physics is required to keep track of time
+let oldElapsedTime = 0
+
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+    const deltaTime = elapsedTime - oldElapsedTime
+    oldElapsedTime = elapsedTime
+
+    // Update physics world
+    world.step(1 / 60, deltaTime, 3) // 1/60 is the fixed time step, 3 is the max number of substeps
+
+    // Update sphere based on physics
+    sphere.position.copy(sphereBody.position)
 
     // Update controls
     controls.update()

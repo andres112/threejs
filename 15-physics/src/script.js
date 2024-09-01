@@ -146,7 +146,8 @@ const createBox = (size, position, rotation) => {
 };
 
 createBox(1, { x: 0, y: 3, z: 0 }, { x: 0, y: 0, z: -Math.PI * 0.2 });
-createBox(1, { x: -2, y: 4, z: 0 });
+createBox(1, { x: -2, y: 4, z: 0 }, { x: 0, y: 0, z: Math.PI * 0.2 });	
+createBox(1, { x: 2, y: 5, z: 0 }, { x: 0, y: 0, z: -Math.PI * 0.2 });
 
 /**
  * Floor

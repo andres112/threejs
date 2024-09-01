@@ -36,7 +36,7 @@ const environmentMapTexture = cubeTextureLoader.load([
  * Physics
  */
 const world = new CANNON.World();
-world.gravity.set(0.01, -9.82, 0);
+world.gravity.set(0, -9.82, 0);
 
 // Physics material
 // const concretePhysicsMaterial = new CANNON.Material('concrete');
@@ -56,8 +56,8 @@ world.gravity.set(0.01, -9.82, 0);
 // simpler way to create materials with default values
 const defaultMaterial = new CANNON.Material('default');
 const defaultContactMaterial = new CANNON.ContactMaterial(defaultMaterial, defaultMaterial, {
-  friction: 0.9,
-  restitution: 0.9,
+  friction: 10,
+  restitution: 0.7,
 });
 world.addContactMaterial(defaultContactMaterial);
 world.defaultContactMaterial = defaultContactMaterial;
@@ -69,8 +69,11 @@ const sphereBody = new CANNON.Body({
   mass: 1,
   position: new CANNON.Vec3(0, 3, 0),
   shape: sphereShape,
-//   material: plasticPhysicsMaterial,
+  //   material: plasticPhysicsMaterial,
 });
+
+// Apply force
+sphereBody.applyLocalForce(new CANNON.Vec3(150, 0, 0), new CANNON.Vec3(0, 0, 0));
 
 // world in cannon is like the scene in three.js
 world.addBody(sphereBody);
@@ -199,6 +202,9 @@ const tick = () => {
   oldElapsedTime = elapsedTime;
 
   // Update physics world
+  // simulate wind
+  sphereBody.applyForce(new CANNON.Vec3(-0.5, 0, 0), sphereBody.position);
+
   world.step(1 / 60, deltaTime, 3); // 1/60 is the fixed time step, 3 is the max number of substeps
 
   // Update sphere based on physics

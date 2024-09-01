@@ -17,6 +17,9 @@ const canvas = document.querySelector('canvas.webgl');
 // Scene
 const scene = new THREE.Scene();
 
+const axesHelper = new THREE.AxesHelper(3);
+scene.add(axesHelper);
+
 /**
  * Textures
  */
@@ -62,21 +65,21 @@ const defaultContactMaterial = new CANNON.ContactMaterial(defaultMaterial, defau
 world.addContactMaterial(defaultContactMaterial);
 world.defaultContactMaterial = defaultContactMaterial;
 
-// create the body as sphere
-// for cannon the body is the mesh in three.js and the shape is the geometry
-const sphereShape = new CANNON.Sphere(0.5); // same radius as the sphere in three.js
-const sphereBody = new CANNON.Body({
-  mass: 1,
-  position: new CANNON.Vec3(0, 3, 0),
-  shape: sphereShape,
-  //   material: plasticPhysicsMaterial,
-});
+// // create the body as sphere
+// // for cannon the body is the mesh in three.js and the shape is the geometry
+// const sphereShape = new CANNON.Sphere(0.5); // same radius as the sphere in three.js
+// const sphereBody = new CANNON.Body({
+//   mass: 1,
+//   position: new CANNON.Vec3(0, 3, 0),
+//   shape: sphereShape,
+//   //   material: plasticPhysicsMaterial,
+// });
 
-// Apply force
-sphereBody.applyLocalForce(new CANNON.Vec3(150, 0, 0), new CANNON.Vec3(0, 0, 0));
+// // Apply force
+// sphereBody.applyLocalForce(new CANNON.Vec3(150, 0, 0), new CANNON.Vec3(0, 0, 0));
 
-// world in cannon is like the scene in three.js
-world.addBody(sphereBody);
+// // world in cannon is like the scene in three.js
+// world.addBody(sphereBody);
 
 // create the body for the floor
 const floorShape = new CANNON.Plane();
@@ -86,21 +89,64 @@ floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
 // floorBody.material = concretePhysicsMaterial;
 world.addBody(floorBody);
 
+// /**
+//  * Test sphere
+//  */
+// const sphere = new THREE.Mesh(
+//   new THREE.SphereGeometry(0.5, 32, 32),
+//   new THREE.MeshStandardMaterial({
+//     metalness: 0.3,
+//     roughness: 0.4,
+//     envMap: environmentMapTexture,
+//     envMapIntensity: 0.5,
+//   })
+// );
+// sphere.castShadow = true;
+// sphere.position.y = 0.5;
+// scene.add(sphere);
+
 /**
- * Test sphere
+ * Function to create a box
  */
-const sphere = new THREE.Mesh(
-  new THREE.SphereGeometry(0.5, 32, 32),
-  new THREE.MeshStandardMaterial({
-    metalness: 0.3,
-    roughness: 0.4,
-    envMap: environmentMapTexture,
-    envMapIntensity: 0.5,
-  })
-);
-sphere.castShadow = true;
-sphere.position.y = 0.5;
-scene.add(sphere);
+
+let bodies = [];
+
+const createBox = (size, position, rotation) => {
+  // three.js
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(size, size, size),
+    new THREE.MeshStandardMaterial({
+      color: '#8ac',
+      metalness: 0.4,
+      roughness: 0.5,
+      envMap: environmentMapTexture,
+      envMapIntensity: 0.9,
+    })
+  );
+  mesh.castShadow = true;
+  mesh.position.copy(position);
+  if (rotation) {
+    mesh.rotation.set(rotation.x, rotation.y, rotation.z);
+  }
+  scene.add(mesh);
+
+  // cannon.js
+  const shape = new CANNON.Box(new CANNON.Vec3(size * 0.5, size * 0.5, size * 0.5));
+  const body = new CANNON.Body({
+    mass: 1,
+    position: new CANNON.Vec3(position.x, position.y, position.z),
+    shape: shape,
+    // material: plasticPhysicsMaterial,
+  });
+  body.quaternion.setFromEuler(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z);
+  world.addBody(body);
+
+  // save the body
+  bodies.push({ body, mesh });
+};
+
+createBox(1, { x: 0, y: 3, z: 0 }, { x: 0, y: 0, z: -Math.PI * 0.2 });
+createBox(1, { x: -2, y: 4, z: 0 });
 
 /**
  * Floor
@@ -166,7 +212,7 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.set(-3, 3, 3);
+camera.position.set(-3, 5, 5);
 scene.add(camera);
 
 // Controls
@@ -202,13 +248,18 @@ const tick = () => {
   oldElapsedTime = elapsedTime;
 
   // Update physics world
-  // simulate wind
-  sphereBody.applyForce(new CANNON.Vec3(-0.5, 0, 0), sphereBody.position);
+  //   // simulate wind
+  //   sphereBody.applyForce(new CANNON.Vec3(-0.5, 0, 0), sphereBody.position);
 
   world.step(1 / 60, deltaTime, 3); // 1/60 is the fixed time step, 3 is the max number of substeps
 
-  // Update sphere based on physics
-  sphere.position.copy(sphereBody.position);
+  bodies.forEach((body) => {
+    body.mesh.position.copy(body.body.position);
+    body.mesh.quaternion.copy(body.body.quaternion);
+  });
+
+  //   // Update sphere based on physics
+  //   sphere.position.copy(sphereBody.position);
 
   // Update controls
   controls.update();

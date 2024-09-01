@@ -10,7 +10,11 @@ const gui = new GUI();
 
 const debugObj = {};
 debugObj.createBox = () => {
-  createBox(Math.random(), { x: (Math.random() - 0.5) * 3, y: 3, z: (Math.random() - 0.5) * 3 }, { x: 0, y: 0, z: Math.random() * Math.PI });
+  createBox(
+    Math.random(),
+    { x: (Math.random() - 0.5) * 3, y: 3, z: (Math.random() - 0.5) * 3 },
+    { x: 0, y: 0, z: Math.random() * Math.PI }
+  );
 };
 
 gui.add(debugObj, 'createBox');
@@ -46,6 +50,8 @@ const environmentMapTexture = cubeTextureLoader.load([
  * Physics
  */
 const world = new CANNON.World();
+world.broadphase = new CANNON.SAPBroadphase(world); // broadphase is the algorithm to detect collisions
+world.allowSleep = true; // allow objects to sleep when they are not moving
 world.gravity.set(0, -9.82, 0);
 
 // Physics material
@@ -150,11 +156,14 @@ const createBox = (size, position, rotation) => {
 
   // save the body
   bodies.push({ body, mesh });
+  return body;
 };
 
-createBox(1, { x: 0, y: 3, z: 0 }, { x: 0, y: 0, z: -Math.PI * 0.2 });
+const box1 = createBox(1, { x: 0, y: 3, z: 0 }, { x: 0, y: 0, z: -Math.PI * 0.2 });
 createBox(1, { x: -2, y: 4, z: 0 }, { x: 0, y: 0, z: Math.PI * 0.2 });
 createBox(1, { x: 2, y: 5, z: 0 }, { x: 0, y: 0, z: -Math.PI * 0.2 });
+
+box1.applyLocalImpulse(new CANNON.Vec3(0, 0, 2), new CANNON.Vec3(0, 0, 0));
 
 /**
  * Floor

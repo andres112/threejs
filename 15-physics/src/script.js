@@ -8,6 +8,13 @@ import GUI from 'lil-gui';
  */
 const gui = new GUI();
 
+const debugObj = {};
+debugObj.createBox = () => {
+  createBox(Math.random(), { x: (Math.random() - 0.5) * 3, y: 3, z: (Math.random() - 0.5) * 3 }, { x: 0, y: 0, z: Math.random() * Math.PI });
+};
+
+gui.add(debugObj, 'createBox');
+
 /**
  * Base
  */
@@ -59,8 +66,8 @@ world.gravity.set(0, -9.82, 0);
 // simpler way to create materials with default values
 const defaultMaterial = new CANNON.Material('default');
 const defaultContactMaterial = new CANNON.ContactMaterial(defaultMaterial, defaultMaterial, {
-  friction: 10,
-  restitution: 0.7,
+  friction: 1,
+  restitution: 0.5,
 });
 world.addContactMaterial(defaultContactMaterial);
 world.defaultContactMaterial = defaultContactMaterial;
@@ -110,19 +117,19 @@ world.addBody(floorBody);
  */
 
 let bodies = [];
+// create only one geometry and material
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshStandardMaterial({
+  color: '#fff',
+  metalness: 0.6,
+  roughness: 0.3,
+  envMap: environmentMapTexture,
+});
 
 const createBox = (size, position, rotation) => {
   // three.js
-  const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(size, size, size),
-    new THREE.MeshStandardMaterial({
-      color: '#8ac',
-      metalness: 0.4,
-      roughness: 0.5,
-      envMap: environmentMapTexture,
-      envMapIntensity: 0.9,
-    })
-  );
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.scale.set(size, size, size);
   mesh.castShadow = true;
   mesh.position.copy(position);
   if (rotation) {
@@ -146,7 +153,7 @@ const createBox = (size, position, rotation) => {
 };
 
 createBox(1, { x: 0, y: 3, z: 0 }, { x: 0, y: 0, z: -Math.PI * 0.2 });
-createBox(1, { x: -2, y: 4, z: 0 }, { x: 0, y: 0, z: Math.PI * 0.2 });	
+createBox(1, { x: -2, y: 4, z: 0 }, { x: 0, y: 0, z: Math.PI * 0.2 });
 createBox(1, { x: 2, y: 5, z: 0 }, { x: 0, y: 0, z: -Math.PI * 0.2 });
 
 /**

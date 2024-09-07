@@ -50,8 +50,8 @@ const environmentMapTexture = cubeTextureLoader.load([
  * Physics
  */
 const world = new CANNON.World();
-world.broadphase = new CANNON.SAPBroadphase(world); // broadphase is the algorithm to detect collisions
-world.allowSleep = true; // allow objects to sleep when they are not moving
+world.broadphase = new CANNON.SAPBroadphase(world); // broadphase is the algorithm to detect collisions PERFORMANCE
+world.allowSleep = true; // allow objects to sleep when they are not moving PERFORMANCE
 world.gravity.set(0, -9.82, 0);
 
 // Physics material
@@ -123,7 +123,7 @@ world.addBody(floorBody);
  */
 
 let bodies = [];
-// create only one geometry and material
+// create only one geometry and material PERFORMANCE
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshStandardMaterial({
   color: '#fff',
@@ -270,9 +270,9 @@ const tick = () => {
 
   world.step(1 / 60, deltaTime, 3); // 1/60 is the fixed time step, 3 is the max number of substeps
 
-  bodies.forEach((body) => {
-    body.mesh.position.copy(body.body.position);
-    body.mesh.quaternion.copy(body.body.quaternion);
+  bodies.forEach((element) => {
+    element.mesh.position.copy(element.body.position);
+    element.mesh.quaternion.copy(element.body.quaternion);
   });
 
   //   // Update sphere based on physics

@@ -17,7 +17,17 @@ debugObj.createBox = () => {
   );
 };
 
+debugObj.reset = () => {
+    // remove all the bodies
+    bodies.forEach((element) => {
+        world.removeBody(element.body);
+        scene.remove(element.mesh);
+    });
+    bodies = [];
+};
+
 gui.add(debugObj, 'createBox');
+gui.add(debugObj, 'reset');
 
 /**
  * Base
@@ -30,6 +40,33 @@ const scene = new THREE.Scene();
 
 const axesHelper = new THREE.AxesHelper(3);
 scene.add(axesHelper);
+
+/**
+ * Sounds
+ */
+const hitSound = new Audio('/sounds/hit.mp3');
+const collideBetweenBoxes = new Audio('/sounds/boing.mp3');
+
+const playHitSound = (collision) => {
+  const impactStrength = collision.contact.getImpactVelocityAlongNormal();
+  let impactSound;
+  // define the sound based on the object id 0 for the floor
+  if (collision.body.id === 0) {
+    impactSound = hitSound;
+  } else {
+    impactSound = collideBetweenBoxes;
+  }
+
+  if (impactStrength > 1.5) {    
+    // Add a short delay to avoid overlapping sounds
+    setTimeout(() => {
+        // sert imapctSound volume based on the impactStrength but this volume is max 1 
+        impactSound.volume = Math.min(impactStrength / 10, 1);
+        impactSound.currentTime = 0;
+        impactSound.play();
+    }, 50); // 50 milliseconds delay
+  }
+};
 
 /**
  * Textures
@@ -152,6 +189,7 @@ const createBox = (size, position, rotation) => {
     // material: plasticPhysicsMaterial,
   });
   body.quaternion.setFromEuler(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z);
+  body.addEventListener('collide', playHitSound);
   world.addBody(body);
 
   // save the body

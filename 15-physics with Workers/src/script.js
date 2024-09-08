@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
+import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js';
+
 
 // Canvas and Scene setup
 const canvas = document.querySelector('canvas.webgl');
@@ -35,6 +37,7 @@ debugObj.reset = () => {
 gui.add(debugObj, 'createBox');
 gui.add(debugObj, 'reset');
 
+
 // Floor
 
 // Three.js floor
@@ -49,13 +52,14 @@ scene.add(floor);
 // Cannon.js floor in Worker
 worker.postMessage({ type: 'createFloor' });
 
+
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 2.1);
+const ambientLight = new THREE.AmbientLight(0xffffff, 2);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
 directionalLight.castShadow = true;
 directionalLight.position.set(5, 5, 5);
 scene.add(directionalLight);
@@ -94,6 +98,16 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 /**
+ * Environment map
+ */
+const rgbeloader = new RGBELoader()
+rgbeloader.load('/textures/environmentMap/2k.hdr', (envMap) => {
+    envMap.mapping = THREE.EquirectangularReflectionMapping
+    scene.background = envMap
+    scene.environment = envMap
+})
+
+/**
  * Animate
  */
 const clock = new THREE.Clock();
@@ -109,9 +123,20 @@ worker.onmessage = (e) => {
         });
     }
 
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshPhysicalMaterial();
+    material.roughness= 0
+    material.metalness = 0
+    material.side = THREE.DoubleSide
+    material.transparent = true;
+    material.transmission = 0.9
+    material.ior = 1.5
+    material.thickness = 0.1
+    material.iridescence = 0.8
+    material.iridescenceIOR = 1
+    material.iridescenceThicknessRange = [100, 400]
+
     if (type === 'createBox') {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshStandardMaterial({ color: '#fff' });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.scale.set(data.size, data.size, data.size);
         mesh.position.copy(data.position);

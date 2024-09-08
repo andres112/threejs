@@ -134,7 +134,7 @@ worker.onmessage = (e) => {
   }
 
   const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+  const material = new THREE.MeshStandardMaterial({ color: 0xff5015 });
 
   if (type === 'createBox') {
     const mesh = new THREE.Mesh(geometry, material);

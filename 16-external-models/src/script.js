@@ -64,7 +64,7 @@ gltfLoader.load('/models/Duck/glTF/Duck.gltf', (gltf) => {
   gltf.scene.scale.setScalar(0.5);
   gltf.scene.rotateY(Math.PI * -0.75);
   gltf.scene.position.set(-2, 0, 0);
-  
+
   add3DModelShadow(gltf);
 
   scene.add(gltf.scene);
@@ -140,7 +140,7 @@ scene.add(floor);
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 2.4);
+const ambientLight = new THREE.AmbientLight(0x000000, 0.4);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
@@ -151,7 +151,7 @@ directionalLight.shadow.camera.left = -15;
 directionalLight.shadow.camera.top = 10;
 directionalLight.shadow.camera.right = 15;
 directionalLight.shadow.camera.bottom = -7;
-directionalLight.position.set(5, 5, 5);
+directionalLight.position.set(5, 3, 5);
 scene.add(directionalLight);
 
 const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2);

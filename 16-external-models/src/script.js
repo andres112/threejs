@@ -98,8 +98,31 @@ gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
   console.log('Duck', gltf);
 
   // the model is in the gltf.scene property
-  gltf.scene.scale.setScalar(0.5);
+  gltf.scene.scale.setScalar(0.3);
   gltf.scene.position.set(-2, 0, 1);
+
+  // cast shadows
+  add3DModelShadow(gltf);
+
+  scene.add(gltf.scene);
+});
+
+
+// create a mixer for the animations
+let mixer = null;
+//Animated model - Fox
+gltfLoader.load('/models/Fox/glTF/Fox.gltf', (gltf) => {
+  console.log('Fox', gltf);
+
+  mixer = new THREE.AnimationMixer(gltf.scene);
+  const action = mixer.clipAction(gltf.animations[0]);
+
+  action.play();
+
+  // the model is in the gltf.scene property
+  gltf.scene.scale.setScalar(0.02);
+  gltf.scene.rotation.y = Math.PI * 0.25;
+  gltf.scene.position.set(-3.5, 0, -0.5);
 
   // cast shadows
   add3DModelShadow(gltf);
@@ -164,11 +187,13 @@ directionalLight.position.set(5, 3, 5);
 scene.add(directionalLight);
 
 const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2);
+directionalLightHelper.visible = false;
 scene.add(directionalLightHelper);
 
 helperFolder.add(directionalLightHelper, 'visible').name('Directional Light Helper');
 
 const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
+helper.visible = false;
 scene.add(helper);
 
 helperFolder.add(helper, 'visible').name('Camera Helper');
@@ -236,6 +261,11 @@ const tick = () => {
   // Rotate directional light around scene slowly
   directionalLight.position.x = Math.sin(elapsedTime * 0.1) * 5;
   directionalLight.position.z = Math.cos(elapsedTime * 0.1) * 5;
+
+  // Update mixer - fox animation
+    if (mixer) {
+        mixer.update(deltaTime);
+    }
 
   // Update controls
   controls.update();

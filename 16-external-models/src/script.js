@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
  * Base
@@ -16,6 +17,27 @@ const scene = new THREE.Scene()
 
 const axesHelper = new THREE.AxesHelper(2)
 scene.add(axesHelper)
+
+/**
+ * External Model
+ */
+const gltfLoader = new GLTFLoader()
+gltfLoader.load(
+    '/models/FlightHelmet/glTF/FlightHelmet.gltf',
+    (gltf) =>
+    {
+        console.log(gltf)
+
+        gltf.scene.scale.set(5, 5, 5)
+        scene.add(gltf.scene)
+
+        gui.addFolder({
+            title: 'Flight Helmet',
+            target: gltf.scene,
+            open: true
+        })
+    }
+)
 
 /**
  * Floor
@@ -83,7 +105,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(3, 2, 3)
+camera.position.set(3, 5, 4)
 scene.add(camera)
 
 // Controls
@@ -91,7 +113,7 @@ const controls = new OrbitControls(camera, canvas)
 controls.target.set(0, 0.75, 0)
 controls.enableDamping = true
 controls.minDistance = 1
-controls.maxDistance = 10
+controls.maxDistance = 20
 controls.maxPolarAngle = Math.PI * 0.5
 
 /**

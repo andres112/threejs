@@ -10,8 +10,10 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 // Debug
 const gui = new GUI();
 const helperFolder = gui.addFolder('Helpers');
+const foxFolder = gui.addFolder('Fox');
 const debugObject = {};
 debugObject.toggleShadows = true;
+debugObject.foxAnimation = 0;
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -107,17 +109,16 @@ gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
   scene.add(gltf.scene);
 });
 
-
 // create a mixer for the animations
 let mixer = null;
+let fox;
 //Animated model - Fox
 gltfLoader.load('/models/Fox/glTF/Fox.gltf', (gltf) => {
+  fox = gltf;
   console.log('Fox', gltf);
 
   mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[0]);
-
-  action.play();
+  mixer.clipAction(fox.animations[debugObject.foxAnimation]).play();
 
   // the model is in the gltf.scene property
   gltf.scene.scale.setScalar(0.02);
@@ -129,6 +130,21 @@ gltfLoader.load('/models/Fox/glTF/Fox.gltf', (gltf) => {
 
   scene.add(gltf.scene);
 });
+
+foxFolder
+  .add(debugObject, 'foxAnimation', {
+    Idle: 0,
+    Walk: 1,
+    Run: 2,
+  })
+  .name('Fox Animation')
+  .onChange(() => {
+    if (mixer && fox.animations) {
+      mixer.stopAllAction();
+      // play the selected animation
+      mixer.clipAction(fox.animations[debugObject.foxAnimation]).play();
+    }
+  });
 
 /**
  * Shadows
@@ -177,12 +193,14 @@ scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
 directionalLight.castShadow = true;
-directionalLight.shadow.mapSize.set(1024, 1024);
+directionalLight.shadow.mapSize.set(512, 512);
 directionalLight.shadow.camera.far = 20;
 directionalLight.shadow.camera.left = -15;
 directionalLight.shadow.camera.top = 10;
 directionalLight.shadow.camera.right = 15;
 directionalLight.shadow.camera.bottom = -7;
+directionalLight.shadow.radius = 5;
+directionalLight.shadow.bias = 0;
 directionalLight.position.set(5, 3, 5);
 scene.add(directionalLight);
 
@@ -195,6 +213,8 @@ helperFolder.add(directionalLightHelper, 'visible').name('Directional Light Help
 const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
 helper.visible = false;
 scene.add(helper);
+
+helperFolder.add(directionalLight.shadow, 'bias').min(-0.01).max(0.01).step(0.0001).name('Shadow Bias');
 
 helperFolder.add(helper, 'visible').name('Camera Helper');
 
@@ -263,9 +283,15 @@ const tick = () => {
   directionalLight.position.z = Math.cos(elapsedTime * 0.1) * 5;
 
   // Update mixer - fox animation
-    if (mixer) {
-        mixer.update(deltaTime);
+  if (mixer) {
+    mixer.update(deltaTime);
+    if (debugObject.foxAnimation === 1) {
+      fox.scene.position.z = Math.sin(elapsedTime) * 0.5;
     }
+    if (debugObject.foxAnimation === 2) {
+      fox.scene.position.z = Math.sin(elapsedTime) * 1;
+    }
+  }
 
   // Update controls
   controls.update();

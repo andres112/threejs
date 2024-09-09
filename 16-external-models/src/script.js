@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 /**
  * Base
@@ -27,9 +28,16 @@ helperFolder.add(axesHelper, 'visible').name('Axes Helper');
  * External Model
  */
 const gltfLoader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+// move from node_modules three/examples/js/libs/draco/ to /draco/ in static folder
+dracoLoader.setDecoderPath('/draco/');
+
+// Set the loader to be used by the gltfLoader
+gltfLoader.setDRACOLoader(dracoLoader);
+
 // FlightHelmet model
 gltfLoader.load(
-  '/models/FlightHelmet/glTF/FlightHelmet.gltf',
+  '/models/FlightHelmet/glTF/helmet.gltf',
   (gltf) => {
     console.log('FlightHelmet', gltf);
 
@@ -56,20 +64,6 @@ gltfLoader.load(
   }
 );
 
-// Duck model
-gltfLoader.load('/models/Duck/glTF/Duck.gltf', (gltf) => {
-  console.log('Duck', gltf);
-
-  // the model is in the gltf.scene property
-  gltf.scene.scale.setScalar(0.5);
-  gltf.scene.rotateY(Math.PI * -0.75);
-  gltf.scene.position.set(-2, 0, 0);
-
-  add3DModelShadow(gltf);
-
-  scene.add(gltf.scene);
-});
-
 // Biomechanical Mutant model 1
 gltfLoader.load('/models/Biomech_Mutant/Skin_1/Biomech_Mutant_Skin_1.gltf', (gltf) => {
   console.log('Biomech_Mutant_Skin_1', gltf);
@@ -91,6 +85,21 @@ gltfLoader.load('/models/Biomech_Mutant/Skin_2/Biomech_Mutant_Skin_2.gltf', (glt
   // the model is in the gltf.scene property
   gltf.scene.scale.setScalar(2.5);
   gltf.scene.position.set(0, 0, -3);
+
+  // cast shadows
+  add3DModelShadow(gltf);
+
+  scene.add(gltf.scene);
+});
+
+// Draco compression version of model - Is the most light model
+// Duck model
+gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
+  console.log('Duck', gltf);
+
+  // the model is in the gltf.scene property
+  gltf.scene.scale.setScalar(0.5);
+  gltf.scene.position.set(-2, 0, 1);
 
   // cast shadows
   add3DModelShadow(gltf);
@@ -140,7 +149,7 @@ scene.add(floor);
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0x000000, 0.4);
+const ambientLight = new THREE.AmbientLight(0x000000, 0.5);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 3);

@@ -28,14 +28,22 @@ gltfLoader.load(
     {
         console.log(gltf)
 
-        gltf.scene.scale.set(5, 5, 5)
-        scene.add(gltf.scene)
+        // the model is in the gltf.scene property
+        gltf.scene.scale.setScalar(5)
 
-        gui.addFolder({
-            title: 'Flight Helmet',
-            target: gltf.scene,
-            open: true
-        })
+        /**Different ways to add the model */
+        // Filtering scene.children
+        // gltf.scene.children.forEach(child =>
+        // {
+        //     if(child.name.toLowerCase().includes('metal'))
+        //     {
+        //         child.visible = false
+        //     }
+        // })
+
+        //
+
+        scene.add(gltf.scene)
     }
 )
 

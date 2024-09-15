@@ -42,20 +42,21 @@ scene.add(object1, object2, object3)
  */
 
 const raycaster = new THREE.Raycaster()
-// like a laser beam, define the origin and direction
-const rayOrigin = new THREE.Vector3(-3, 0, 0)
-const rayDirection = new THREE.Vector3(10, 1, 0) 
-console.log(rayDirection.length()) // 10.049
-rayDirection.normalize() // ALWAYS normalize the direction vector
-console.log(rayDirection.length()) // 1
-raycaster.set(rayOrigin, rayDirection)
 
-// Intersection - Cast a ray
-const intersect = raycaster.intersectObject(object1)
-console.log(intersect)
+// // like a laser beam, define the origin and direction
+// const rayOrigin = new THREE.Vector3(-3, 0, 0)
+// const rayDirection = new THREE.Vector3(10, 1, 0) 
+// console.log(rayDirection.length()) // 10.049
+// rayDirection.normalize() // ALWAYS normalize the direction vector
+// console.log(rayDirection.length()) // 1
+// raycaster.set(rayOrigin, rayDirection)
 
-const intersects = raycaster.intersectObjects([object1, object2, object3])
-console.log(intersects)
+// // Intersection - Cast a ray
+// const intersect = raycaster.intersectObject(object1)
+// console.log(intersect)
+
+// const intersects = raycaster.intersectObjects([object1, object2, object3])
+// console.log(intersects)
 
 /**
  * Sizes
@@ -101,6 +102,23 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+const castARay = () => {
+    const rayOrigin = new THREE.Vector3(-3, 0, 0)
+    const rayDirection = new THREE.Vector3(10, 1, 0)
+    rayDirection.normalize()
+
+    raycaster.set(rayOrigin, rayDirection)
+
+    const objectsToTest = [object1, object2, object3]
+    const intersects = raycaster.intersectObjects(objectsToTest)
+
+    objectsToTest.forEach(object => object.material.color.set('#ff0000'))
+
+    intersects.forEach(intersect => intersect.object.material.color.set('#DFFF00'))
+
+    console.log(intersects.length)
+}
+
 /**
  * Animate
  */
@@ -112,6 +130,14 @@ const tick = () =>
 
     // Update controls
     controls.update()
+
+    // Animate objects
+    object1.position.y = Math.sin(elapsedTime * 0.3) * 1.5
+    object2.position.y = Math.sin(elapsedTime * 0.8) * 1.5
+    object3.position.y = Math.sin(elapsedTime * 1.4) * 1.5
+
+    // Cast a ray
+    castARay()
 
     // Render
     renderer.render(scene, camera)

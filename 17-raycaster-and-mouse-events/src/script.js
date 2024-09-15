@@ -18,23 +18,43 @@ const scene = new THREE.Scene()
  * Objects
  */
 const object1 = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 16, 16),
+    new THREE.SphereGeometry(0.5, 32, 32),
     new THREE.MeshBasicMaterial({ color: '#ff0000' })
 )
 object1.position.x = - 2
 
 const object2 = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 16, 16),
+    new THREE.SphereGeometry(0.5, 32, 32),
     new THREE.MeshBasicMaterial({ color: '#ff0000' })
 )
 
 const object3 = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 16, 16),
+    new THREE.SphereGeometry(0.5, 32, 32),
     new THREE.MeshBasicMaterial({ color: '#ff0000' })
 )
 object3.position.x = 2
 
 scene.add(object1, object2, object3)
+
+/**
+ * Raycaster
+ */
+
+const raycaster = new THREE.Raycaster()
+// like a laser beam, define the origin and direction
+const rayOrigin = new THREE.Vector3(-3, 0, 0)
+const rayDirection = new THREE.Vector3(10, 1, 0) 
+console.log(rayDirection.length()) // 10.049
+rayDirection.normalize() // ALWAYS normalize the direction vector
+console.log(rayDirection.length()) // 1
+raycaster.set(rayOrigin, rayDirection)
+
+// Intersection - Cast a ray
+const intersect = raycaster.intersectObject(object1)
+console.log(intersect)
+
+const intersects = raycaster.intersectObjects([object1, object2, object3])
+console.log(intersects)
 
 /**
  * Sizes
@@ -64,7 +84,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.z = 3
+camera.position.z = 5
 scene.add(camera)
 
 // Controls

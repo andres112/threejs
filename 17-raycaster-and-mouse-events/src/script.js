@@ -32,7 +32,8 @@ const object3 = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 32, 32),
     new THREE.MeshBasicMaterial({ color: '#ff0000' })
 )
-object3.position.x = 2
+object3.position.x = 3
+object3.position.y = 1
 
 scene.add(object1, object2, object3)
 

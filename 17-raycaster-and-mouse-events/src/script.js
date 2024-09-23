@@ -25,11 +25,13 @@ const object1 = new THREE.Mesh(
   new THREE.MeshBasicMaterial({ color: '#ff0000' })
 );
 object1.position.x = -2;
+object1.name = 'object1';
 
 const object2 = new THREE.Mesh(
   new THREE.SphereGeometry(0.5, 32, 32),
   new THREE.MeshBasicMaterial({ color: '#ff0000' })
 );
+object2.name = 'object2';
 
 const object3 = new THREE.Mesh(
   new THREE.SphereGeometry(0.5, 32, 32),
@@ -37,6 +39,7 @@ const object3 = new THREE.Mesh(
 );
 object3.position.x = 3;
 object3.position.y = 1;
+object3.name = 'object3';
 
 scene.add(object1, object2, object3);
 
@@ -101,6 +104,20 @@ canvas.addEventListener('click', () => {
     const acceleration = new THREE.Vector3(0, 0, 1);
     acceleration.applyQuaternion(currentIntersect.object.quaternion);
     currentIntersect.object.position.add(acceleration);
+    console.log('Clicked on object', currentIntersect.object.name);
+  }
+});
+
+// right click
+canvas.addEventListener('contextmenu', (event) => {
+  event.preventDefault(); // prevent the context menu from appearing
+
+  if (currentIntersect) {
+    // decelerate the object in the direction of the ray
+    const acceleration = new THREE.Vector3(0, 0, -1);
+    acceleration.applyQuaternion(currentIntersect.object.quaternion);
+    currentIntersect.object.position.add(acceleration);
+    console.log('Right clicked on object', currentIntersect.object.name);
   }
 });
 

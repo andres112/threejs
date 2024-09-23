@@ -87,10 +87,31 @@ window.addEventListener('resize', () => {
  * Mouse events
  */
 const mouse = new THREE.Vector2();
+let color = '#ff0000';
+let isMouseDown = false;
 
 canvas.addEventListener('mousemove', (event) => {
   mouse.x = (event.clientX / sizes.width) * 2 - 1;
   mouse.y = -(event.clientY / sizes.height) * 2 + 1;
+});
+
+canvas.addEventListener('click', () => {
+  if (currentIntersect) {
+    // accelerate the object in the direction of the ray
+    const acceleration = new THREE.Vector3(0, 0, 1);
+    acceleration.applyQuaternion(currentIntersect.object.quaternion);
+    currentIntersect.object.position.add(acceleration);
+  }
+});
+
+canvas.addEventListener('mousedown', () => {
+  if (currentIntersect) {
+    isMouseDown = true;
+  }
+});
+
+canvas.addEventListener('mouseup', () => {
+  isMouseDown = false;
 });
 
 /**
@@ -114,10 +135,14 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+// Check the intersected object
+let currentIntersect = null;
+
 // cast a ray from static position or from mouse position
 const castARay = (source) => {
   if (source === 'mouse') {
     raycaster.setFromCamera(mouse, camera);
+    color = isMouseDown ? '#ffff00' : '#00ff00';
   }
 
   if (source === 'static') {
@@ -125,16 +150,24 @@ const castARay = (source) => {
     const rayDirection = new THREE.Vector3(10, 1, 0);
     rayDirection.normalize();
     raycaster.set(rayOrigin, rayDirection);
+    color = '#0000ff';
   }
 
   const objectsToTest = [object1, object2, object3];
   const intersects = raycaster.intersectObjects(objectsToTest);
 
+  // Capture the intersected object with mouse
+  if (source === 'mouse' && intersects.length) {
+    currentIntersect = intersects[0];
+  } else {
+    currentIntersect = null;
+  }
+
   // Reset colors
   objectsToTest.forEach((object) => object.material.color.set('#ff0000'));
 
   // Change color of intersected objects
-  intersects.forEach((intersect) => intersect.object.material.color.set('#DFFF00'));
+  intersects.forEach((intersect) => intersect.object.material.color.set(color));
 };
 
 gui

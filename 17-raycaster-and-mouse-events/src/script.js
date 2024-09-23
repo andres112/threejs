@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 /**
  * Base
@@ -89,7 +90,7 @@ window.addEventListener('resize', () => {
 /**
  * Mouse events
  */
-const mouse = new THREE.Vector2();
+const mouse = new THREE.Vector2(0,0); //initialize the mouse position
 let color = '#ff0000';
 let isMouseDown = false;
 
@@ -194,6 +195,39 @@ gui
   .onFinishChange(() => {
     castARay(debugObject.castARay);
   });
+
+/**
+ * External 3D model
+ */
+const gltfLoader = new GLTFLoader();
+let model;
+gltfLoader.load('/models/Duck/glTF-Binary/Duck.glb', (gltf) => {
+  model = gltf.scene;
+  model.scale.set(1, 1, 1);
+  model.position.set(0, -3, 0);
+  scene.add(model);
+
+  // Debug
+  const duckFolder = gui.addFolder('Duck');
+  duckFolder.add(model.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.01).name('Rotation');
+});
+
+const castARayModel = () => {
+  raycaster.setFromCamera(mouse, camera);
+  const intersectsModel = raycaster.intersectObject(model, true); // true to check children recursively
+
+  if (intersectsModel.length) {
+    console.log('Intersected model', intersectsModel[0]);
+    model.rotation.y += 0.01;
+  }
+};
+
+/**
+ * Lights
+ */
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+scene.add(ambientLight);
+
 /**
  * Animate
  */
@@ -212,6 +246,11 @@ const tick = () => {
 
   // Cast a ray using mouse position
   castARay(debugObject.castARay);
+
+  // Cast a ray on the 3D model
+  if (model) {
+    castARayModel();
+  }
 
   // Render
   renderer.render(scene, camera);

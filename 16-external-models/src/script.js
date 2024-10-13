@@ -109,6 +109,17 @@ gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
   scene.add(gltf.scene);
 });
 
+// External model Created with Blender by Myself - LESSON 23
+gltfLoader.load('/models/hamburger.glb', (gltf) => {
+  console.log('Hamburger', gltf);
+  gltf.scene.scale.setScalar(0.05);
+  gltf.scene.position.set(-3, -0.1, 2);
+
+  // cast shadows
+  add3DModelShadow(gltf);
+  scene.add(gltf.scene);
+});
+
 // create a mixer for the animations
 let mixer = null;
 let fox;

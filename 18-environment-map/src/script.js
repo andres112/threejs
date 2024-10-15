@@ -12,6 +12,8 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('/draco/');
 gltfLoader.setDRACOLoader(dracoLoader);
 
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+
 /**
  * Base
  */

@@ -75,6 +75,7 @@ const loadEnvironmentMap = () => {
   }
 
   if (environmentOptions.useHDRI) {
+    // The use of HDRI is recommended for lights and reflections with small resolutions ONLY
     rgbeLoader.load('/environmentMaps/0/2k.hdr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = envMap;

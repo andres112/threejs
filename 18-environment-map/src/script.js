@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 /**
  * Loaders
@@ -12,13 +13,18 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('/draco/');
 gltfLoader.setDRACOLoader(dracoLoader);
 
+// environment map loaders
 const cubeTextureLoader = new THREE.CubeTextureLoader();
+const rgbeLoader = new RGBELoader();
 
 /**
  * Base
  */
 // Debug
 const gui = new GUI();
+const environmentOptions = {
+  useHDRI: true,
+};
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -33,25 +39,67 @@ scene.backgroundIntensity = 1;
 gui.add(scene, 'environmentIntensity').min(0).max(10).step(0.01).name('environment intensity');
 gui.add(scene, 'backgroundBlurriness').min(0).max(1).step(0.01).name('background blurriness');
 gui.add(scene, 'backgroundIntensity').min(0).max(1).step(0.01).name('background intensity');
-gui.add(scene.backgroundRotation, 'y').min(0).max(Math.PI * 2).step(0.01).name('background rotation Y');
-gui.add(scene.backgroundRotation, 'x').min(0).max(Math.PI * 2).step(0.01).name('background rotation X');
-gui.add(scene.environmentRotation, 'y').min(0).max(Math.PI * 2).step(0.01).name('environment rotation Y');
-gui.add(scene.environmentRotation, 'x').min(0).max(Math.PI * 2).step(0.01).name('environment rotation X');
+gui
+  .add(scene.backgroundRotation, 'y')
+  .min(0)
+  .max(Math.PI * 2)
+  .step(0.01)
+  .name('background rotation Y');
+gui
+  .add(scene.backgroundRotation, 'x')
+  .min(0)
+  .max(Math.PI * 2)
+  .step(0.01)
+  .name('background rotation X');
+gui
+  .add(scene.environmentRotation, 'y')
+  .min(0)
+  .max(Math.PI * 2)
+  .step(0.01)
+  .name('environment rotation Y');
+gui
+  .add(scene.environmentRotation, 'x')
+  .min(0)
+  .max(Math.PI * 2)
+  .step(0.01)
+  .name('environment rotation X');
 
 /**
  * Environment map
  */
-const environmentMap = cubeTextureLoader.load([
-  '/environmentMaps/2/px.png',
-  '/environmentMaps/2/nx.png',
-  '/environmentMaps/2/py.png',
-  '/environmentMaps/2/ny.png',
-  '/environmentMaps/2/pz.png',
-  '/environmentMaps/2/nz.png',
-]);
-scene.environment = environmentMap;
-scene.background = environmentMap;
+// Function to load the environment map
+let currentEnvironmentMap = null;
+const loadEnvironmentMap = () => {
+  if (currentEnvironmentMap) {
+    currentEnvironmentMap.dispose();
+  }
 
+  if (environmentOptions.useHDRI) {
+    rgbeLoader.load('/environmentMaps/0/2k.hdr', (envMap) => {
+      envMap.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment = envMap;
+      scene.background = envMap;
+    });
+  } else {
+    const environmentMap = cubeTextureLoader.load([
+      '/environmentMaps/0/px.png',
+      '/environmentMaps/0/nx.png',
+      '/environmentMaps/0/py.png',
+      '/environmentMaps/0/ny.png',
+      '/environmentMaps/0/pz.png',
+      '/environmentMaps/0/nz.png',
+    ]);
+    scene.environment = environmentMap;
+    scene.background = environmentMap;
+    currentEnvironmentMap = environmentMap;
+  }
+};
+
+// Add GUI switch
+gui.add(environmentOptions, 'useHDRI').name('Use HDRI').onChange(loadEnvironmentMap);
+
+// Initial load
+loadEnvironmentMap();
 
 // axes helper
 const axesHelper = new THREE.AxesHelper(2);
@@ -75,9 +123,8 @@ scene.add(axesHelper);
  */
 const torusKnot = new THREE.Mesh(
   new THREE.TorusKnotGeometry(1, 0.4, 150, 32),
-  new THREE.MeshBasicMaterial({ roughness: 0.1, metalness: 1, color: 0x00ff00 }),
+  new THREE.MeshStandardMaterial({ roughness: 0.1, metalness: 1, color: 0xff5500 })
 );
-torusKnot.material.envMap = environmentMap;
 torusKnot.position.set(-2, 4, -5);
 scene.add(torusKnot);
 
@@ -168,10 +215,10 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
   // rotate the directional light around the scene
-//   const radius = 7;
-//   directionalLight.position.x = Math.sin(elapsedTime) * radius;
-//   directionalLight.position.z = Math.cos(elapsedTime) * radius;
-//   directionalLightHelper.update();
+  //   const radius = 7;
+  //   directionalLight.position.x = Math.sin(elapsedTime) * radius;
+  //   directionalLight.position.z = Math.cos(elapsedTime) * radius;
+  //   directionalLightHelper.update();
 
   // Update controls
   controls.update();

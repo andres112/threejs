@@ -25,6 +25,33 @@ const canvas = document.querySelector('canvas.webgl');
 
 // Scene
 const scene = new THREE.Scene();
+// scene properties
+scene.environmentIntensity = 10;
+scene.backgroundBlurriness = 0;
+scene.backgroundIntensity = 1;
+
+gui.add(scene, 'environmentIntensity').min(0).max(10).step(0.01).name('environment intensity');
+gui.add(scene, 'backgroundBlurriness').min(0).max(1).step(0.01).name('background blurriness');
+gui.add(scene, 'backgroundIntensity').min(0).max(1).step(0.01).name('background intensity');
+gui.add(scene.backgroundRotation, 'y').min(0).max(Math.PI * 2).step(0.01).name('background rotation Y');
+gui.add(scene.backgroundRotation, 'x').min(0).max(Math.PI * 2).step(0.01).name('background rotation X');
+gui.add(scene.environmentRotation, 'y').min(0).max(Math.PI * 2).step(0.01).name('environment rotation Y');
+gui.add(scene.environmentRotation, 'x').min(0).max(Math.PI * 2).step(0.01).name('environment rotation X');
+
+/**
+ * Environment map
+ */
+const environmentMap = cubeTextureLoader.load([
+  '/environmentMaps/2/px.png',
+  '/environmentMaps/2/nx.png',
+  '/environmentMaps/2/py.png',
+  '/environmentMaps/2/ny.png',
+  '/environmentMaps/2/pz.png',
+  '/environmentMaps/2/nz.png',
+]);
+scene.environment = environmentMap;
+scene.background = environmentMap;
+
 
 // axes helper
 const axesHelper = new THREE.AxesHelper(2);
@@ -33,24 +60,25 @@ scene.add(axesHelper);
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 5);
-scene.add(ambientLight);
+// const ambientLight = new THREE.AmbientLight(0xffffff, 5);
+// scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0x9400d3, 10);
-directionalLight.position.set(3.5, 7, -1);
-scene.add(directionalLight);
-// directional light helper
-const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2);
-scene.add(directionalLightHelper);
+// const directionalLight = new THREE.DirectionalLight(0x9400d3, 10);
+// directionalLight.position.set(3.5, 7, -1);
+// scene.add(directionalLight);
+// // directional light helper
+// const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2);
+// scene.add(directionalLightHelper);
 
 /**
  * Torus Knot
  */
 const torusKnot = new THREE.Mesh(
-  new THREE.TorusKnotGeometry(1, 0.4, 100, 16),
-  new THREE.MeshBasicMaterial()
+  new THREE.TorusKnotGeometry(1, 0.4, 150, 32),
+  new THREE.MeshBasicMaterial({ roughness: 0.1, metalness: 1, color: 0x00ff00 }),
 );
-torusKnot.position.y = 4;
+torusKnot.material.envMap = environmentMap;
+torusKnot.position.set(-2, 4, -5);
 scene.add(torusKnot);
 
 /**
@@ -114,7 +142,7 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.set(4, 5, 4);
+camera.position.set(5, 7, 10);
 scene.add(camera);
 
 // Controls
@@ -140,10 +168,10 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
   // rotate the directional light around the scene
-  const radius = 7;
-  directionalLight.position.x = Math.sin(elapsedTime) * radius;
-  directionalLight.position.z = Math.cos(elapsedTime) * radius;
-  directionalLightHelper.update();
+//   const radius = 7;
+//   directionalLight.position.x = Math.sin(elapsedTime) * radius;
+//   directionalLight.position.z = Math.cos(elapsedTime) * radius;
+//   directionalLightHelper.update();
 
   // Update controls
   controls.update();

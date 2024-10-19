@@ -4,6 +4,7 @@ import GUI from 'lil-gui';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
 
 /**
  * Loaders
@@ -16,6 +17,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 // environment map loaders
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 const rgbeLoader = new RGBELoader();
+const exrLoader = new EXRLoader();
 
 /**
  * Base
@@ -24,6 +26,7 @@ const rgbeLoader = new RGBELoader();
 const gui = new GUI();
 const environmentOptions = {
   useHDRI: true,
+  useEXR: false,
 };
 
 // Canvas
@@ -32,9 +35,11 @@ const canvas = document.querySelector('canvas.webgl');
 // Scene
 const scene = new THREE.Scene();
 // scene properties
-scene.environmentIntensity = 10;
-scene.backgroundBlurriness = 0;
-scene.backgroundIntensity = 1;
+const setSceneProperties = () => {
+  scene.environmentIntensity = 10;
+  scene.backgroundBlurriness = 0;
+  scene.backgroundIntensity = 1;
+};
 
 gui.add(scene, 'environmentIntensity').min(0).max(10).step(0.01).name('environment intensity');
 gui.add(scene, 'backgroundBlurriness').min(0).max(1).step(0.01).name('background blurriness');
@@ -76,8 +81,17 @@ const loadEnvironmentMap = () => {
 
   if (environmentOptions.useHDRI) {
     // The use of HDRI is recommended for lights and reflections with small resolutions ONLY
-    rgbeLoader.load('/environmentMaps/0/2k.hdr', (envMap) => {
+    rgbeLoader.load('/environmentMaps/empty-blender-2k.hdr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment = envMap;
+      scene.background = envMap;
+      setSceneProperties();
+    });
+  } else if (environmentOptions.useEXR) {
+    exrLoader.load('/environmentMaps/church.exr', (envMap) => {
+      envMap.mapping = THREE.EquirectangularReflectionMapping;
+      scene.backgroundIntensity = 0.1;
+      scene.environmentIntensity = 1;
       scene.environment = envMap;
       scene.background = envMap;
     });
@@ -92,12 +106,14 @@ const loadEnvironmentMap = () => {
     ]);
     scene.environment = environmentMap;
     scene.background = environmentMap;
+    setSceneProperties();
     currentEnvironmentMap = environmentMap;
   }
 };
 
 // Add GUI switch
 gui.add(environmentOptions, 'useHDRI').name('Use HDRI').onChange(loadEnvironmentMap);
+gui.add(environmentOptions, 'useEXR').name('Use EXR').onChange(loadEnvironmentMap);
 
 // Initial load
 loadEnvironmentMap();

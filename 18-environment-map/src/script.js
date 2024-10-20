@@ -112,13 +112,12 @@ const loadEnvironmentMap = () => {
       scene.background = envMap;
     });
   } else if (environmentOptions.useJPEG) {
-    currentEnvironmentMap = textureLoader.load('/environmentMaps/earth.jpg');
+    currentEnvironmentMap = textureLoader.load('/environmentMaps/blockadesLabsSkybox/digital_painting_neon_city_night_orange_lights_.jpg');
     currentEnvironmentMap.mapping = THREE.EquirectangularReflectionMapping;
     currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
     scene.environment = currentEnvironmentMap;
     scene.background = currentEnvironmentMap;
     setSceneProperties();
-    setGroundedSkybox();
   } else {
     currentEnvironmentMap = cubeTextureLoader.load([
       '/environmentMaps/0/px.png',

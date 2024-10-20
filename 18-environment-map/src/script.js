@@ -82,6 +82,25 @@ gui
   .name('environment rotation X');
 
 /**
+ * Holy Donut
+ */
+const holyDonut = new THREE.Mesh();
+let cubeCamera = null;
+
+const setHolyDonut = () => {
+  holyDonut.geometry = new THREE.TorusGeometry(8, 0.5);
+  holyDonut.material = new THREE.MeshBasicMaterial({ color: 'white' });
+  holyDonut.position.y = 3.5;
+  // Cube render target
+  const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
+    type: THREE.HalfFloatType,
+  });
+
+  // Cube camera
+  cubeCamera = new THREE.CubeCamera(1, 100, cubeRenderTarget);
+};
+
+/**
  * Environment map
  */
 // Function to load the environment map
@@ -92,6 +111,13 @@ const loadEnvironmentMap = () => {
     if (skybox) {
       scene.remove(skybox);
       console.log('Skybox removed');
+    }
+    if (holyDonut) {
+      holyDonut.geometry.dispose();
+      holyDonut.material.dispose();
+      scene.remove(holyDonut);
+      scene.remove(holyDonut);
+      console.log('Holy donut removed');
     }
   }
 
@@ -128,6 +154,8 @@ const loadEnvironmentMap = () => {
     currentEnvironmentMap.mapping = THREE.EquirectangularReflectionMapping;
     currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
     scene.background = currentEnvironmentMap;
+    scene.add(holyDonut);
+    scene.environment = cubeRenderTarget.texture;
   } else {
     currentEnvironmentMap = cubeTextureLoader.load([
       '/environmentMaps/0/px.png',
@@ -179,16 +207,6 @@ const torusKnot = new THREE.Mesh(
 );
 torusKnot.position.set(-2, 4, -5);
 scene.add(torusKnot);
-
-/**
- * Holy Donut
- */
-const holyDonut = new THREE.Mesh(
-  new THREE.TorusGeometry(8, 0.5),
-  new THREE.MeshBasicMaterial({ color: 'white' })
-);
-holyDonut.position.y = 3.5;
-scene.add(holyDonut);
 
 /**
  * Models
@@ -287,6 +305,7 @@ const tick = () => {
   // Realtime holy donut
   if (holyDonut) {
     holyDonut.rotation.x = Math.sin(elapsedTime) * 2;
+    cubeCamera.update(renderer, scene);
   }
 
   // Update controls

@@ -46,6 +46,7 @@ const setSceneProperties = () => {
   scene.backgroundIntensity = 1;
 };
 
+// Skybox - allows the environment map to be grounded
 let skybox = null;
 const setGroundedSkybox = () => {
   skybox = new GroundedSkybox(scene.environment, 15, 70);
@@ -82,7 +83,7 @@ gui
   .name('environment rotation X');
 
 /**
- * Holy Donut
+ * Holy Donut to demonstrate real-time environment map
  */
 const holyDonut = new THREE.Mesh();
 let cubeCamera = null;
@@ -90,14 +91,18 @@ let cubeCamera = null;
 const setHolyDonut = () => {
   holyDonut.geometry = new THREE.TorusGeometry(8, 0.5);
   holyDonut.material = new THREE.MeshBasicMaterial({ color: 'white' });
+  // Enable layer 1 - allows the cube camera to render the holy donut
+  holyDonut.layers.enable(1);
   holyDonut.position.y = 3.5;
-  // Cube render target
-  const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
+  // Cube render target - WebGLCubeRenderTarget is used to render the holy donut
+  const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(128, {
     type: THREE.HalfFloatType,
   });
 
-  // Cube camera
+  // Cube camera - renders the holy donut with all the perspectives
   cubeCamera = new THREE.CubeCamera(1, 100, cubeRenderTarget);
+  // Set the cube camera to layer 1 - this will render the holy donut
+  cubeCamera.layers.set(1);
 
   scene.environment = cubeRenderTarget.texture;
 };

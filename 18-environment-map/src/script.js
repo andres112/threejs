@@ -98,6 +98,8 @@ const setHolyDonut = () => {
 
   // Cube camera
   cubeCamera = new THREE.CubeCamera(1, 100, cubeRenderTarget);
+
+  scene.environment = cubeRenderTarget.texture;
 };
 
 /**
@@ -110,14 +112,12 @@ const loadEnvironmentMap = () => {
     currentEnvironmentMap.dispose();
     if (skybox) {
       scene.remove(skybox);
-      console.log('Skybox removed');
     }
     if (holyDonut) {
       holyDonut.geometry.dispose();
       holyDonut.material.dispose();
       scene.remove(holyDonut);
-      scene.remove(holyDonut);
-      console.log('Holy donut removed');
+      cubeCamera = null;
     }
   }
 
@@ -155,7 +155,7 @@ const loadEnvironmentMap = () => {
     currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
     scene.background = currentEnvironmentMap;
     scene.add(holyDonut);
-    scene.environment = cubeRenderTarget.texture;
+    setHolyDonut();
   } else {
     currentEnvironmentMap = cubeTextureLoader.load([
       '/environmentMaps/0/px.png',
@@ -303,7 +303,7 @@ const tick = () => {
   //   directionalLightHelper.update();
 
   // Realtime holy donut
-  if (holyDonut) {
+  if (holyDonut && cubeCamera) {
     holyDonut.rotation.x = Math.sin(elapsedTime) * 2;
     cubeCamera.update(renderer, scene);
   }

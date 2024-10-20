@@ -18,6 +18,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 const rgbeLoader = new RGBELoader();
 const exrLoader = new EXRLoader();
+const textureLoader = new THREE.TextureLoader();
 
 /**
  * Base
@@ -27,6 +28,7 @@ const gui = new GUI();
 const environmentOptions = {
   useHDRI: false,
   useEXR: false,
+  useJPEG: false,
 };
 
 // Canvas
@@ -81,22 +83,29 @@ const loadEnvironmentMap = () => {
 
   if (environmentOptions.useHDRI) {
     // The use of HDRI is recommended for lights and reflections with small resolutions ONLY
-    rgbeLoader.load('/environmentMaps/empty-blender-2k.hdr', (envMap) => {
+    currentEnvironmentMap = rgbeLoader.load('/environmentMaps/empty-blender-2k.hdr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = envMap;
       scene.background = envMap;
       setSceneProperties();
     });
   } else if (environmentOptions.useEXR) {
-    exrLoader.load('/environmentMaps/church.exr', (envMap) => {
+    currentEnvironmentMap = exrLoader.load('/environmentMaps/church.exr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.backgroundIntensity = 0.1;
       scene.environmentIntensity = 1;
       scene.environment = envMap;
       scene.background = envMap;
     });
+  } else if (environmentOptions.useJPEG) {
+    currentEnvironmentMap= textureLoader.load('/environmentMaps/earth.jpg');
+    currentEnvironmentMap.mapping = THREE.EquirectangularReflectionMapping;
+    currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
+    scene.environment = currentEnvironmentMap;
+    scene.background = currentEnvironmentMap;
+    setSceneProperties();
   } else {
-    const environmentMap = cubeTextureLoader.load([
+    currentEnvironmentMap= cubeTextureLoader.load([
       '/environmentMaps/0/px.png',
       '/environmentMaps/0/nx.png',
       '/environmentMaps/0/py.png',
@@ -104,10 +113,9 @@ const loadEnvironmentMap = () => {
       '/environmentMaps/0/pz.png',
       '/environmentMaps/0/nz.png',
     ]);
-    scene.environment = environmentMap;
-    scene.background = environmentMap;
+    scene.environment = currentEnvironmentMap;
+    scene.background = currentEnvironmentMap;
     setSceneProperties();
-    currentEnvironmentMap = environmentMap;
   }
 };
 
@@ -115,6 +123,7 @@ const loadEnvironmentMap = () => {
 const environmentFolder = gui.addFolder('EquiRectangular Env Map');
 environmentFolder.add(environmentOptions, 'useHDRI').name('Use HDRI').onChange(loadEnvironmentMap);
 environmentFolder.add(environmentOptions, 'useEXR').name('Use EXR').onChange(loadEnvironmentMap);
+environmentFolder.add(environmentOptions, 'useJPEG').name('Use JPEG').onChange(loadEnvironmentMap);
 
 // Initial load
 loadEnvironmentMap();

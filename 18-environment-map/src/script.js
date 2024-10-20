@@ -31,6 +31,7 @@ const environmentOptions = {
   useHDRI: false,
   useEXR: false,
   useJPEG: false,
+  realTimeEnvMap: true,
 };
 
 // Canvas
@@ -47,9 +48,9 @@ const setSceneProperties = () => {
 
 let skybox = null;
 const setGroundedSkybox = () => {
-    skybox = new GroundedSkybox(scene.environment, 15, 70);
-    skybox.position.y = 15;
-    scene.add(skybox);
+  skybox = new GroundedSkybox(scene.environment, 15, 70);
+  skybox.position.y = 15;
+  scene.add(skybox);
 };
 
 gui.add(scene, 'environmentIntensity').min(0).max(10).step(0.01).name('environment intensity');
@@ -112,12 +113,21 @@ const loadEnvironmentMap = () => {
       scene.background = envMap;
     });
   } else if (environmentOptions.useJPEG) {
-    currentEnvironmentMap = textureLoader.load('/environmentMaps/blockadesLabsSkybox/digital_painting_neon_city_night_orange_lights_.jpg');
+    currentEnvironmentMap = textureLoader.load(
+      '/environmentMaps/blockadesLabsSkybox/fantasy_lands_castles_at_night.jpg'
+    );
     currentEnvironmentMap.mapping = THREE.EquirectangularReflectionMapping;
     currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
     scene.environment = currentEnvironmentMap;
     scene.background = currentEnvironmentMap;
     setSceneProperties();
+  } else if (environmentOptions.realTimeEnvMap) {
+    currentEnvironmentMap = textureLoader.load(
+      '/environmentMaps/blockadesLabsSkybox/interior_views_cozy_wood_cabin_with_cauldron_and_p.jpg'
+    );
+    currentEnvironmentMap.mapping = THREE.EquirectangularReflectionMapping;
+    currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
+    scene.background = currentEnvironmentMap;
   } else {
     currentEnvironmentMap = cubeTextureLoader.load([
       '/environmentMaps/0/px.png',
@@ -138,6 +148,7 @@ const environmentFolder = gui.addFolder('EquiRectangular Env Map');
 environmentFolder.add(environmentOptions, 'useHDRI').name('Use HDRI').onChange(loadEnvironmentMap);
 environmentFolder.add(environmentOptions, 'useEXR').name('Use EXR').onChange(loadEnvironmentMap);
 environmentFolder.add(environmentOptions, 'useJPEG').name('Use JPEG').onChange(loadEnvironmentMap);
+environmentFolder.add(environmentOptions, 'realTimeEnvMap').name('Real Time');
 
 // Initial load
 loadEnvironmentMap();
@@ -168,6 +179,16 @@ const torusKnot = new THREE.Mesh(
 );
 torusKnot.position.set(-2, 4, -5);
 scene.add(torusKnot);
+
+/**
+ * Holy Donut
+ */
+const holyDonut = new THREE.Mesh(
+  new THREE.TorusGeometry(8, 0.5),
+  new THREE.MeshBasicMaterial({ color: 'white' })
+);
+holyDonut.position.y = 3.5;
+scene.add(holyDonut);
 
 /**
  * Models
@@ -237,6 +258,8 @@ scene.add(camera);
 const controls = new OrbitControls(camera, canvas);
 controls.target.y = 3.5;
 controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.7;
+controls.minPolarAngle = Math.PI * 0.3;
 
 /**
  * Renderer
@@ -260,6 +283,11 @@ const tick = () => {
   //   directionalLight.position.x = Math.sin(elapsedTime) * radius;
   //   directionalLight.position.z = Math.cos(elapsedTime) * radius;
   //   directionalLightHelper.update();
+
+  // Realtime holy donut
+  if (holyDonut) {
+    holyDonut.rotation.x = Math.sin(elapsedTime) * 2;
+  }
 
   // Update controls
   controls.update();

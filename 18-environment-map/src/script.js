@@ -25,7 +25,7 @@ const exrLoader = new EXRLoader();
 // Debug
 const gui = new GUI();
 const environmentOptions = {
-  useHDRI: true,
+  useHDRI: false,
   useEXR: false,
 };
 
@@ -112,8 +112,9 @@ const loadEnvironmentMap = () => {
 };
 
 // Add GUI switch
-gui.add(environmentOptions, 'useHDRI').name('Use HDRI').onChange(loadEnvironmentMap);
-gui.add(environmentOptions, 'useEXR').name('Use EXR').onChange(loadEnvironmentMap);
+const environmentFolder = gui.addFolder('EquiRectangular Env Map');
+environmentFolder.add(environmentOptions, 'useHDRI').name('Use HDRI').onChange(loadEnvironmentMap);
+environmentFolder.add(environmentOptions, 'useEXR').name('Use EXR').onChange(loadEnvironmentMap);
 
 // Initial load
 loadEnvironmentMap();

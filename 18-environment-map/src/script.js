@@ -6,6 +6,8 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
 
+import { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js';
+
 /**
  * Loaders
  */
@@ -38,9 +40,16 @@ const canvas = document.querySelector('canvas.webgl');
 const scene = new THREE.Scene();
 // scene properties
 const setSceneProperties = () => {
-  scene.environmentIntensity = 10;
+  scene.environmentIntensity = 2;
   scene.backgroundBlurriness = 0;
   scene.backgroundIntensity = 1;
+};
+
+let skybox = null;
+const setGroundedSkybox = () => {
+    skybox = new GroundedSkybox(scene.environment, 15, 70);
+    skybox.position.y = 15;
+    scene.add(skybox);
 };
 
 gui.add(scene, 'environmentIntensity').min(0).max(10).step(0.01).name('environment intensity');
@@ -79,6 +88,10 @@ let currentEnvironmentMap = null;
 const loadEnvironmentMap = () => {
   if (currentEnvironmentMap) {
     currentEnvironmentMap.dispose();
+    if (skybox) {
+      scene.remove(skybox);
+      console.log('Skybox removed');
+    }
   }
 
   if (environmentOptions.useHDRI) {
@@ -88,6 +101,7 @@ const loadEnvironmentMap = () => {
       scene.environment = envMap;
       scene.background = envMap;
       setSceneProperties();
+      setGroundedSkybox();
     });
   } else if (environmentOptions.useEXR) {
     currentEnvironmentMap = exrLoader.load('/environmentMaps/church.exr', (envMap) => {
@@ -98,14 +112,15 @@ const loadEnvironmentMap = () => {
       scene.background = envMap;
     });
   } else if (environmentOptions.useJPEG) {
-    currentEnvironmentMap= textureLoader.load('/environmentMaps/earth.jpg');
+    currentEnvironmentMap = textureLoader.load('/environmentMaps/earth.jpg');
     currentEnvironmentMap.mapping = THREE.EquirectangularReflectionMapping;
     currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
     scene.environment = currentEnvironmentMap;
     scene.background = currentEnvironmentMap;
     setSceneProperties();
+    setGroundedSkybox();
   } else {
-    currentEnvironmentMap= cubeTextureLoader.load([
+    currentEnvironmentMap = cubeTextureLoader.load([
       '/environmentMaps/0/px.png',
       '/environmentMaps/0/nx.png',
       '/environmentMaps/0/py.png',

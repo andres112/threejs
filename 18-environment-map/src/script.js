@@ -131,7 +131,7 @@ const loadEnvironmentMap = () => {
     currentEnvironmentMap = rgbeLoader.load('/environmentMaps/empty-blender-2k.hdr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = envMap;
-      scene.background = envMap;
+      // scene.background = envMap;
       setSceneProperties();
       setGroundedSkybox();
     });
@@ -181,7 +181,7 @@ const environmentFolder = gui.addFolder('EquiRectangular Env Map');
 environmentFolder.add(environmentOptions, 'useHDRI').name('Use HDRI').onChange(loadEnvironmentMap);
 environmentFolder.add(environmentOptions, 'useEXR').name('Use EXR').onChange(loadEnvironmentMap);
 environmentFolder.add(environmentOptions, 'useJPEG').name('Use JPEG').onChange(loadEnvironmentMap);
-environmentFolder.add(environmentOptions, 'realTimeEnvMap').name('Real Time');
+environmentFolder.add(environmentOptions, 'realTimeEnvMap').name('Real Time').onChange(loadEnvironmentMap);
 
 // Initial load
 loadEnvironmentMap();

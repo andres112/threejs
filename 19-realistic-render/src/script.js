@@ -41,21 +41,29 @@ const updateAllMaterials = () => {
 // Floor
 const floorColorTexture = textureLoader.load(
   '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_diff_1k.jpg'
-);
+); // this is not linear color space, but threejs assumes it is linear
 const floorNormalTexture = textureLoader.load(
   '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_nor_gl_1k.png'
 );
 const floorAORoughnessMetallicTexture = textureLoader.load(
   '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_arm_1k.jpg'
 );
+// convert textures to sRGB
+floorColorTexture.colorSpace = THREE.SRGBColorSpace;
 
 // Wall
-const wallColorTexture = textureLoader.load('/textures/castle_brick_broken_06/castle_brick_broken_06_diff_1k.jpg');
-const wallNormalTexture = textureLoader.load('/textures/castle_brick_broken_06/castle_brick_broken_06_nor_gl_1k.png');
+const wallColorTexture = textureLoader.load(
+  '/textures/castle_brick_broken_06/castle_brick_broken_06_diff_1k.jpg'
+); // this is not linear color space, but threejs assumes it is linear
+const wallNormalTexture = textureLoader.load(
+  '/textures/castle_brick_broken_06/castle_brick_broken_06_nor_gl_1k.png'
+);
 const wallAORoughnessMetallicTexture = textureLoader.load(
   '/textures/castle_brick_broken_06/castle_brick_broken_06_arm_1kF.jpg'
 );
 
+// convert textures to sRGB
+wallColorTexture.colorSpace = THREE.SRGBColorSpace;
 
 /**
  * Meshes
@@ -86,6 +94,7 @@ const wall = new THREE.Mesh(
     aoMap: wallAORoughnessMetallicTexture,
     roughnessMap: wallAORoughnessMetallicTexture,
     metalnessMap: wallAORoughnessMetallicTexture,
+    side: THREE.DoubleSide,
   })
 );
 wall.position.z = -5;

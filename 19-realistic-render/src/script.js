@@ -38,6 +38,7 @@ const updateAllMaterials = () => {
 /**
  * Textures
  */
+// Floor
 const floorColorTexture = textureLoader.load(
   '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_diff_1k.jpg'
 );
@@ -47,6 +48,14 @@ const floorNormalTexture = textureLoader.load(
 const floorAORoughnessMetallicTexture = textureLoader.load(
   '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_arm_1k.jpg'
 );
+
+// Wall
+const wallColorTexture = textureLoader.load('/textures/castle_brick_broken_06/castle_brick_broken_06_diff_1k.jpg');
+const wallNormalTexture = textureLoader.load('/textures/castle_brick_broken_06/castle_brick_broken_06_nor_gl_1k.png');
+const wallAORoughnessMetallicTexture = textureLoader.load(
+  '/textures/castle_brick_broken_06/castle_brick_broken_06_arm_1kF.jpg'
+);
+
 
 /**
  * Meshes
@@ -67,6 +76,21 @@ const floor = new THREE.Mesh(
 floor.rotation.x = -Math.PI * 0.5;
 floor.position.y = -0.01;
 scene.add(floor);
+
+// Wall
+const wall = new THREE.Mesh(
+  new THREE.PlaneGeometry(10, 10),
+  new THREE.MeshStandardMaterial({
+    map: wallColorTexture,
+    normalMap: wallNormalTexture,
+    aoMap: wallAORoughnessMetallicTexture,
+    roughnessMap: wallAORoughnessMetallicTexture,
+    metalnessMap: wallAORoughnessMetallicTexture,
+  })
+);
+wall.position.z = -5;
+wall.position.y = 5;
+scene.add(wall);
 
 /**
  * Environment map

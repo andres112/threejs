@@ -9,6 +9,7 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
  */
 const gltfLoader = new GLTFLoader();
 const rgbeLoader = new RGBELoader();
+const textureLoader = new THREE.TextureLoader();
 
 /**
  * Base
@@ -35,6 +36,39 @@ const updateAllMaterials = () => {
 };
 
 /**
+ * Textures
+ */
+const floorColorTexture = textureLoader.load(
+  '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_diff_1k.jpg'
+);
+const floorNormalTexture = textureLoader.load(
+  '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_nor_gl_1k.png'
+);
+const floorAORoughnessMetallicTexture = textureLoader.load(
+  '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_arm_1k.jpg'
+);
+
+/**
+ * Meshes
+ */
+
+// Floor
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(10, 10),
+  new THREE.MeshStandardMaterial({
+    map: floorColorTexture,
+    normalMap: floorNormalTexture,
+    aoMap: floorAORoughnessMetallicTexture,
+    roughnessMap: floorAORoughnessMetallicTexture,
+    metalnessMap: floorAORoughnessMetallicTexture,
+    transparent: true,
+  })
+);
+floor.rotation.x = -Math.PI * 0.5;
+floor.position.y = -0.01;
+scene.add(floor);
+
+/**
  * Environment map
  */
 // Intensity
@@ -53,7 +87,7 @@ rgbeLoader.load('/environmentMaps/0/2k.hdr', (environmentMap) => {
  * Lights
  */
 const directionalLight = new THREE.DirectionalLight(0xffffff, 6);
-directionalLight.position.set(-5,12, 2.5);
+directionalLight.position.set(-5, 12, 2.5);
 scene.add(directionalLight);
 
 const lightsFolder = gui.addFolder('Lights');
@@ -64,12 +98,13 @@ lightsFolder.add(directionalLight.position, 'z').min(-5).max(5).step(0.001).name
 
 // Light shadows
 directionalLight.castShadow = true;
-directionalLight.shadow.mapSize.set(1024, 1024);
-directionalLight.shadow.camera.far = 15;
+directionalLight.shadow.mapSize.set(512, 512);
+directionalLight.shadow.camera.far = 20;
 lightsFolder.add(directionalLight, 'castShadow').name('light shadow');
 
 // helpers
 const directionalLightCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+directionalLightCameraHelper.visible = false;
 scene.add(directionalLightCameraHelper);
 lightsFolder.add(directionalLightCameraHelper, 'visible').name('Directional Light Camera Helper');
 

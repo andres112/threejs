@@ -162,7 +162,7 @@ foxFolder
  */
 const add3DModelShadow = (object) => {
   object.scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
+    if (child.isMesh) {
       child.castShadow = true;
     }
   });

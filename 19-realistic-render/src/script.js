@@ -28,7 +28,8 @@ const scene = new THREE.Scene();
 const updateAllMaterials = () => {
   scene.traverse((child) => {
     if (child.isMesh) {
-      // Activate shadow here
+      child.castShadow = true;
+      child.receiveShadow = true;
     }
   });
 };
@@ -51,25 +52,26 @@ rgbeLoader.load('/environmentMaps/0/2k.hdr', (environmentMap) => {
 /**
  * Lights
  */
-const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
-directionalLight.position.set(0, 9, -5);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 6);
+directionalLight.position.set(-5,12, 2.5);
 scene.add(directionalLight);
 
 const lightsFolder = gui.addFolder('Lights');
 lightsFolder.add(directionalLight, 'intensity').min(0).max(10).step(0.001).name('light intensity');
 lightsFolder.add(directionalLight.position, 'x').min(-5).max(5).step(0.001).name('light x');
-lightsFolder.add(directionalLight.position, 'y').min(-5).max(10).step(0.001).name('light y');
+lightsFolder.add(directionalLight.position, 'y').min(-5).max(20).step(0.001).name('light y');
 lightsFolder.add(directionalLight.position, 'z').min(-5).max(5).step(0.001).name('light z');
 
 // Light shadows
 directionalLight.castShadow = true;
 directionalLight.shadow.mapSize.set(1024, 1024);
-directionalLight.shadow.camera.far = 12;
+directionalLight.shadow.camera.far = 15;
 lightsFolder.add(directionalLight, 'castShadow').name('light shadow');
 
 // helpers
 const directionalLightCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
 scene.add(directionalLightCameraHelper);
+lightsFolder.add(directionalLightCameraHelper, 'visible').name('Directional Light Camera Helper');
 
 // Light target
 directionalLight.target.position.set(0, 5, 0);
@@ -83,6 +85,7 @@ gltfLoader.load('/models/FlightHelmet/glTF/FlightHelmet.gltf', (gltf) => {
   gltf.scene.scale.set(10, 10, 10);
   scene.add(gltf.scene);
 
+  // add shadow to all meshes
   updateAllMaterials();
 });
 

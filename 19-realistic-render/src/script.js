@@ -99,6 +99,8 @@ const wall = new THREE.Mesh(
 );
 wall.position.z = -5;
 wall.position.y = 5;
+// set the shadow side to the front side only
+wall.material.shadowSide = THREE.FrontSide;
 scene.add(wall);
 
 /**
@@ -121,6 +123,7 @@ rgbeLoader.load('/environmentMaps/0/2k.hdr', (environmentMap) => {
  */
 const directionalLight = new THREE.DirectionalLight(0xffffff, 6);
 directionalLight.position.set(-5, 12, 2.5);
+directionalLight.shadow.bias = -0.006;
 scene.add(directionalLight);
 
 const lightsFolder = gui.addFolder('Lights');
@@ -128,6 +131,8 @@ lightsFolder.add(directionalLight, 'intensity').min(0).max(10).step(0.001).name(
 lightsFolder.add(directionalLight.position, 'x').min(-5).max(5).step(0.001).name('light x');
 lightsFolder.add(directionalLight.position, 'y').min(-5).max(20).step(0.001).name('light y');
 lightsFolder.add(directionalLight.position, 'z').min(-5).max(5).step(0.001).name('light z');
+//shadow bias
+lightsFolder.add(directionalLight.shadow, 'bias').min(-0.01).max(0.01).step(0.0001).name('Shadow Bias');
 
 // Light shadows
 directionalLight.castShadow = true;
@@ -150,7 +155,18 @@ directionalLight.target.updateMatrixWorld(); // necessary to update the world ma
  */
 // Helmet
 gltfLoader.load('/models/FlightHelmet/glTF/FlightHelmet.gltf', (gltf) => {
-  gltf.scene.scale.set(10, 10, 10);
+  gltf.scene.scale.setScalar(10);
+  gltf.scene.position.set(-2.5, 0, 0);
+  scene.add(gltf.scene);
+
+  // add shadow to all meshes
+  updateAllMaterials();
+});
+
+// Hamburger
+gltfLoader.load('/models/hamburger.glb', (gltf) => {
+  gltf.scene.scale.setScalar(0.25);
+  gltf.scene.position.set(2.5, -0.1, 0);
   scene.add(gltf.scene);
 
   // add shadow to all meshes

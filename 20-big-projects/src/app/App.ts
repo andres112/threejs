@@ -1,4 +1,4 @@
-import Sizes from "../utils/Sizes";
+import Sizes from '../utils/Sizes';
 
 declare global {
   interface Window {
@@ -19,8 +19,13 @@ export default class App {
 
     // Setup
     this.sizes = new Sizes();
+    this.sizes.on('resize', () => this.resize());
   }
   init() {
     console.log('App initialized');
+  }
+
+  resize() {
+    console.log('resize');
   }
 }

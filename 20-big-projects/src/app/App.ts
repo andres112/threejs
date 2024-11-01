@@ -1,3 +1,5 @@
+import Sizes from "../utils/Sizes";
+
 declare global {
   interface Window {
     app: App;
@@ -6,6 +8,7 @@ declare global {
 
 export default class App {
   private canvas: HTMLCanvasElement | null;
+  private sizes: Sizes;
 
   constructor(canvas: HTMLCanvasElement | null) {
     // Global access to app
@@ -13,6 +16,9 @@ export default class App {
 
     // Options
     this.canvas = canvas;
+
+    // Setup
+    this.sizes = new Sizes();
   }
   init() {
     console.log('App initialized');

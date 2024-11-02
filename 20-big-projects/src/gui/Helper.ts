@@ -19,6 +19,10 @@ export default class Helper {
       console.warn(`Folder ${name} already exists`);
       return folder;
     }
-    return Helper.instance.gui.addFolder(name);
+    // Add folder but closed by default
+    const newFolder = Helper.instance.gui.addFolder(name);
+    newFolder.close();
+    return newFolder;
   }
+
 }

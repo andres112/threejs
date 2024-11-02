@@ -12,6 +12,7 @@ export default class Sizes extends EventEmitter {
     // Resize event
     //use arrow function to keep the context of this
     window.addEventListener('resize', () => this.resize()); 
+    console.info('Sizes initialized');
   }
 
   private resize() {

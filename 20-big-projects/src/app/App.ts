@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Sizes from '../utils/Sizes';
 import Time from '../utils/Time';
+import Camera from '../components/Camera';
 
 declare global {
   interface Window {
@@ -9,12 +10,20 @@ declare global {
 }
 
 export default class App {
-  private canvas: HTMLCanvasElement | null;
-  private sizes: Sizes;
-  private time: Time;
-  private scene: THREE.Scene;
+  // Singleton pattern
+  private static _instance: App;
+
+  public sizes!: Sizes;
+  public time!: Time;
+  public scene!: THREE.Scene;
+  private canvas!: HTMLCanvasElement | null;
+  private camera!: Camera;
 
   constructor(canvas: HTMLCanvasElement | null) {
+    // Singleton
+    if (App._instance) return App._instance;
+    App._instance = this;
+
     // Global access to app
     window.app = this;
 
@@ -25,6 +34,7 @@ export default class App {
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new THREE.Scene();
+    this.camera = new Camera();
 
     // Listen for resize event
     this.sizes.on('resize', () => this.resize());
@@ -32,15 +42,24 @@ export default class App {
     // Listen for tick event
     this.time.on('tick', () => this.update());
   }
-  init() {
-    console.log('App initialized');
+
+  // getter for the instance
+  static get instance(): App {
+    if (App._instance === null) {
+      try {
+        throw new Error('App instance not found');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return App._instance;
   }
 
-  resize() {
+  private resize() {
     console.log('resize');
   }
 
-  update() {
+  private update() {
     console.log('update');
   }
 }

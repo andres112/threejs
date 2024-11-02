@@ -17,6 +17,7 @@ export default class Time extends EventEmitter {
 
         // Start
         window.requestAnimationFrame(() => this.tick());
+        console.info('Time initialized');
     }
 
     tick() {

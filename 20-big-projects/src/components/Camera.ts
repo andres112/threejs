@@ -3,18 +3,23 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default class Camera {
-  public controls!: OrbitControls;
-  private instance!: THREE.PerspectiveCamera;
+    public instance!: THREE.PerspectiveCamera;
+    private controls!: OrbitControls;
 
   constructor() {
     this.createCamera();
     this.setOrbitControls();
+    console.info('Camera initialized');
   }
 
   public resize() {
     const { width, height } = App.instance.sizes;
     this.instance.aspect = width / height;
     this.instance.updateProjectionMatrix();
+  }
+
+  public update() {
+    this.controls.update();
   }
 
   /**

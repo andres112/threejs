@@ -18,7 +18,7 @@ export default class App {
   public time!: Time;
   public scene!: THREE.Scene;
   public canvas!: HTMLCanvasElement | null;
-  private camera!: Camera;
+  public camera!: Camera;
   private renderer!: Renderer;
 
   constructor(canvas: HTMLCanvasElement | null) {
@@ -60,9 +60,11 @@ export default class App {
 
   private resize() {
     this.camera.resize();
+    this.renderer.resize();
   }
 
   private update() {
-    this.camera.controls.update();
+    this.camera.update();
+    this.renderer.update();
   }
 }

@@ -6,17 +6,41 @@ export default class Renderer {
 
   constructor() {
     this.createRenderer();
+    console.info('Renderer initialized');
   }
 
-  private createRenderer() {
-    this.instance = new THREE.WebGLRenderer({
-      canvas: App.instance.canvas as HTMLCanvasElement,
-      antialias: window.devicePixelRatio < 2 ? false : true,
-    });
-
+  public resize() {
     const { width, height, aspectRatio } = App.instance.sizes;
+
     this.instance.setSize(width, height);
     this.instance.setPixelRatio(aspectRatio);
-    this.instance.setClearColor(0x000000);
+  } 
+  
+  public update() {
+    this.instance.render(App.instance.scene, App.instance.camera.instance);
+  }
+
+  /**
+   * Create a renderer
+   * @private
+   * @memberof Renderer
+   * @returns {void}
+   */
+  private createRenderer() {
+    const { width, height, aspectRatio } = App.instance.sizes;
+
+    this.instance = new THREE.WebGLRenderer({
+      canvas: App.instance.canvas as HTMLCanvasElement,
+      antialias: aspectRatio < 2 ? false : true,
+    });
+    this.instance.setSize(width, height);
+    this.instance.setPixelRatio(aspectRatio);
+    this.instance.setClearColor('#211d20');
+    // Enable tone mapping
+    this.instance.toneMapping = THREE.CineonToneMapping;
+    this.instance.toneMappingExposure = 1.75;
+    // Enable shadows
+    this.instance.shadowMap.enabled = true;
+    this.instance.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 }

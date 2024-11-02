@@ -20,6 +20,7 @@ export default class Sizes extends EventEmitter {
     this.height = window.innerHeight;
     this.aspectRatio = Math.min(window.devicePixelRatio, 2);
 
+    // trigger the event resize using the EventEmitter class
     this.trigger('resize');
   }
 }

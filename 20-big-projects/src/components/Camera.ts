@@ -11,6 +11,12 @@ export default class Camera {
     this.setOrbitControls();
   }
 
+  public resize() {
+    const { width, height } = App.instance.sizes;
+    this.instance.aspect = width / height;
+    this.instance.updateProjectionMatrix();
+  }
+
   /**
    * Create a camera
    * @private
@@ -33,6 +39,6 @@ export default class Camera {
    */
   private setOrbitControls() {
     this.controls = new OrbitControls(this.instance, App.instance.canvas);
-    this.controls.enableDamping = true;
+    this.controls.enableDamping = true; // set smooth movement
   }
 }

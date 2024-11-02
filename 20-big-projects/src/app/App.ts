@@ -56,10 +56,10 @@ export default class App {
   }
 
   private resize() {
-    console.log('resize');
+    this.camera.resize();
   }
 
   private update() {
-    console.log('update');
+    this.camera.controls.update();
   }
 }

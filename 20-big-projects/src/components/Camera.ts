@@ -1,10 +1,10 @@
-import App from '../app/App';
+import App from '@/app/App';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default class Camera {
-  public instance!: THREE.PerspectiveCamera;
   public controls!: OrbitControls;
+  private instance!: THREE.PerspectiveCamera;
 
   constructor() {
     this.createCamera();

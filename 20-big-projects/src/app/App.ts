@@ -23,9 +23,9 @@ export default class App {
   public scene!: THREE.Scene;
   public canvas!: HTMLCanvasElement | null;
   public camera!: Camera;
+  public resources!: Resources;
   private renderer!: Renderer;
   private world!: World;
-  private resources!: Resources;
 
   constructor(canvas: HTMLCanvasElement | null) {
     // Singleton

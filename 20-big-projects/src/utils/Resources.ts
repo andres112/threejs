@@ -52,18 +52,18 @@ export default class Resources extends EventEmitter {
     this.sources.forEach((source) => {
       switch (source.type) {
         case 'gltf':
-          this.loaders['gltfLoader'].load(source.path, (gltf: GLTF) => {
-            console.log('GLTF loaded', gltf);
+          this.loaders['gltfLoader'].load(source.path, (file: GLTF) => {
+            this.sourceLoaded(source, file);
           });
           break;
         case 'texture':
-          this.loaders['textureLoader'].load(source.path, (texture: THREE.Texture) => {
-            console.log('Texture loaded', texture);
+          this.loaders['textureLoader'].load(source.path, (file: THREE.Texture) => {
+            this.sourceLoaded(source, file);
           });
           break;
         case 'cubeTexture':
-          this.loaders['cubeTextureLoader'].load(source.path, (cubeTexture: THREE.CubeTexture) => {
-            console.log('Cube texture loaded', cubeTexture);
+          this.loaders['cubeTextureLoader'].load(source.path, (file: THREE.CubeTexture) => {
+            this.sourceLoaded(source, file);
           });
           break;
         default:
@@ -73,12 +73,12 @@ export default class Resources extends EventEmitter {
   }
 
     /**
-     * Called when a resource is loaded.
+     * Called when all resource are loaded.
      * @private
      * @memberof Resources
      * @returns {void}
      */
-    private onResourceLoaded(source: ISource, file: string) {
+    private sourceLoaded(source: ISource, file: any) {
         this.items[source.name] = file;
         this.loaded++;
         if (this.loaded === this.toLoad) {

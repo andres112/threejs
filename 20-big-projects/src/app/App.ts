@@ -3,6 +3,7 @@ import Sizes from '@/utils/Sizes';
 import Time from '@/utils/Time';
 import Camera from '@/components/Camera';
 import Renderer from '@/components/Renderer';
+import World from '@/World/World';
 
 declare global {
   interface Window {
@@ -20,6 +21,7 @@ export default class App {
   public canvas!: HTMLCanvasElement | null;
   public camera!: Camera;
   private renderer!: Renderer;
+  private world!: World;
 
   constructor(canvas: HTMLCanvasElement | null) {
     // Singleton
@@ -38,6 +40,7 @@ export default class App {
     this.scene = new THREE.Scene();
     this.camera = new Camera();
     this.renderer = new Renderer();
+    this.world = new World();
 
     // Listen for resize event
     this.sizes.on('resize', () => this.resize());

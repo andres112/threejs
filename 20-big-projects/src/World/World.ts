@@ -24,7 +24,8 @@ export default class World {
   }
 
   private createWorld() {
-    this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial());
+    this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({
+    }));
     App.instance.scene.add(this.mesh);
   }
 }

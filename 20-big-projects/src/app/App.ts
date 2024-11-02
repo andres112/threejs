@@ -3,7 +3,10 @@ import Sizes from '@/utils/Sizes';
 import Time from '@/utils/Time';
 import Camera from '@/components/Camera';
 import Renderer from '@/components/Renderer';
-import World from '@/World/World';
+import World from '@/world/World';
+import Resources from '@/utils/Resources';
+
+import sources from '@/resources/sources';
 
 declare global {
   interface Window {
@@ -22,6 +25,7 @@ export default class App {
   public camera!: Camera;
   private renderer!: Renderer;
   private world!: World;
+  private resources!: Resources;
 
   constructor(canvas: HTMLCanvasElement | null) {
     // Singleton
@@ -38,6 +42,7 @@ export default class App {
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new THREE.Scene();
+    this.resources = new Resources(sources);
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.world = new World();

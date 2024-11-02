@@ -1,11 +1,38 @@
 import App from '../app/App';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default class Camera {
-  private sizes: App['sizes'];
-  private scene: App['scene'];
+  public instance!: THREE.PerspectiveCamera;
+  public controls!: OrbitControls;
 
   constructor() {
-    this.sizes = App.instance.sizes;
-    this.scene = App.instance.scene;
+    this.createCamera();
+    this.setOrbitControls();
+  }
+
+  /**
+   * Create a camera
+   * @private
+   * @memberof Camera
+   * @returns {void}
+   */
+  private createCamera() {
+    const { width, height } = App.instance.sizes;
+    this.instance = new THREE.PerspectiveCamera(35, width / height, 0.1, 100);
+    this.instance.position.set(6, 4, 8);
+
+    App.instance.scene.add(this.instance);
+  }
+
+  /**
+   * Set orbit controls
+   * @private
+   * @memberof Camera
+   * @returns {void}
+   */
+  private setOrbitControls() {
+    this.controls = new OrbitControls(this.instance, App.instance.canvas);
+    this.controls.enableDamping = true;
   }
 }

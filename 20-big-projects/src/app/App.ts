@@ -16,7 +16,7 @@ export default class App {
   public sizes!: Sizes;
   public time!: Time;
   public scene!: THREE.Scene;
-  private canvas!: HTMLCanvasElement | null;
+  public canvas!: HTMLCanvasElement | null;
   private camera!: Camera;
 
   constructor(canvas: HTMLCanvasElement | null) {

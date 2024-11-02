@@ -31,7 +31,7 @@ export default class Renderer {
 
     this.instance = new THREE.WebGLRenderer({
       canvas: App.instance.canvas as HTMLCanvasElement,
-      antialias: aspectRatio < 2 ? false : true,
+      antialias: true,
     });
     this.instance.setSize(width, height);
     this.instance.setPixelRatio(aspectRatio);

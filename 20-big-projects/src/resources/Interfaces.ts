@@ -2,7 +2,7 @@ import { AnimationMixer, AnimationAction } from 'three';
 
 export interface ISource {
   name: string;
-  type: 'texture' | 'cubeTexture' | 'gltf';
+  type: 'texture' | 'cubeTexture' | 'gltf' | 'equiRectangularTexture';
   path: string | string[];
 }
 

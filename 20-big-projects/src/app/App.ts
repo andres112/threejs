@@ -85,9 +85,8 @@ export default class App {
 
   private setAxisHelpers() {
     const axesHelper = new THREE.AxesHelper(3);
-    App.instance.scene.add(axesHelper);
     const gridHelper = new THREE.GridHelper(10, 10);
-    App.instance.scene.add(gridHelper);
+    App.instance.scene.add(gridHelper, axesHelper);
   }
 
   private removeAxisHelpers() {
@@ -103,6 +102,7 @@ export default class App {
 
   private update() {
     this.camera.update();
+    this.world.update();
     this.renderer.update();
   }
 }

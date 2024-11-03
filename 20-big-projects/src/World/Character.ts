@@ -14,13 +14,18 @@ export default class Character {
     console.info('Character initialized');
   }
 
+  public update() {
+    // Update animation multiple delta by 0.001 to convert milliseconds to seconds
+    this.animation.mixer.update(App.instance.time.delta * 0.001);
+  }
+
   private setModel() {
     // Load character
     const gltfLoader = App.instance.resources.items['goblinModel'] as GLTF;
     this.model = gltfLoader.scene;
-    this.model.scale.set(0.02, 0.02, 0.02);
+    this.model.scale.setScalar(0.03);
     this.model.position.set(0, 0, 0);
-    this.model.rotation.x = -Math.PI * 0.5;
+    this.model.rotation.y = Math.PI;
     App.instance.scene.add(this.model);
   }
 
@@ -30,7 +35,5 @@ export default class Character {
       (App.instance.resources.items['goblinModel'] as GLTF).animations[0]
     );
     this.animation.action.play();
-
-    console.log(this.animation);
   }
 }

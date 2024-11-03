@@ -23,8 +23,9 @@ export default class Environment {
     this.sunlight.shadow.mapSize.set(1024, 1024);
     this.sunlight.shadow.normalBias = 0.05;
     this.sunlight.shadow.bias = -0.001;
-    this.sunlight.position.set(0, 3, -3);
+    this.sunlight.position.set(-1, 3, -4);
     App.instance.scene.add(this.sunlight);
+
     this.guiLights.add(this.sunlight, 'intensity', 0, 10, 0.01).name('Sunlight intensity');
 
     const sunlightHelper = new THREE.DirectionalLightHelper(this.sunlight, 0.2);
@@ -38,16 +39,18 @@ export default class Environment {
   }
 
   private setEnvironmentMap() {
-    const environmentMap = {
+    let environmentMap = {
       intensity: 1,
-      texture: App.instance.resources.items['environmentMapTexture'],
+      texture: App.instance.resources.items['environmentMapHDRTexture'],
     };
 
     // Since the version 0.152 of Three.js encoding has been replaced by colorSpace:
     environmentMap.texture.colorSpace = THREE.SRGBColorSpace;
+    if (environmentMap.texture instanceof THREE.DataTexture) {
+      environmentMap.texture.mapping = THREE.EquirectangularReflectionMapping;
+    }
 
-    App.instance.scene.environment = environmentMap.texture;
-    App.instance.scene.background = environmentMap.texture;
+    App.instance.scene.environment = App.instance.scene.background = environmentMap.texture;
 
     this.guiEnvMap
       .add(App.instance.scene, 'environmentIntensity')
@@ -62,10 +65,22 @@ export default class Environment {
       .step(0.001)
       .name('Background intensity');
 
+    // checkbox for removing the environment map
+    this.guiEnvMap
+      .add({ show: true }, 'show')
+      .name('Show EnvMap')
+      .onChange((value: boolean) => {
+        if (!value) {
+          App.instance.scene.environment = App.instance.scene.background = null;
+        } else {
+          App.instance.scene.environment = App.instance.scene.background = environmentMap.texture;
+        }
+      });
+
     const updateMaterial = () => {
       App.instance.scene.traverse((child) => {
         // Update environment map for all meshes
-        if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial ) {
+        if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
           child.material.envMap = environmentMap.texture;
           child.material.envMapIntensity = environmentMap.intensity;
           child.castShadow = true;

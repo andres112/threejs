@@ -24,4 +24,10 @@ export default class World {
 
     console.info('World initialized');
   }
+
+  public update() {
+    if (this.character) {
+      this.character.update();
+    }
+  }
 }

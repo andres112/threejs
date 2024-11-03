@@ -4,13 +4,15 @@ import App from '@/app/App';
 import Helper from '@/gui/Helper';
 
 export default class Environment {
-  private guiLights: GUI;
-  private guiEnvMap: GUI;
+  private guiLights: GUI | undefined;
+  private guiEnvMap: GUI | undefined;
   private sunlight!: THREE.DirectionalLight;
 
   constructor() {
-    this.guiLights = Helper.addFolder('Lighting');
-    this.guiEnvMap = Helper.addFolder('Environment map');
+    if (Helper.active) {
+      this.guiLights = Helper.addFolder('Lighting');
+      this.guiEnvMap = Helper.addFolder('Environment map');
+    }
     this.setSunlight();
     this.setEnvironmentMap();
     console.info('Environment initialized');
@@ -26,16 +28,16 @@ export default class Environment {
     this.sunlight.position.set(-1, 3, -4);
     App.instance.scene.add(this.sunlight);
 
-    this.guiLights.add(this.sunlight, 'intensity', 0, 10, 0.01).name('Sunlight intensity');
+    this.guiLights?.add(this.sunlight, 'intensity', 0, 10, 0.01).name('Sunlight intensity');
 
     const sunlightHelper = new THREE.DirectionalLightHelper(this.sunlight, 0.2);
     App.instance.scene.add(sunlightHelper);
-    this.guiLights.add(sunlightHelper, 'visible').name('Sunlight helper');
+    this.guiLights?.add(sunlightHelper, 'visible').name('Sunlight helper');
 
     // light shadow camera helper
     const shadowCameraHelper = new THREE.CameraHelper(this.sunlight.shadow.camera);
     App.instance.scene.add(shadowCameraHelper);
-    this.guiLights.add(shadowCameraHelper, 'visible').name('Shadow camera helper');
+    this.guiLights?.add(shadowCameraHelper, 'visible').name('Shadow camera helper');
   }
 
   private setEnvironmentMap() {
@@ -46,6 +48,7 @@ export default class Environment {
 
     // Since the version 0.152 of Three.js encoding has been replaced by colorSpace:
     environmentMap.texture.colorSpace = THREE.SRGBColorSpace;
+    
     if (environmentMap.texture instanceof THREE.DataTexture) {
       environmentMap.texture.mapping = THREE.EquirectangularReflectionMapping;
     }
@@ -53,13 +56,13 @@ export default class Environment {
     App.instance.scene.environment = App.instance.scene.background = environmentMap.texture;
 
     this.guiEnvMap
-      .add(App.instance.scene, 'environmentIntensity')
+      ?.add(App.instance.scene, 'environmentIntensity')
       .min(0)
       .max(10)
       .step(0.001)
       .name('Intensity');
     this.guiEnvMap
-      .add(App.instance.scene, 'backgroundIntensity')
+      ?.add(App.instance.scene, 'backgroundIntensity')
       .min(0)
       .max(10)
       .step(0.001)
@@ -67,7 +70,7 @@ export default class Environment {
 
     // checkbox for removing the environment map
     this.guiEnvMap
-      .add({ show: true }, 'show')
+      ?.add({ show: true }, 'show')
       .name('Show EnvMap')
       .onChange((value: boolean) => {
         if (!value) {

@@ -8,6 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('Canvas not found');
   }
 
-  const gui  = new Helper();
-  const app = new App(canvas);
+  new Helper();
+  new App(canvas);
 });

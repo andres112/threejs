@@ -23,7 +23,7 @@ export default class Character {
     // Load character
     const gltfLoader = App.instance.resources.items['goblinModel'] as GLTF;
     this.model = gltfLoader.scene;
-    this.model.scale.setScalar(0.03);
+    this.model.scale.setScalar(0.025);
     this.model.position.set(0, 0, 0);
     this.model.rotation.y = Math.PI;
     App.instance.scene.add(this.model);

@@ -29,7 +29,7 @@ export default class App {
   public resources!: Resources;
   private renderer!: Renderer;
   private world!: World;
-  private gui!: GUI;
+  private gui: GUI | undefined;
 
   constructor(canvas: HTMLCanvasElement | null) {
     // Singleton
@@ -41,7 +41,7 @@ export default class App {
 
     // Options
     this.canvas = canvas;
-    this.gui = Helper.addFolder('General');
+    if (Helper.active) this.gui = Helper.addFolder('General');
 
     // Setup
     this.sizes = new Sizes();
@@ -61,8 +61,7 @@ export default class App {
     // GUI setup
     this.setAxisHelpers();
     // this gui checkbox for axis helpers
-    this.gui.add({ axisHelpers: true }, 'axisHelpers').onChange((value: boolean) => {
-      console.log('axisHelpers', value);
+    this.gui?.add({ axisHelpers: true }, 'axisHelpers').onChange((value: boolean) => {
       if (value) {
         this.setAxisHelpers();
       } else {
@@ -90,7 +89,7 @@ export default class App {
   }
 
   private removeAxisHelpers() {
-      App.instance.scene.children = App.instance.scene.children.filter(
+    App.instance.scene.children = App.instance.scene.children.filter(
       (child) => !(child instanceof THREE.AxesHelper || child instanceof THREE.GridHelper)
     );
   }

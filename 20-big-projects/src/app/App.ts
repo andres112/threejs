@@ -41,7 +41,6 @@ export default class App {
 
     // Options
     this.canvas = canvas;
-    if (Helper.active) this.gui = Helper.addFolder('General');
 
     // Setup
     this.sizes = new Sizes();
@@ -59,15 +58,19 @@ export default class App {
     this.time.on('tick', () => this.update());
 
     // GUI setup
-    this.setAxisHelpers();
-    // this gui checkbox for axis helpers
-    this.gui?.add({ axisHelpers: true }, 'axisHelpers').onChange((value: boolean) => {
-      if (value) {
-        this.setAxisHelpers();
-      } else {
-        this.removeAxisHelpers();
-      }
-    });
+    if (Helper.active) {
+      this.gui = Helper.addFolder('General');
+      this.setAxisHelpers();
+
+      // this gui checkbox for axis helpers
+      this.gui?.add({ axisHelpers: true }, 'axisHelpers').onChange((value: boolean) => {
+        if (value) {
+          this.setAxisHelpers();
+        } else {
+          this.removeAxisHelpers();
+        }
+      });
+    }
   }
 
   // getter for the instance

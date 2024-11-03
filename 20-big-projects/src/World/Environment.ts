@@ -30,14 +30,17 @@ export default class Environment {
 
     this.guiLights?.add(this.sunlight, 'intensity', 0, 10, 0.01).name('Sunlight intensity');
 
-    const sunlightHelper = new THREE.DirectionalLightHelper(this.sunlight, 0.2);
-    App.instance.scene.add(sunlightHelper);
-    this.guiLights?.add(sunlightHelper, 'visible').name('Sunlight helper');
+    if (Helper.active) {
+      // light helper
+      const sunlightHelper = new THREE.DirectionalLightHelper(this.sunlight, 0.2);
+      App.instance.scene.add(sunlightHelper);
+      this.guiLights?.add(sunlightHelper, 'visible').name('Sunlight helper');
 
-    // light shadow camera helper
-    const shadowCameraHelper = new THREE.CameraHelper(this.sunlight.shadow.camera);
-    App.instance.scene.add(shadowCameraHelper);
-    this.guiLights?.add(shadowCameraHelper, 'visible').name('Shadow camera helper');
+      // light shadow camera helper
+      const shadowCameraHelper = new THREE.CameraHelper(this.sunlight.shadow.camera);
+      App.instance.scene.add(shadowCameraHelper);
+      this.guiLights?.add(shadowCameraHelper, 'visible').name('Shadow camera helper');
+    }
   }
 
   private setEnvironmentMap() {

@@ -31,7 +31,7 @@ export default class Camera {
   private createCamera() {
     const { width, height } = App.instance.sizes;
     this.instance = new THREE.PerspectiveCamera(35, width / height, 0.1, 100);
-    this.instance.position.set(6, 5, -20);
+    this.instance.position.set(6, 3, -20);
 
     App.instance.scene.add(this.instance);
   }

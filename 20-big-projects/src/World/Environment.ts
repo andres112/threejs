@@ -69,7 +69,6 @@ export default class Environment {
           child.material.envMapIntensity = environmentMap.intensity;
           child.castShadow = true;
           child.material.needsUpdate = true;
-          console.log(child);
         }
       });
     };

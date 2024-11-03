@@ -7,6 +7,7 @@ import World from '@/world/World';
 import Resources from '@/utils/Resources';
 
 import sources from '@/resources/sources';
+import { ISource } from '@/resources/Interfaces';
 
 declare global {
   interface Window {
@@ -42,7 +43,7 @@ export default class App {
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new THREE.Scene();
-    this.resources = new Resources(sources);
+    this.resources = new Resources(sources as ISource[]);
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.world = new World();

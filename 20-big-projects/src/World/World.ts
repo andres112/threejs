@@ -2,10 +2,12 @@ import * as THREE from 'three';
 import App from '@/app/App';
 import Environment from './Environment';
 import Resources from '@/utils/Resources';
+import Floor from './Floor';
 
 export default class World {
   private mesh!: THREE.Mesh;
   private environment!: Environment;
+  private floor!: Floor;
   private resources: Resources;
 
   constructor() {
@@ -16,8 +18,9 @@ export default class World {
 
     // Wait until Load resources
     this.resources.on('loaded', () => {
-      // setup environment once resources are loaded
+      // setup world components once resources are loaded
       this.environment = new Environment();
+      this.floor = new Floor();
     });
 
     console.info('World initialized');

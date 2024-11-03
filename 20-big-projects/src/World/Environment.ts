@@ -43,12 +43,12 @@ export default class Environment {
   private setEnvironmentMap() {
     let environmentMap = {
       intensity: 1,
-      texture: App.instance.resources.items['environmentMapHDRTexture'],
+      texture: App.instance.resources.items['environmentMapTexture'],
     };
 
     // Since the version 0.152 of Three.js encoding has been replaced by colorSpace:
     environmentMap.texture.colorSpace = THREE.SRGBColorSpace;
-    
+
     if (environmentMap.texture instanceof THREE.DataTexture) {
       environmentMap.texture.mapping = THREE.EquirectangularReflectionMapping;
     }

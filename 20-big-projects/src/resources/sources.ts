@@ -31,4 +31,9 @@ export default [
         type: 'texture',
         path: 'textures/dirt/displacement.jpg'
     },
+    {
+        name: 'goblinModel',
+        type: 'gltf',
+        path: 'models/goblin.glb'
+    }
 ]

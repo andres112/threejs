@@ -5,9 +5,11 @@ import Camera from '@/components/Camera';
 import Renderer from '@/components/Renderer';
 import World from '@/world/World';
 import Resources from '@/utils/Resources';
+import Helper from '@/gui/Helper';
 
 import sources from '@/resources/sources';
 import { ISource } from '@/resources/Interfaces';
+import GUI from 'lil-gui';
 
 declare global {
   interface Window {
@@ -27,6 +29,7 @@ export default class App {
   public resources!: Resources;
   private renderer!: Renderer;
   private world!: World;
+  private gui!: GUI;
 
   constructor(canvas: HTMLCanvasElement | null) {
     // Singleton
@@ -38,6 +41,7 @@ export default class App {
 
     // Options
     this.canvas = canvas;
+    this.gui = Helper.addFolder('General');
 
     // Setup
     this.sizes = new Sizes();
@@ -53,6 +57,18 @@ export default class App {
 
     // Listen for tick event
     this.time.on('tick', () => this.update());
+
+    // GUI setup
+    this.setAxisHelpers();
+    // this gui checkbox for axis helpers
+    this.gui.add({ axisHelpers: true }, 'axisHelpers').onChange((value: boolean) => {
+      console.log('axisHelpers', value);
+      if (value) {
+        this.setAxisHelpers();
+      } else {
+        this.removeAxisHelpers();
+      }
+    });
   }
 
   // getter for the instance
@@ -65,6 +81,19 @@ export default class App {
       }
     }
     return App._instance;
+  }
+
+  private setAxisHelpers() {
+    const axesHelper = new THREE.AxesHelper(3);
+    App.instance.scene.add(axesHelper);
+    const gridHelper = new THREE.GridHelper(10, 10);
+    App.instance.scene.add(gridHelper);
+  }
+
+  private removeAxisHelpers() {
+      App.instance.scene.children = App.instance.scene.children.filter(
+      (child) => !(child instanceof THREE.AxesHelper || child instanceof THREE.GridHelper)
+    );
   }
 
   private resize() {

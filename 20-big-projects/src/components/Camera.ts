@@ -31,7 +31,7 @@ export default class Camera {
   private createCamera() {
     const { width, height } = App.instance.sizes;
     this.instance = new THREE.PerspectiveCamera(35, width / height, 0.1, 100);
-    this.instance.position.set(6, 4, 8);
+    this.instance.position.set(6, 7, 10);
 
     App.instance.scene.add(this.instance);
   }
@@ -45,5 +45,6 @@ export default class Camera {
   private setOrbitControls() {
     this.controls = new OrbitControls(this.instance, App.instance.canvas);
     this.controls.enableDamping = true; // set smooth movement
+    this.controls.maxDistance = 20;
   }
 }

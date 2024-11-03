@@ -19,8 +19,8 @@ export default class World {
     // Wait until Load resources
     this.resources.on('loaded', () => {
       // setup world components once resources are loaded
-      this.environment = new Environment();
-      this.floor = new Floor();
+      this.floor = new Floor(); // Create floor first to avoid shadow issues
+      this.environment = new Environment(); // because updateMaterial is called here
     });
 
     console.info('World initialized');

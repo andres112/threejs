@@ -19,6 +19,16 @@ export default [
     {
         name: 'grassNormalTexture',
         type: 'texture',
-        path: 'textures/dirt/normal.jpg'
+        path: 'textures/dirt/normal.png'
+    },
+    {
+        name: 'grassARMTexture',
+        type: 'texture',
+        path: 'textures/dirt/arm.jpg'
+    },
+    {
+        name: 'grassDisplacementTexture',
+        type: 'texture',
+        path: 'textures/dirt/displacement.jpg'
     },
 ]

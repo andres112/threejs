@@ -25,7 +25,7 @@ export default class Environment {
     this.sunlight.shadow.mapSize.set(1024, 1024);
     this.sunlight.shadow.normalBias = 0.05;
     this.sunlight.shadow.bias = -0.001;
-    this.sunlight.position.set(-1, 3, -4);
+    this.sunlight.position.set(-1, 3, -6);
     App.instance.scene.add(this.sunlight);
 
     this.guiLights?.add(this.sunlight, 'intensity', 0, 10, 0.01).name('Sunlight intensity');

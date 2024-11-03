@@ -5,7 +5,8 @@ import Floor from './Floor';
 import Character from './Character';
 
 export default class World {
-  private character!: Character;
+  private globin!: Character;
+  private fox!: Character;
   private environment!: Environment;
   private floor!: Floor;
   private resources: Resources;
@@ -17,7 +18,10 @@ export default class World {
     // Wait until Load resources
     this.resources.on('loaded', () => {
       // setup world components once resources are loaded
-      this.character = new Character();
+      this.globin = new Character('goblinModel');
+      this.globin.model.position.set(-2, 0, -3);
+      this.fox = new Character('foxModel');
+      this.fox.model.position.set(2, 0, 2);
       this.floor = new Floor(); // Create floor first to avoid shadow issues
       this.environment = new Environment(); // because updateMaterial is called here
     });
@@ -26,8 +30,11 @@ export default class World {
   }
 
   public update() {
-    if (this.character) {
-      this.character.update();
+    if (this.globin) {
+      this.globin.update();
+    }
+    if (this.fox) {
+      this.fox.update();
     }
   }
 }

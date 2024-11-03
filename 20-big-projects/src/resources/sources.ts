@@ -40,5 +40,10 @@ export default [
         name: 'goblinModel',
         type: 'gltf',
         path: 'models/goblin.glb'
+    },
+    {
+        name: 'foxModel',
+        type: 'gltf',
+        path: 'models/Fox/glTF-Binary/Fox.glb'
     }
 ]

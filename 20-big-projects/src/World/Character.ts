@@ -4,13 +4,13 @@ import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export default class Character {
-  private model!: THREE.Group<THREE.Object3DEventMap>;
+  public model!: THREE.Group<THREE.Object3DEventMap>;
   private animation: IAnimation = {} as IAnimation;
 
-  constructor() {
+  constructor(modelName: string) {
     // setup
-    this.setModel();
-    this.setAnimation();
+    this.setModel(modelName);
+    this.setAnimation(modelName);
     console.info('Character initialized');
   }
 
@@ -19,20 +19,19 @@ export default class Character {
     this.animation.mixer.update(App.instance.time.delta * 0.001);
   }
 
-  private setModel() {
+  private setModel(modelName: string) {
     // Load character
-    const gltfLoader = App.instance.resources.items['goblinModel'] as GLTF;
+    const gltfLoader = App.instance.resources.items[modelName] as GLTF;
     this.model = gltfLoader.scene;
     this.model.scale.setScalar(0.025);
-    this.model.position.set(0, 0, 0);
     this.model.rotation.y = Math.PI;
     App.instance.scene.add(this.model);
   }
 
-  private setAnimation() {
+  private setAnimation(modelName: string) {
     this.animation.mixer = new THREE.AnimationMixer(this.model);
     this.animation.action = this.animation.mixer.clipAction(
-      (App.instance.resources.items['goblinModel'] as GLTF).animations[0]
+      (App.instance.resources.items[modelName] as GLTF).animations[0]
     );
     this.animation.action.play();
   }

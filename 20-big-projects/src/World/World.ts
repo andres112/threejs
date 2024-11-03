@@ -3,6 +3,7 @@ import Environment from './Environment';
 import Resources from '@/utils/Resources';
 import Floor from './Floor';
 import Character from './Character';
+import * as THREE from 'three';
 
 export default class World {
   private globin!: Character;
@@ -18,10 +19,8 @@ export default class World {
     // Wait until Load resources
     this.resources.on('loaded', () => {
       // setup world components once resources are loaded
-      this.globin = new Character('goblinModel');
-      this.globin.model.position.set(-2, 0, -3);
-      this.fox = new Character('foxModel');
-      this.fox.model.position.set(2, 0, 2);
+      this.globin = new Character('goblinModel', new THREE.Vector3(-2, 0, -3));
+      this.fox = new Character('foxModel', new THREE.Vector3(2, 0, 0));
       this.floor = new Floor(); // Create floor first to avoid shadow issues
       this.environment = new Environment(); // because updateMaterial is called here
     });

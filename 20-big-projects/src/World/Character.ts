@@ -7,9 +7,9 @@ export default class Character {
   public model!: THREE.Group<THREE.Object3DEventMap>;
   private animation: IAnimation = {} as IAnimation;
 
-  constructor(modelName: string) {
+  constructor(modelName: string, position?: THREE.Vector3) {
     // setup
-    this.setModel(modelName);
+    this.setModel(modelName, position);
     this.setAnimation(modelName);
     console.info('Character initialized');
   }
@@ -19,11 +19,12 @@ export default class Character {
     this.animation.mixer.update(App.instance.time.delta * 0.001);
   }
 
-  private setModel(modelName: string) {
+  private setModel(modelName: string, position?: THREE.Vector3) {
     // Load character
     const gltfLoader = App.instance.resources.items[modelName] as GLTF;
     this.model = gltfLoader.scene;
     this.model.scale.setScalar(0.025);
+    this.model.position.copy(position || new THREE.Vector3(0, 0, 0));
     this.model.rotation.y = Math.PI;
     App.instance.scene.add(this.model);
   }

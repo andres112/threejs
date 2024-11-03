@@ -6,7 +6,7 @@ import Character from './Character';
 import * as THREE from 'three';
 
 export default class World {
-  private globin!: Character;
+  private goblin!: Character;
   private fox!: Character;
   private environment!: Environment;
   private floor!: Floor;
@@ -19,7 +19,7 @@ export default class World {
     // Wait until Load resources
     this.resources.on('loaded', () => {
       // setup world components once resources are loaded
-      this.globin = new Character('goblinModel', new THREE.Vector3(-2, 0, -3));
+      this.goblin = new Character('goblinModel', new THREE.Vector3(-2, 0, -3));
       this.fox = new Character('foxModel', new THREE.Vector3(2, 0, 0));
       this.floor = new Floor(); // Create floor first to avoid shadow issues
       this.environment = new Environment(); // because updateMaterial is called here
@@ -29,8 +29,8 @@ export default class World {
   }
 
   public update() {
-    if (this.globin) {
-      this.globin.update();
+    if (this.goblin) {
+      this.goblin.update();
     }
     if (this.fox) {
       this.fox.update();

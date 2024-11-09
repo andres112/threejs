@@ -107,4 +107,9 @@ export default class App {
     this.world.update();
     this.renderer.update();
   }
+
+  destroy() {
+    this.sizes.off('resize');
+    this.time.off('tick');
+  }
 }

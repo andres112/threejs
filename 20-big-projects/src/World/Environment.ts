@@ -17,7 +17,7 @@ export default class Environment {
     this.setEnvironmentMap();
     console.info('Environment initialized');
   }
-
+  
   private setSunlight() {
     this.sunlight = new THREE.DirectionalLight('#ffffff', 4);
     this.sunlight.castShadow = true;

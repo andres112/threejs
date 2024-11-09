@@ -11,6 +11,7 @@ export default class Character {
   private modelName!: string;
   private animation: IAnimation = {} as IAnimation;
   private animations: THREE.AnimationClip[] = [];
+  private debugObject: { [key: string]: any } = {};
 
   constructor(modelName: string, position?: THREE.Vector3) {
     // setup
@@ -20,8 +21,11 @@ export default class Character {
     if (this.animations.length) {
       this.setAnimation();
     }
-    if(Helper.active && this.animations.length > 1) {
-        this.gui = Helper.addFolder(modelName.toUpperCase());
+    if (Helper.active && this.animations.length > 1) {
+      this.gui = Helper.addFolder(modelName.toUpperCase());
+      this.debugObject['animation'] = 0;
+      this.debugObject['crossFadeTime'] = 1;
+      this.setGUIAnimations();
     }
     console.info('Character initialized');
   }
@@ -43,15 +47,45 @@ export default class Character {
 
   private getAnimations() {
     this.animations = (App.instance.resources.items[this.modelName] as GLTF).animations;
-    // add the animations to the GUI as dropdown where the key is name
-
   }
 
+  /**
+   * 
+   * Set animation with crossfade
+   * This method requires to reset the animation and play it again
+   * only when a previous animation is playing
+   */
   private setAnimation(index: number = 0) {
-    this.animation.mixer = new THREE.AnimationMixer(this.model);
-    this.animation.action = this.animation.mixer.clipAction(
-      (App.instance.resources.items[this.modelName] as GLTF).animations[index]
-    );
-    this.animation.action.play();
+    const oldAction = this.animation.action;
+    if (!oldAction) {
+      this.animation.mixer = new THREE.AnimationMixer(this.model);
+      this.animation.action = this.animation.mixer.clipAction(this.animations[index]);
+      this.animation.action.play();
+    } else {
+      this.animation.action = this.animation.mixer.clipAction(this.animations[index]);
+      this.animation.action?.reset();
+      this.animation.action?.play();
+      this.animation.action?.crossFadeFrom(oldAction, this.debugObject.crossFadeTime, true);
+    }
+  }
+
+  private setGUIAnimations() {
+    if (!this.gui) return;
+    this.gui
+      .add(this.debugObject, 'animation', {
+        ...this.animations.reduce((acc: { [key: string]: number }, _, index) => {
+          acc[`Animation ${index}`] = index;
+          return acc;
+        }, {}),
+      })
+      .name('Animations')
+      .onChange((index: number) => {
+        this.setAnimation(index);
+      });
+
+    this.gui
+      .add(this.debugObject, 'crossFadeTime', 0, 5, 1)
+      .name('Crossfade time')
+      .onChange((time: number) => (this.debugObject.crossFadeTime = time));
   }
 }

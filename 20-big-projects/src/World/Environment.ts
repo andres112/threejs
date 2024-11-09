@@ -17,7 +17,7 @@ export default class Environment {
     this.setEnvironmentMap();
     console.info('Environment initialized');
   }
-  
+
   private setSunlight() {
     this.sunlight = new THREE.DirectionalLight('#ffffff', 4);
     this.sunlight.castShadow = true;
@@ -58,19 +58,6 @@ export default class Environment {
 
     App.instance.scene.environment = App.instance.scene.background = environmentMap.texture;
 
-    this.guiEnvMap
-      ?.add(App.instance.scene, 'environmentIntensity')
-      .min(0)
-      .max(10)
-      .step(0.001)
-      .name('Intensity');
-    this.guiEnvMap
-      ?.add(App.instance.scene, 'backgroundIntensity')
-      .min(0)
-      .max(10)
-      .step(0.001)
-      .name('Background intensity');
-
     // checkbox for removing the environment map
     this.guiEnvMap
       ?.add({ show: true }, 'show')
@@ -97,5 +84,22 @@ export default class Environment {
 
     // Update material when texture is loaded
     updateMaterial();
+
+    this.guiEnvMap
+      ?.add(App.instance.scene, 'environmentIntensity')
+      .min(0)
+      .max(10)
+      .step(0.001)
+      .name('Intensity')
+      .onChange(() => {
+        environmentMap.intensity = App.instance.scene.environmentIntensity;
+        updateMaterial();
+      });
+    this.guiEnvMap
+      ?.add(App.instance.scene, 'backgroundIntensity')
+      .min(0)
+      .max(10)
+      .step(0.001)
+      .name('Background intensity');
   }
 }

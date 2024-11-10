@@ -22,6 +22,10 @@ export default class Camera {
     this.controls.update();
   }
 
+  public destroy() {
+    this.controls.dispose();
+  }
+
   /**
    * Create a camera
    * @private

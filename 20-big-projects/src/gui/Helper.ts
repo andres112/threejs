@@ -33,4 +33,10 @@ export default class Helper {
     return newFolder;
   }
 
+  public static destroy() {
+    if (!Helper.instance) return;
+    Helper.instance.gui.destroy();
+  }
+
+
 }

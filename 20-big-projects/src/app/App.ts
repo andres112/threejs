@@ -112,6 +112,12 @@ export default class App {
     this.sizes.off('resize');
     this.time.off('tick');
     this.destroyMeshes();
+    this.camera.destroy();
+    this.renderer.destroy();
+
+    if(Helper.active) {
+      Helper.destroy();
+    }
   }
 
   private destroyMeshes() {

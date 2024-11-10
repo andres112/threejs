@@ -20,6 +20,10 @@ export default class Renderer {
     this.instance.render(App.instance.scene, App.instance.camera.instance);
   }
 
+  public destroy() {
+    this.instance.dispose();
+  }
+
   /**
    * Create a renderer
    * @private

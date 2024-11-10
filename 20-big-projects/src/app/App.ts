@@ -111,5 +111,20 @@ export default class App {
   destroy() {
     this.sizes.off('resize');
     this.time.off('tick');
+    this.destroyMeshes();
+  }
+
+  private destroyMeshes() {
+    this.scene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.geometry.dispose();
+        for (const key of Object.keys(child.material)) {
+          const material = child.material[key];
+          if (material && typeof material.dispose === 'function') {
+            material.dispose();
+          }
+        }
+      }
+    });
   }
 }

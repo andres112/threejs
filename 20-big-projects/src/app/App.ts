@@ -70,6 +70,9 @@ export default class App {
           this.removeAxisHelpers();
         }
       });
+
+      // button for destroying the app
+      this.gui?.add({ destroy: () => this.destroy() }, 'destroy').name('Destroy App');
     }
   }
 
@@ -109,13 +112,13 @@ export default class App {
   }
 
   destroy() {
-    this.sizes.off('resize');
     this.time.off('tick');
+    this.sizes.destroy();
     this.destroyMeshes();
     this.camera.destroy();
     this.renderer.destroy();
 
-    if(Helper.active) {
+    if (Helper.active) {
       Helper.destroy();
     }
   }

@@ -15,6 +15,11 @@ export default class Sizes extends EventEmitter {
     console.info('Sizes initialized');
   }
 
+  public destroy() {
+    this.off('resize');
+    window.removeEventListener('resize', () => this.resize());
+  }
+
   private resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;

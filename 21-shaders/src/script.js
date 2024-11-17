@@ -31,6 +31,7 @@ const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
 const material = new THREE.RawShaderMaterial({
   vertexShader: vertexShader,
   fragmentShader: fragmentShader,
+  wireframe: true,
 });
 
 // Mesh
@@ -70,12 +71,15 @@ scene.add(camera);
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
+controls.zoomToCursor = true;
+controls.autoRotate = true;
 
 /**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
+  antialias: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));

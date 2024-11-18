@@ -1,9 +1,22 @@
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 modelMatrix;
+uniform mat4 projectionMatrix;// transform the 3D space into 2D space (clip space)
+uniform mat4 viewMatrix; // Apply transformations to the Camera (rotation, translation, field of view, near/far)
+uniform mat4 modelMatrix; // Apply transformations to the Mesh (scale, rotation, translation)
+// uniform mat4 modelViewMatrix; // modelMatrix * viewMatrix
 
 attribute vec3 position;
 
 void main() {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+    // gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+
+    // The above is the same as the following, just more readable
+    vec4  modelPosition = modelMatrix * vec4(position, 1.0);
+    modelPosition.z += sin(modelPosition.x * 20.0) * 0.1;
+    vec4  viewPosition = viewMatrix * modelPosition;
+    vec4  projectionPosition = projectionMatrix * viewPosition;
+    projectionPosition.y += sin(projectionPosition.x * 10.0) * 0.1;
+    gl_Position = projectionPosition;
+
+    // The following is possible but NOT recommended
+    // gl_Position.y += 0.5;
+    // gl_Position.x += 0.5;
 }

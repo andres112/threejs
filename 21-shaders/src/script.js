@@ -72,6 +72,7 @@ scene.add(camera);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.zoomToCursor = true;
+// with autoRotate enabled, the camera will rotate automatically NOT the object
 controls.autoRotate = true;
 
 /**

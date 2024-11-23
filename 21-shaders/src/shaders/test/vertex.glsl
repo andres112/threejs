@@ -6,6 +6,8 @@ uniform mat4 modelMatrix; // Apply transformations to the Mesh (scale, rotation,
 attribute vec3 position;
 attribute float aRandom;
 
+varying float vRandom;
+
 void main() {
     // gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
 
@@ -21,4 +23,6 @@ void main() {
     // The following is possible but NOT recommended
     // gl_Position.y += 0.5;
     // gl_Position.x += 0.5;
+
+    vRandom = aRandom;
 }

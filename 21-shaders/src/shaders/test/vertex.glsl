@@ -7,10 +7,15 @@ uniform mat4 modelMatrix; // Apply transformations to the Mesh (scale, rotation,
 uniform vec2 uFrequency;
 uniform float uTime;
 
+// Attributes which are passed from the JS
 attribute vec3 position;
+attribute vec2 uv;
+attribute vec3 normal;
 attribute float aRandom;
 
+// Varyings are passed to the fragment shader
 varying float vRandom;
+varying vec2 vUv;
 
 void main() {
     // gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
@@ -31,4 +36,5 @@ void main() {
     // gl_Position.x += 0.5;
 
     vRandom = aRandom;
+    vUv = uv;
 }

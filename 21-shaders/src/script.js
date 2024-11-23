@@ -20,6 +20,7 @@ const scene = new THREE.Scene();
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
+const flagTexture = textureLoader.load('/textures/flag_swiss.png');
 
 /**
  * Test mesh
@@ -35,19 +36,22 @@ for (let i = 0; i < count; i++) {
   randoms[i] = Math.random();
 }
 geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
+
+// print the geometry attributes
 console.log(geometry.attributes);
+
 
 // Material
 const material = new THREE.RawShaderMaterial({
   vertexShader: vertexShader,
   fragmentShader: fragmentShader,
   transparent: true,
-  wireframe: true,
+  wireframe: false,
   uniforms: {
     uFrequency: { value: new THREE.Vector2(10, 5) },
     uTime: { value: 0 },
     uColor: { value: new THREE.Color('orange') },
-    uTexture: { value: textureLoader.load('/textures/door/color.jpg') },
+    uTexture: { value: flagTexture },
   },
 });
 
@@ -57,7 +61,7 @@ gui.addColor(material.uniforms.uColor, 'value').name('color');
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
-mesh.scale.y = 2 / 3;
+mesh.scale.y = 1;
 scene.add(mesh);
 
 /**

@@ -3,8 +3,9 @@ uniform mat4 viewMatrix; // Apply transformations to the Camera (rotation, trans
 uniform mat4 modelMatrix; // Apply transformations to the Mesh (scale, rotation, translation)
 // uniform mat4 modelViewMatrix; // modelMatrix * viewMatrix
 
-// Custom uniforms
+// Custom uniforms defined in the JS
 uniform vec2 uFrequency;
+uniform float uTime;
 
 attribute vec3 position;
 attribute float aRandom;
@@ -16,9 +17,10 @@ void main() {
 
     // The above is the same as the following, just more readable
     vec4  modelPosition = modelMatrix * vec4(position, 1.0);
-    modelPosition.z += sin(modelPosition.x * uFrequency.x) * 0.1;
-    modelPosition.z += sin(modelPosition.y * uFrequency.y) * 0.1;
-    // modelPosition.z += aRandom * 0.1;
+    modelPosition.z += sin(modelPosition.x * uFrequency.x + uTime) * 0.1;
+    modelPosition.z += sin(modelPosition.y * uFrequency.y - uTime) * 0.1;
+    modelPosition.z += aRandom * 0.1;
+
     vec4  viewPosition = viewMatrix * modelPosition;
     vec4  projectionPosition = projectionMatrix * viewPosition;
     // projectionPosition.y += sin(projectionPosition.x * 2.0) * 0.5;

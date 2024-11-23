@@ -42,6 +42,10 @@ console.log(geometry.attributes);
 
 
 // Material
+// Ideally we should use RawShaderMaterial for learning purposes
+// but we can use ShaderMaterial directly for simplicity, 
+// due to the fact that already includes the uniforms and attributes
+// and precision in the glsl code
 const material = new THREE.RawShaderMaterial({
   vertexShader: vertexShader,
   fragmentShader: fragmentShader,
@@ -55,6 +59,7 @@ const material = new THREE.RawShaderMaterial({
   },
   side: THREE.DoubleSide,
 });
+
 
 gui.add(material.uniforms.uFrequency.value, 'x').min(0).max(20).step(0.01).name('frequencyX');
 gui.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name('frequencyY');

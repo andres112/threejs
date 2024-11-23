@@ -27,11 +27,22 @@ const textureLoader = new THREE.TextureLoader();
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
 
+// Exact number of vertices in the geometry
+const count = geometry.attributes.position.count;
+const randoms = new Float32Array(count);
+
+for (let i = 0; i < count; i++) {
+    randoms[i] = Math.random();
+}
+geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
+console.log(geometry.attributes);
+
 // Material
 const material = new THREE.RawShaderMaterial({
   vertexShader: vertexShader,
   fragmentShader: fragmentShader,
-  wireframe: true,
+  transparent: true,
+  wireframe: false,
 });
 
 // Mesh
@@ -73,7 +84,7 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.zoomToCursor = true;
 // with autoRotate enabled, the camera will rotate automatically NOT the object
-controls.autoRotate = true;
+// controls.autoRotate = true;
 
 /**
  * Renderer

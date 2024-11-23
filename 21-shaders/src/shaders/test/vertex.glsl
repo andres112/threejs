@@ -10,10 +10,10 @@ void main() {
 
     // The above is the same as the following, just more readable
     vec4  modelPosition = modelMatrix * vec4(position, 1.0);
-    modelPosition.z += sin(modelPosition.x * 20.0) * 0.1;
+    modelPosition.z += sin(modelPosition.x * 10.0) * 0.1;
     vec4  viewPosition = viewMatrix * modelPosition;
     vec4  projectionPosition = projectionMatrix * viewPosition;
-    projectionPosition.y += sin(projectionPosition.x * 10.0) * 0.1;
+    projectionPosition.y += sin(projectionPosition.x * 5.0) * 0.5;
     gl_Position = projectionPosition;
 
     // The following is possible but NOT recommended

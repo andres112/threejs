@@ -53,6 +53,7 @@ const material = new THREE.RawShaderMaterial({
     uColor: { value: new THREE.Color('orange') },
     uTexture: { value: flagTexture },
   },
+  side: THREE.DoubleSide,
 });
 
 gui.add(material.uniforms.uFrequency.value, 'x').min(0).max(20).step(0.01).name('frequencyX');

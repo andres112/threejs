@@ -89,4 +89,36 @@ void main() {
 
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
+    // Pattern 15: Gradient from center to right and left
+    else if(uPatternIndex == 14) {
+        strength = abs(vUv.x - 0.5);
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 16: Minimum abs from center
+    else if(uPatternIndex == 15) {
+        strength = min(abs(vUv.x - 0.5), abs(vUv.y - 0.5));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    } 
+    // Pattern 17: Max abs from center
+    else if(uPatternIndex == 16) {
+        strength = max(abs(vUv.x - 0.5), abs(vUv.y - 0.5));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    } 
+    // Pattern 18: Frames
+    else if(uPatternIndex == 17) {
+        // max limit is 0.5 due to the UV coordinates were shifted to the center
+        strength = step(0.4, max(abs(vUv.x - 0.5), abs(vUv.y - 0.5)));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 19: Vertical gradient chart
+    else if(uPatternIndex == 18) {
+        strength = floor(vUv.x * 10.0) / 10.0;
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    //Pattern 20: Grid gradient chart
+    else if(uPatternIndex == 19) {
+        strength = floor(vUv.x * 10.0) / 10.0;
+        strength *= floor(vUv.y * 10.0) / 10.0;
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
 }

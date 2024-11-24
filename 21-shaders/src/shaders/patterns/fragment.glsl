@@ -54,4 +54,39 @@ void main() {
         strength += step(0.8, mod(vUv.y * 10.0, 1.0));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
+    // Pattern 11: Dots
+    else if(uPatternIndex == 10) {
+        strength = step(0.8, mod(vUv.x * 10.0, 1.0));
+        strength *= step(0.8, mod(vUv.y * 10.0, 1.0));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 12: Dashes
+    else if(uPatternIndex == 11) {
+        strength = step(0.4, mod(vUv.x * 10.0, 1.0));
+        strength *= step(0.8, mod(vUv.y * 10.0, 1.0));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 13: Corners
+    else if(uPatternIndex == 12) {
+        float horizontal = step(0.4, mod(vUv.x * 10.0, 1.0));
+        horizontal *= step(0.8, mod(vUv.y * 10.0, 1.0));
+
+        float vertical = step(0.8, mod(vUv.x * 10.0, 1.0));
+        vertical *= step(0.4, mod(vUv.y * 10.0, 1.0));
+
+        strength = horizontal + vertical;
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 14: Crosses
+    else if(uPatternIndex == 13) {
+        float horizontal = step(0.4, mod(vUv.x * 10.0, 1.0));
+        horizontal *= step(0.8, mod(vUv.y * 10.0 + 0.2, 1.0)); // + 0.2 to move the cross
+
+        float vertical = step(0.8, mod(vUv.x * 10.0 + 0.2, 1.0)); // + 0.2 to move the cross
+        vertical *= step(0.4, mod(vUv.y * 10.0, 1.0));
+
+        strength = horizontal + vertical;
+
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
 }

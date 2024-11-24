@@ -79,9 +79,19 @@ const patternMaterial = new THREE.ShaderMaterial({
   transparent: true,
   wireframe: false,
   side: THREE.DoubleSide,
+  uniforms:{
+    uPatternIndex: { value: 0 },
+  }
 })
 
 const patternFolder = gui.addFolder('Pattern');
+
+// Add pattern index to the GUI
+const patternOptions = {};
+for (let i = 0; i < 50; i++) {
+  patternOptions[`Pattern ${i + 1}`] = i;
+}
+patternFolder.add(patternMaterial.uniforms.uPatternIndex, 'value', patternOptions).name('Pattern');
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);

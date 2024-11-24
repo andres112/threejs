@@ -14,6 +14,8 @@ void main() {
     textureColor.rgb *= vElevation * 2.0 + 0.8;
     // gl_FragColor = vec4(1.0, vRandom, 0.2, 1.0);
     // gl_FragColor = vec4(uColor, 1.0);
-    gl_FragColor = textureColor;
+    vec3 blendedColor = mix(textureColor.rgb, uColor, 0.15); // Adjust the 0.5 value to control blending
+
+    gl_FragColor = vec4(blendedColor, textureColor.a);
     // gl_FragColor = vec4(vUv, 1.0, 1.0);
 }

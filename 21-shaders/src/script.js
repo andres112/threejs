@@ -3,6 +3,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 import vertexShader from './shaders/test/vertex.glsl';
 import fragmentShader from './shaders/test/fragment.glsl';
+// Shader patterns import
+import patternVertexShader from './shaders/patterns/vertex.glsl';
+import patternFragmentShader from './shaders/patterns/fragment.glsl';
 
 /**
  * Base
@@ -38,7 +41,11 @@ for (let i = 0; i < count; i++) {
 geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
 
 // print the geometry attributes
-console.log(geometry.attributes);
+console.log("Geometry attributes", geometry.attributes);
+
+// Shader Patterns Geometry ****************************************************
+const patternGeometry = new THREE.PlaneGeometry(1, 1, 32, 32);
+console.log("Pattern Geometry attributes", patternGeometry.attributes);
 
 
 // Material
@@ -60,15 +67,32 @@ const material = new THREE.RawShaderMaterial({
   side: THREE.DoubleSide,
 });
 
+const flagFolder = gui.addFolder('Flag');
+flagFolder.add(material.uniforms.uFrequency.value, 'x').min(0).max(20).step(0.01).name('frequencyX');
+flagFolder.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name('frequencyY');
+flagFolder.addColor(material.uniforms.uColor, 'value').name('color');
 
-gui.add(material.uniforms.uFrequency.value, 'x').min(0).max(20).step(0.01).name('frequencyX');
-gui.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name('frequencyY');
-gui.addColor(material.uniforms.uColor, 'value').name('color');
+// Shader Patterns Material ****************************************************
+const patternMaterial = new THREE.ShaderMaterial({
+  vertexShader: patternVertexShader,
+  fragmentShader: patternFragmentShader,
+  transparent: true,
+  wireframe: false,
+  side: THREE.DoubleSide,
+})
+
+const patternFolder = gui.addFolder('Pattern');
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
 mesh.scale.y = 1;
+mesh.position.x = -1
 scene.add(mesh);
+
+// Shader Patterns Mesh ****************************************************
+const patternMesh = new THREE.Mesh(patternGeometry, patternMaterial);
+patternMesh.position.x = 1;
+scene.add(patternMesh);
 
 /**
  * Sizes
@@ -97,7 +121,7 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.set(0.25, -0.25, 1);
+camera.position.set(0, -0.25, 3);
 scene.add(camera);
 
 // Controls

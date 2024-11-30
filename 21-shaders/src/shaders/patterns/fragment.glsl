@@ -16,7 +16,7 @@ vec2 rotate(vec2 uv, float rotation, vec2 mid) {
 }
 
 // Const in glsl
-#define PI 3.14159265359
+#define PI 3.1415926535897932384626433832795
 
 void main() {
     // NOTE: Use of if conditionals is not recommended in shaders. BAD PERFORMANCE!
@@ -226,6 +226,21 @@ void main() {
     // Pattern 31: White with black circle in center
     else if(uPatternIndex == 30){
         strength = step(0.25, distance(vUv, vec2(0.5, 0.5)));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 32: black ring with gradient
+    else if(uPatternIndex == 31){
+        strength = abs(distance(vUv, vec2(0.5, 0.5)) - 0.25);
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 33: black ring with white background
+    else if(uPatternIndex == 32){
+        strength = step(0.01, abs(distance(vUv, vec2(0.5, 0.5)) - 0.25));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 34: white ring with black background
+    else if(uPatternIndex == 33){
+        strength = 1.0 - step(0.01, abs(distance(vUv, vec2(0.5, 0.5)) - 0.25));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
 }

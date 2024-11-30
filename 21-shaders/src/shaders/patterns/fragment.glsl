@@ -223,4 +223,9 @@ void main() {
         strength = lightX * lightY;
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
+    // Pattern 31: White with black circle in center
+    else if(uPatternIndex == 30){
+        strength = step(0.25, distance(vUv, vec2(0.5, 0.5)));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
 }

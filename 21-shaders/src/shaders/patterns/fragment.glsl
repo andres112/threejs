@@ -1,6 +1,12 @@
 uniform int uPatternIndex;
 varying vec2 vUv;
 
+// https://thebookofshaders.com/10/
+// Random number generator. Not exist in glsl a random function, so we use a pseudo-random function
+float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233)) * 43758.5453123));
+}
+
 void main() {
     // NOTE: Use of if conditionals is not recommended in shaders. BAD PERFORMANCE!
     float strength = vUv.x;
@@ -121,4 +127,58 @@ void main() {
         strength *= floor(vUv.y * 10.0) / 10.0;
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
+    // Pattern 21: tv static
+    else if(uPatternIndex == 20) {
+        // slsl does not have a random function, so we use a pseudo-random function
+        strength = random(vUv);
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 22: bigger tv static
+    else if(uPatternIndex == 21) {
+        vec2 gridUv = vec2(floor(vUv.x * 10.0) / 10.0, floor(vUv.y * 10.0) / 10.0);
+        strength = random(gridUv);
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 23: bigger tv static diagonal
+    else if(uPatternIndex == 22) {
+        vec2 gridUv = vec2(floor(vUv.x * 10.0) / 10.0, floor((vUv.y + vUv.x * 0.5) * 10.0) / 10.0);
+        strength = random(gridUv);
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 24: White with black corner
+    else if(uPatternIndex == 23){
+        strength = length(vUv);
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 25: White with black center
+    else if(uPatternIndex == 24){
+        // With length
+        // strength = length(vUv - 0.5);
+        // or with distance
+        strength = distance(vUv, vec2(0.5, 0.5));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 26: White with white circle center
+    else if(uPatternIndex == 25){
+        strength = 1.0 - distance(vUv, vec2(0.5, 0.5));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 27: Black with white small point center
+    else if(uPatternIndex == 26){
+        strength = 0.02 / distance(vUv, vec2(0.5, 0.5));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 28: Black with white small oval center
+    else if(uPatternIndex == 27){
+        // oval point: modify the x coordinate to make it oval
+        // and the y coordinate to move it to the center
+        vec2 ovalPoint = vec2(
+            vUv.x, 
+            (vUv.y - 0.5) * 5.0 + 0.5
+        );
+        strength = 0.2 / distance(ovalPoint, vec2(0.5, 0.5) );
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 29: Black with white start in center
+    else if(u) 
 }

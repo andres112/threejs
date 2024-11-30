@@ -91,7 +91,10 @@ const patternOptions = {};
 for (let i = 0; i < 50; i++) {
   patternOptions[`Pattern ${i + 1}`] = i;
 }
+patternOptions['auto'] = false;
+
 patternFolder.add(patternMaterial.uniforms.uPatternIndex, 'value', patternOptions).name('Pattern');
+patternFolder.add(patternOptions, 'auto').name('Auto change')
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
@@ -161,6 +164,13 @@ const tick = () => {
 
   // uUpdate material
   material.uniforms.uTime.value = elapsedTime;
+
+  // change patternMaterial.uniforms.uPatternIndex every 2 seconds from 0 to 34 and repeat
+  if (patternOptions.auto) {
+    const patternIndex = Math.floor(elapsedTime ) % 50;
+    patternMaterial.uniforms.uPatternIndex.value = patternIndex > 34 ? 0 : patternIndex;
+    console.log("Pattern Index", patternMaterial.uniforms.uPatternIndex.value);
+  }
 
   // Update controls
   controls.update();

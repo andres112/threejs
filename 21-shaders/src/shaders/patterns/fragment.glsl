@@ -180,5 +180,19 @@ void main() {
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 29: Black with white start in center
-    else if(u) 
+    else if(uPatternIndex == 28){
+        vec2 lightUvX = vec2(
+            vUv.x, 
+            (vUv.y - 0.5) * 5.0 + 0.5
+        );
+        float lightX = 0.2 / distance(lightUvX, vec2(0.5, 0.5));
+        vec2 lightUvY = vec2(
+            (vUv.x - 0.5) * 5.0 + 0.5, 
+            vUv.y
+        );
+        float lightY = 0.2 / distance(lightUvY, vec2(0.5, 0.5));
+
+        strength = lightX * lightY;
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
 }

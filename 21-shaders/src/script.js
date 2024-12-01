@@ -87,13 +87,18 @@ const patternMaterial = new THREE.ShaderMaterial({
 const patternFolder = gui.addFolder('Pattern');
 
 // Add pattern index to the GUI
-const patternOptions = {};
+const patternOptions = {
+  patterns:{},
+  currentPattern: 0,
+  auto: false,
+};
 for (let i = 0; i < 50; i++) {
-  patternOptions[`Pattern ${i + 1}`] = i;
+  patternOptions.patterns[`Pattern ${i + 1}`] = i;
 }
-patternOptions['auto'] = false;
 
-patternFolder.add(patternMaterial.uniforms.uPatternIndex, 'value', patternOptions).name('Pattern');
+patternFolder.add(patternOptions, 'currentPattern').options(patternOptions.patterns).name('Pattern').onChange(() => {
+  patternMaterial.uniforms.uPatternIndex.value = patternOptions.currentPattern;
+});
 patternFolder.add(patternOptions, 'auto').name('Auto change')
 
 // Mesh
@@ -167,7 +172,8 @@ const tick = () => {
 
   // change patternMaterial.uniforms.uPatternIndex every 2 seconds from 0 to 34 and repeat
   if (patternOptions.auto) {
-    patternMaterial.uniforms.uPatternIndex.value = Math.floor(elapsedTime ) % 38;
+    patternMaterial.uniforms.uPatternIndex.value = Math.floor(elapsedTime / 2) % 43;
+    patternOptions.currentPattern = patternMaterial.uniforms.uPatternIndex.value;
   }
 
   // Update controls

@@ -293,6 +293,6 @@ void main() {
      else if(uPatternIndex == 40) {
         float angle = atan(vUv.x - 0.5, vUv.y - 0.5) / (PI * 2.0) + 0.5;
         strength = sin(angle * 100.0);
-        gl_FragColor = vec4(vec3(strength), 1.0);
+        gl_FragColor = vec4(vec3(strength) * vec3(1.0, 1.0, 0.0), 1.0);
     }
 }

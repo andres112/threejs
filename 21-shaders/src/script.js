@@ -170,9 +170,9 @@ const tick = () => {
   // uUpdate material
   material.uniforms.uTime.value = elapsedTime;
 
-  // change patternMaterial.uniforms.uPatternIndex every 2 seconds from 0 to 34 and repeat
+  // change patternMaterial.uniforms.uPatternIndex every 1 second from 0 to 34 and repeat
   if (patternOptions.auto) {
-    patternMaterial.uniforms.uPatternIndex.value = Math.floor(elapsedTime / 2) % 43;
+    patternMaterial.uniforms.uPatternIndex.value = Math.floor(elapsedTime) % 43;
     patternOptions.currentPattern = patternMaterial.uniforms.uPatternIndex.value;
   }
 

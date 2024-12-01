@@ -92,7 +92,7 @@ const patternOptions = {
   currentPattern: 0,
   auto: false,
 };
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 46; i++) {
   patternOptions.patterns[`Pattern ${i + 1}`] = i;
 }
 
@@ -172,7 +172,7 @@ const tick = () => {
 
   // change patternMaterial.uniforms.uPatternIndex every 1 second from 0 to 34 and repeat
   if (patternOptions.auto) {
-    patternMaterial.uniforms.uPatternIndex.value = Math.floor(elapsedTime) % 43;
+    patternMaterial.uniforms.uPatternIndex.value = Math.floor(elapsedTime) % 46;
     patternOptions.currentPattern = patternMaterial.uniforms.uPatternIndex.value;
   }
 

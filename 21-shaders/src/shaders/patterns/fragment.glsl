@@ -109,7 +109,11 @@ void main() {
     else if(uPatternIndex == 9) {
         strength = step(0.8, mod(vUv.x * 10.0, 1.0));
         strength += step(0.8, mod(vUv.y * 10.0, 1.0));
-        gl_FragColor = vec4(vec3(strength), 1.0);
+        strength = clamp(strength, 0.0,  1.0); // limit the value of strength between 0.0 and 1.0
+        vec3 blackColor = vec3(0.0);
+        vec3 uVColor = vec3(vUv, 0.8);
+        vec3 mixedColor = mix(blackColor, uVColor, strength);
+        gl_FragColor = vec4(vec3(mixedColor), 1.0);
     }
     // Pattern 11: Dots
     else if(uPatternIndex == 10) {

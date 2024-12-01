@@ -9,49 +9,50 @@ float random(vec2 st) {
 
 // Rotation function. Not exist, therefore is required to create it.
 vec2 rotate(vec2 uv, float rotation, vec2 mid) {
-    return vec2(
-        cos(rotation) * (uv.x - mid.x) - sin(rotation) * (uv.y - mid.y) + mid.x,
-        sin(rotation) * (uv.x - mid.x) + cos(rotation) * (uv.y - mid.y) + mid.y
-    );
+    return vec2(cos(rotation) * (uv.x - mid.x) - sin(rotation) * (uv.y - mid.y) + mid.x, sin(rotation) * (uv.x - mid.x) + cos(rotation) * (uv.y - mid.y) + mid.y);
 }
 
 //	Classic Perlin 2D Noise 
 //	by Stefan Gustavson (https://github.com/stegu/webgl-noise)
 //
-vec2 fade(vec2 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
-vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
+vec2 fade(vec2 t) {
+    return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+}
+vec4 permute(vec4 x) {
+    return mod(((x * 34.0) + 1.0) * x, 289.0);
+}
 
-float cnoise(vec2 P){
-  vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
-  vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
-  Pi = mod(Pi, 289.0); // To avoid truncation effects in permutation
-  vec4 ix = Pi.xzxz;
-  vec4 iy = Pi.yyww;
-  vec4 fx = Pf.xzxz;
-  vec4 fy = Pf.yyww;
-  vec4 i = permute(permute(ix) + iy);
-  vec4 gx = 2.0 * fract(i * 0.0243902439) - 1.0; // 1/41 = 0.024...
-  vec4 gy = abs(gx) - 0.5;
-  vec4 tx = floor(gx + 0.5);
-  gx = gx - tx;
-  vec2 g00 = vec2(gx.x,gy.x);
-  vec2 g10 = vec2(gx.y,gy.y);
-  vec2 g01 = vec2(gx.z,gy.z);
-  vec2 g11 = vec2(gx.w,gy.w);
-  vec4 norm = 1.79284291400159 - 0.85373472095314 * 
-    vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));
-  g00 *= norm.x;
-  g01 *= norm.y;
-  g10 *= norm.z;
-  g11 *= norm.w;
-  float n00 = dot(g00, vec2(fx.x, fy.x));
-  float n10 = dot(g10, vec2(fx.y, fy.y));
-  float n01 = dot(g01, vec2(fx.z, fy.z));
-  float n11 = dot(g11, vec2(fx.w, fy.w));
-  vec2 fade_xy = fade(Pf.xy);
-  vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
-  float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
-  return 2.3 * n_xy;
+float cnoise(vec2 P) {
+    vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
+    vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
+    Pi = mod(Pi, 289.0); // To avoid truncation effects in permutation
+    vec4 ix = Pi.xzxz;
+    vec4 iy = Pi.yyww;
+    vec4 fx = Pf.xzxz;
+    vec4 fy = Pf.yyww;
+    vec4 i = permute(permute(ix) + iy);
+    vec4 gx = 2.0 * fract(i * 0.0243902439) - 1.0; // 1/41 = 0.024...
+    vec4 gy = abs(gx) - 0.5;
+    vec4 tx = floor(gx + 0.5);
+    gx = gx - tx;
+    vec2 g00 = vec2(gx.x, gy.x);
+    vec2 g10 = vec2(gx.y, gy.y);
+    vec2 g01 = vec2(gx.z, gy.z);
+    vec2 g11 = vec2(gx.w, gy.w);
+    vec4 norm = 1.79284291400159 - 0.85373472095314 *
+        vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));
+    g00 *= norm.x;
+    g01 *= norm.y;
+    g10 *= norm.z;
+    g11 *= norm.w;
+    float n00 = dot(g00, vec2(fx.x, fy.x));
+    float n10 = dot(g10, vec2(fx.y, fy.y));
+    float n01 = dot(g01, vec2(fx.z, fy.z));
+    float n11 = dot(g11, vec2(fx.w, fy.w));
+    vec2 fade_xy = fade(Pf.xy);
+    vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
+    float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
+    return 2.3 * n_xy;
 }
 
 // Const in glsl
@@ -196,12 +197,12 @@ void main() {
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 24: White with black corner
-    else if(uPatternIndex == 23){
+    else if(uPatternIndex == 23) {
         strength = length(vUv);
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 25: White with black center
-    else if(uPatternIndex == 24){
+    else if(uPatternIndex == 24) {
         // With length
         // strength = length(vUv - 0.5);
         // or with distance
@@ -209,109 +210,88 @@ void main() {
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 26: White with white circle center
-    else if(uPatternIndex == 25){
+    else if(uPatternIndex == 25) {
         strength = 1.0 - distance(vUv, vec2(0.5, 0.5));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 27: Black with white small point center
-    else if(uPatternIndex == 26){
+    else if(uPatternIndex == 26) {
         strength = 0.02 / distance(vUv, vec2(0.5, 0.5));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 28: Black with white small oval center
-    else if(uPatternIndex == 27){
+    else if(uPatternIndex == 27) {
         // oval point: modify the x coordinate to make it oval
         // and the y coordinate to move it to the center
-        vec2 ovalPoint = vec2(
-            vUv.x, 
-            (vUv.y - 0.5) * 5.0 + 0.5
-        );
-        strength = 0.2 / distance(ovalPoint, vec2(0.5, 0.5) );
+        vec2 ovalPoint = vec2(vUv.x, (vUv.y - 0.5) * 5.0 + 0.5);
+        strength = 0.2 / distance(ovalPoint, vec2(0.5, 0.5));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 29: Black with white cross in center
-    else if(uPatternIndex == 28){
-        vec2 lightUvX = vec2(
-            vUv.x, 
-            (vUv.y - 0.5) * 5.0 + 0.5
-        );
+    else if(uPatternIndex == 28) {
+        vec2 lightUvX = vec2(vUv.x, (vUv.y - 0.5) * 5.0 + 0.5);
         float lightX = 0.2 / distance(lightUvX, vec2(0.5, 0.5));
-        vec2 lightUvY = vec2(
-            (vUv.x - 0.5) * 5.0 + 0.5, 
-            vUv.y
-        );
+        vec2 lightUvY = vec2((vUv.x - 0.5) * 5.0 + 0.5, vUv.y);
         float lightY = 0.2 / distance(lightUvY, vec2(0.5, 0.5));
 
         strength = lightX * lightY;
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 30: Black with white rotated cross in center
-    else if(uPatternIndex == 29){
+    else if(uPatternIndex == 29) {
         vec2 rotatedUv = rotate(vUv, PI * 0.25, vec2(0.5));
-        vec2 lightUvX = vec2(
-            rotatedUv.x, 
-            (rotatedUv.y - 0.5) * 5.0 + 0.5
-        );
+        vec2 lightUvX = vec2(rotatedUv.x, (rotatedUv.y - 0.5) * 5.0 + 0.5);
         float lightX = 0.2 / distance(lightUvX, vec2(0.5, 0.5));
-        vec2 lightUvY = vec2(
-            (rotatedUv.x - 0.5) * 5.0 + 0.5, 
-            rotatedUv.y
-        );
+        vec2 lightUvY = vec2((rotatedUv.x - 0.5) * 5.0 + 0.5, rotatedUv.y);
         float lightY = 0.2 / distance(lightUvY, vec2(0.5, 0.5));
 
         strength = lightX * lightY;
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 31: White with black circle in center
-    else if(uPatternIndex == 30){
+    else if(uPatternIndex == 30) {
         strength = step(0.25, distance(vUv, vec2(0.5, 0.5)));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 32: black ring with gradient
-    else if(uPatternIndex == 31){
+    else if(uPatternIndex == 31) {
         strength = abs(distance(vUv, vec2(0.5, 0.5)) - 0.25);
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 33: black ring with white background
-    else if(uPatternIndex == 32){
+    else if(uPatternIndex == 32) {
         strength = step(0.01, abs(distance(vUv, vec2(0.5, 0.5)) - 0.25));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 34: white ring with black background
-    else if(uPatternIndex == 33){
+    else if(uPatternIndex == 33) {
         strength = 1.0 - step(0.01, abs(distance(vUv, vec2(0.5, 0.5)) - 0.25));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 35: Waved ring shape pattern
-    else if(uPatternIndex == 34){
-        vec2 wavedUv = vec2(
-            vUv.x,
-            vUv.y + sin(vUv.x * 40.0) * 0.1
-        );
+    else if(uPatternIndex == 34) {
+        vec2 wavedUv = vec2(vUv.x, vUv.y + sin(vUv.x * 40.0) * 0.1);
         strength = 1.0 - step(0.01, abs(distance(wavedUv, vec2(0.5, 0.5)) - 0.25));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 36: waved ring both axes, varying amplitudes
-    else if(uPatternIndex == 35){
-        vec2 wavedUv = vec2(
-            vUv.x + sin(vUv.y * 100.0) * 0.1,
-            vUv.y + sin(vUv.x * 30.0) * 0.1
-        );
+    else if(uPatternIndex == 35) {
+        vec2 wavedUv = vec2(vUv.x + sin(vUv.y * 100.0) * 0.1, vUv.y + sin(vUv.x * 30.0) * 0.1);
         strength = 1.0 - step(0.01, abs(distance(wavedUv, vec2(0.5, 0.5)) - 0.25));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 37: diagonal generated by arc tangent
-     else if(uPatternIndex == 36) {
+    else if(uPatternIndex == 36) {
         strength = atan(vUv.x, vUv.y);
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 38: diagonal generated by arc tangent with offset
-     else if(uPatternIndex == 37) {
+    else if(uPatternIndex == 37) {
         strength = atan(vUv.x - 0.5, vUv.y - 0.5);
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 39: diagonal generated by arc tangent with offset and 360° rotation
-     else if(uPatternIndex == 38) {
+    else if(uPatternIndex == 38) {
         float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
         angle /= 2.0 * PI;
         angle += 0.5;
@@ -320,7 +300,7 @@ void main() {
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 40: startbust pattern
-     else if(uPatternIndex == 39) {
+    else if(uPatternIndex == 39) {
         float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
         angle /= 2.0 * PI;
         angle += 0.5;
@@ -329,7 +309,7 @@ void main() {
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 41: Sun pattern
-     else if(uPatternIndex == 40) {
+    else if(uPatternIndex == 40) {
         float angle = atan(vUv.x - 0.5, vUv.y - 0.5) / (PI * 2.0) + 0.5;
         strength = sin(angle * 100.0);
         gl_FragColor = vec4(vec3(strength) * vec3(1.0, 1.0, 0.0), 1.0); // * vec3(1.0, 1.0, 0.0) color yellow
@@ -343,20 +323,20 @@ void main() {
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 43: Perlin noise
-    else if(uPatternIndex == 42){
+    else if(uPatternIndex == 42) {
         // use of cnoise function to generate perlin noise
         strength = cnoise(vUv * 20.0);
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
     // Pattern 44: Perlin noise with step
-    else if(uPatternIndex == 43){
+    else if(uPatternIndex == 43) {
         // Define colors for the gradient
         vec3 brown = vec3(0.4, 0.2, 0.1); // Brown color
         vec3 green = vec3(0.2, 0.4, 0.1); // Military green color
 
         // Step to 0.0 due to the cnoise function returns values between -1.0 and 1.0
         strength = step(0.0, cnoise(vUv * 20.0));
-        
+
         // Gradient mapping for green regions
         vec3 gradientColor = mix(brown, green, vUv.y); // Blend brown to green based on vUv.y
 
@@ -365,5 +345,18 @@ void main() {
 
         // Output the color
         gl_FragColor = vec4(finalColor, 1.0);
+    }
+    // Pattern 45: Perlin noise with abs, neon 
+    else if(uPatternIndex == 44) {
+        // color neon orange
+        vec3 orange = vec3(1.0, 0.5, 0.0);
+        strength = 1.0 - abs(cnoise(vUv * 15.0));
+        gl_FragColor = vec4(vec3(strength) * orange, 1.0);
+    }
+    // Pattern 46: Perlin noise with sin
+    else if(uPatternIndex == 45) {
+        vec3 purple = vec3(199.0 / 255.0, 8.0 / 255.0, 253.0 / 255.0);
+        strength = step(0.8, sin(cnoise(vUv * 10.0) * 20.0));
+        gl_FragColor = vec4(vec3(strength) * purple, 1.0);
     }
 }

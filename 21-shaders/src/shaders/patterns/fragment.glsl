@@ -243,4 +243,13 @@ void main() {
         strength = 1.0 - step(0.01, abs(distance(vUv, vec2(0.5, 0.5)) - 0.25));
         gl_FragColor = vec4(vec3(strength), 1.0);
     }
+    // Pattern 35: Waved ring shape pattern
+    else if(uPatternIndex == 34){
+        vec2 wavedUv = vec2(
+            vUv.x,
+            vUv.y + sin(vUv.x * 40.0) * 0.1
+        );
+        strength = 1.0 - step(0.01, abs(distance(wavedUv, vec2(0.5, 0.5)) - 0.25));
+        gl_FragColor = vec4(vec3(strength), 1.0);
+    }
 }

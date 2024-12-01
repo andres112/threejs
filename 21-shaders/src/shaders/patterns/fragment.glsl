@@ -345,7 +345,25 @@ void main() {
     // Pattern 43: Perlin noise
     else if(uPatternIndex == 42){
         // use of cnoise function to generate perlin noise
-        strength = cnoise(vUv * 10.0);
+        strength = cnoise(vUv * 20.0);
         gl_FragColor = vec4(vec3(strength), 1.0);
+    }
+    // Pattern 44: Perlin noise with step
+    else if(uPatternIndex == 43){
+        // Define colors for the gradient
+        vec3 brown = vec3(0.4, 0.2, 0.1); // Brown color
+        vec3 green = vec3(0.2, 0.4, 0.1); // Military green color
+
+        // Step to 0.0 due to the cnoise function returns values between -1.0 and 1.0
+        strength = step(0.0, cnoise(vUv * 20.0));
+        
+        // Gradient mapping for green regions
+        vec3 gradientColor = mix(brown, green, vUv.y); // Blend brown to green based on vUv.y
+
+        // Final color based on the strength
+        vec3 finalColor = mix(vec3(0.0), gradientColor, strength); // Black for strength = 0, gradient for strength = 1
+
+        // Output the color
+        gl_FragColor = vec4(finalColor, 1.0);
     }
 }

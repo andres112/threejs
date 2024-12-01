@@ -355,8 +355,10 @@ void main() {
     }
     // Pattern 46: Perlin noise with sin
     else if(uPatternIndex == 45) {
-        vec3 purple = vec3(199.0 / 255.0, 8.0 / 255.0, 253.0 / 255.0);
         strength = step(0.8, sin(cnoise(vUv * 10.0) * 20.0));
-        gl_FragColor = vec4(vec3(strength) * purple, 1.0);
+        vec3 blackColor = vec3(0.0);
+        vec3 uVColor = vec3(vUv, 1.0);
+        vec3 mixedColor = mix(blackColor, uVColor, strength);
+        gl_FragColor = vec4(vec3(mixedColor), 1.0);
     }
 }

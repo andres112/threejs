@@ -1,6 +1,9 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
+// shaders
+import waterVertexShader from './shaders/water/vertex.glsl'
+import waterFragmentShader from './shaders/water/fragment.glsl'
 
 /**
  * Base
@@ -23,6 +26,8 @@ const waterGeometry = new THREE.PlaneGeometry(2, 2, 128, 128)
 // Material
 // With a default shader material you have a red color, because has a vertex and fragment shader by default
 const waterMaterial = new THREE.ShaderMaterial()
+waterMaterial.vertexShader = waterVertexShader
+waterMaterial.fragmentShader = waterFragmentShader
 
 // Mesh
 const water = new THREE.Mesh(waterGeometry, waterMaterial)

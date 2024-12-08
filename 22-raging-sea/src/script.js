@@ -30,11 +30,14 @@ waterMaterial.vertexShader = waterVertexShader
 waterMaterial.fragmentShader = waterFragmentShader
 waterMaterial.uniforms = {
     uBigWavesElevation: { value: 0.2 },
+    uBigWavesFrequency: { value: new THREE.Vector2(4, 1.5) },
 }
 waterMaterial.transparent = true
 
 // Debug
 gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('wavesElevation')
+gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'x').min(0).max(10).step(0.001).name('wavesFrequencyX')
+gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'y').min(0).max(10).step(0.001).name('wavesFrequencyY')
 
 
 // Mesh

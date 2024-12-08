@@ -1,4 +1,5 @@
 uniform float uBigWavesElevation;
+uniform vec2 uBigWavesFrequency;
 
 void main() {
     // matrices are provided by shadowMapMaterial
@@ -9,8 +10,8 @@ void main() {
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
     // Elevation
-    float elevation = sin(modelPosition.x * 0.1 ) * uBigWavesElevation;
-    modelPosition.z += elevation;
+    float elevation = sin(modelPosition.x * uBigWavesFrequency.x) * sin(modelPosition.z * uBigWavesFrequency.y) * uBigWavesElevation;
+    modelPosition.y += elevation;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;

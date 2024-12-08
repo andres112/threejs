@@ -28,6 +28,14 @@ const waterGeometry = new THREE.PlaneGeometry(2, 2, 128, 128)
 const waterMaterial = new THREE.ShaderMaterial()
 waterMaterial.vertexShader = waterVertexShader
 waterMaterial.fragmentShader = waterFragmentShader
+waterMaterial.uniforms = {
+    uBigWavesElevation: { value: 0.2 },
+}
+waterMaterial.transparent = true
+
+// Debug
+gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('wavesElevation')
+
 
 // Mesh
 const water = new THREE.Mesh(waterGeometry, waterMaterial)

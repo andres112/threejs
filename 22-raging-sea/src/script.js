@@ -21,7 +21,8 @@ const scene = new THREE.Scene()
 const waterGeometry = new THREE.PlaneGeometry(2, 2, 128, 128)
 
 // Material
-const waterMaterial = new THREE.MeshBasicMaterial()
+// With a default shader material you have a red color, because has a vertex and fragment shader by default
+const waterMaterial = new THREE.ShaderMaterial()
 
 // Mesh
 const water = new THREE.Mesh(waterGeometry, waterMaterial)

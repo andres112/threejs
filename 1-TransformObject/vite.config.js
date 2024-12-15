@@ -1,7 +1,7 @@
 export default {
     root: 'src/',
     publicDir: '../static/',
-    base: './',
+    base: './', // Base URL when the app is running in a subdirectory
     server:
     {
         host: true, // Open to local network and display URL

@@ -1,3 +1,5 @@
+#include "perlin_noise.glsl"
+
 uniform float uBigWavesElevation;
 uniform vec2 uBigWavesFrequency;
 uniform float uTime;
@@ -18,6 +20,8 @@ void main() {
     float elevation = sin(modelPosition.x * uBigWavesFrequency.x + uTime * uBigWavesSpeed) *
         sin(modelPosition.z * uBigWavesFrequency.y + uTime * uBigWavesSpeed) *
         uBigWavesElevation;
+    elevation += cnoise(vec3(modelPosition.xz * 2.0, uTime * 0.1));
+
     modelPosition.y += elevation;
 
     vec4 viewPosition = viewMatrix * modelPosition;

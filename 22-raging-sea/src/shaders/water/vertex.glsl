@@ -3,6 +3,9 @@ uniform vec2 uBigWavesFrequency;
 uniform float uTime;
 uniform float uBigWavesSpeed;
 
+// data to be passed to fragment shader
+varying float vElevation;
+
 void main() {
     // matrices are provided by shadowMapMaterial
     // modelMatrix
@@ -12,8 +15,8 @@ void main() {
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
     // Elevation
-    float elevation = sin((modelPosition.x * uBigWavesFrequency.x) + uTime * uBigWavesSpeed) *
-        sin((modelPosition.z * uBigWavesFrequency.y) + uTime * uBigWavesSpeed) *
+    float elevation = sin(modelPosition.x * uBigWavesFrequency.x + uTime * uBigWavesSpeed) *
+        sin(modelPosition.z * uBigWavesFrequency.y + uTime * uBigWavesSpeed) *
         uBigWavesElevation;
     modelPosition.y += elevation;
 
@@ -21,5 +24,8 @@ void main() {
     vec4 projectedPosition = projectionMatrix * viewPosition;
 
     gl_Position = projectedPosition;
+
+    // Varying
+    vElevation = elevation;
 
 }

@@ -41,6 +41,8 @@ waterMaterial.uniforms = {
 
     uDepthColor: { value: new THREE.Color(debugParams.depthColor) },
     uSurfaceColor: { value: new THREE.Color(debugParams.surfaceColor) },
+    uColorOffset: { value: 0.01 },
+    uColorMultiplier: { value: 1.1 },
 }
 waterMaterial.transparent = true
 
@@ -54,7 +56,9 @@ gui.addColor(debugParams, 'depthColor').onChange(() => {
 })
 gui.addColor(debugParams, 'surfaceColor').onChange(() => {
     waterMaterial.uniforms.uSurfaceColor.value.set(debugParams.surfaceColor)
-}) 
+})
+gui.add(waterMaterial.uniforms.uColorOffset, 'value').min(0).max(0.1).step(0.001).name('colorOffset')
+gui.add(waterMaterial.uniforms.uColorMultiplier, 'value').min(0).max(5).step(0.001).name('colorMultiplier')
 
 
 // Mesh
@@ -90,7 +94,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(1, 1, 1)
+camera.position.set(1, 1, 2)
 scene.add(camera)
 
 // Controls

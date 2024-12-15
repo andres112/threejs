@@ -11,7 +11,7 @@ import waterFragmentShader from './shaders/water/fragment.glsl'
 // Debug
 const gui = new GUI({ width: 340 })
 const debugParams = {
-    depthColor: '#186691',
+    depthColor: '#067fc1',
     surfaceColor: '#9bd8ff',
 }
 
@@ -41,8 +41,8 @@ waterMaterial.uniforms = {
 
     uDepthColor: { value: new THREE.Color(debugParams.depthColor) },
     uSurfaceColor: { value: new THREE.Color(debugParams.surfaceColor) },
-    uColorOffset: { value: 0.01 },
-    uColorMultiplier: { value: 1.1 },
+    uColorOffset: { value: 0.02 },
+    uColorMultiplier: { value: 2.0 },
 }
 waterMaterial.transparent = true
 

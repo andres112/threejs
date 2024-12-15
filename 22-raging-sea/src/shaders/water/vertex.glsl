@@ -20,7 +20,8 @@ void main() {
     float elevation = sin(modelPosition.x * uBigWavesFrequency.x + uTime * uBigWavesSpeed) *
         sin(modelPosition.z * uBigWavesFrequency.y + uTime * uBigWavesSpeed) *
         uBigWavesElevation;
-    elevation += cnoise(vec3(modelPosition.xz * 2.0, uTime * 0.1));
+    // use of negative abs to make a peak effect in the perlin noise
+    elevation -= abs(cnoise(vec3(modelPosition.xz * 3.0, uTime * 0.1)) * 0.15);
 
     modelPosition.y += elevation;
 

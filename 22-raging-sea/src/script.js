@@ -39,6 +39,11 @@ waterMaterial.uniforms = {
     uBigWavesFrequency: { value: new THREE.Vector2(4, 1.5) },
     uBigWavesSpeed: { value: 0.75 },
 
+    uSmallWavesElevation: { value: 0.15 },
+    uSmallWavesFrequency: { value: 3.0 },
+    uSmallWavesSpeed: { value: 0.2 },
+    uSmallWavesIterations: { value: 5 },
+
     uDepthColor: { value: new THREE.Color(debugParams.depthColor) },
     uSurfaceColor: { value: new THREE.Color(debugParams.surfaceColor) },
     uColorOffset: { value: 0.02 },
@@ -50,7 +55,7 @@ waterMaterial.transparent = true
 gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('wavesElevation')
 gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'x').min(0).max(10).step(0.001).name('wavesFrequencyX')
 gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'y').min(0).max(10).step(0.001).name('wavesFrequencyY')
-gui.add(waterMaterial.uniforms.uBigWavesSpeed, 'value').min(0).max(4).step(0.001).name('wavesSpeed')
+gui.add(waterMaterial.uniforms.uBigWavesSpeed, 'value').min(0).max(10).step(0.001).name('wavesSpeed')
 gui.addColor(debugParams, 'depthColor').onChange(() => {
     waterMaterial.uniforms.uDepthColor.value.set(debugParams.depthColor)
 })
@@ -59,6 +64,11 @@ gui.addColor(debugParams, 'surfaceColor').onChange(() => {
 })
 gui.add(waterMaterial.uniforms.uColorOffset, 'value').min(0).max(0.1).step(0.001).name('colorOffset')
 gui.add(waterMaterial.uniforms.uColorMultiplier, 'value').min(0).max(5).step(0.001).name('colorMultiplier')
+
+gui.add(waterMaterial.uniforms.uSmallWavesElevation, 'value').min(0).max(1).step(0.001).name('smallWavesElevation')
+gui.add(waterMaterial.uniforms.uSmallWavesFrequency, 'value').min(0).max(30).step(0.001).name('smallWavesFrequency')
+gui.add(waterMaterial.uniforms.uSmallWavesSpeed, 'value').min(0).max(4).step(0.001).name('smallWavesSpeed')
+gui.add(waterMaterial.uniforms.uSmallWavesIterations, 'value').min(0).max(5).step(1).name('smallWavesIterations')
 
 
 // Mesh

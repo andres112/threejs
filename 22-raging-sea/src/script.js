@@ -52,23 +52,27 @@ waterMaterial.uniforms = {
 waterMaterial.transparent = true
 
 // Debug
-gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('wavesElevation')
-gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'x').min(0).max(10).step(0.001).name('wavesFrequencyX')
-gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'y').min(0).max(10).step(0.001).name('wavesFrequencyY')
-gui.add(waterMaterial.uniforms.uBigWavesSpeed, 'value').min(0).max(10).step(0.001).name('wavesSpeed')
-gui.addColor(debugParams, 'depthColor').onChange(() => {
+const wavesFolder = gui.addFolder('Waves')
+wavesFolder.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('wavesElevation')
+wavesFolder.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'x').min(0).max(10).step(0.001).name('wavesFrequencyX')
+wavesFolder.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'y').min(0).max(10).step(0.001).name('wavesFrequencyY')
+wavesFolder.add(waterMaterial.uniforms.uBigWavesSpeed, 'value').min(0).max(10).step(0.001).name('wavesSpeed')
+
+const colorFolder = gui.addFolder('Color')
+colorFolder.addColor(debugParams, 'depthColor').onChange(() => {
     waterMaterial.uniforms.uDepthColor.value.set(debugParams.depthColor)
 })
-gui.addColor(debugParams, 'surfaceColor').onChange(() => {
+colorFolder.addColor(debugParams, 'surfaceColor').onChange(() => {
     waterMaterial.uniforms.uSurfaceColor.value.set(debugParams.surfaceColor)
 })
-gui.add(waterMaterial.uniforms.uColorOffset, 'value').min(0).max(0.1).step(0.001).name('colorOffset')
-gui.add(waterMaterial.uniforms.uColorMultiplier, 'value').min(0).max(5).step(0.001).name('colorMultiplier')
+colorFolder.add(waterMaterial.uniforms.uColorOffset, 'value').min(0).max(0.1).step(0.001).name('colorOffset')
+colorFolder.add(waterMaterial.uniforms.uColorMultiplier, 'value').min(0).max(5).step(0.001).name('colorMultiplier')
 
-gui.add(waterMaterial.uniforms.uSmallWavesElevation, 'value').min(0).max(1).step(0.001).name('smallWavesElevation')
-gui.add(waterMaterial.uniforms.uSmallWavesFrequency, 'value').min(0).max(30).step(0.001).name('smallWavesFrequency')
-gui.add(waterMaterial.uniforms.uSmallWavesSpeed, 'value').min(0).max(4).step(0.001).name('smallWavesSpeed')
-gui.add(waterMaterial.uniforms.uSmallWavesIterations, 'value').min(0).max(5).step(1).name('smallWavesIterations')
+const perlinNoiseFolder = gui.addFolder('Perlin Noise')
+perlinNoiseFolder.add(waterMaterial.uniforms.uSmallWavesElevation, 'value').min(0).max(1).step(0.001).name('smallWavesElevation')
+perlinNoiseFolder.add(waterMaterial.uniforms.uSmallWavesFrequency, 'value').min(0).max(30).step(0.001).name('smallWavesFrequency')
+perlinNoiseFolder.add(waterMaterial.uniforms.uSmallWavesSpeed, 'value').min(0).max(4).step(0.001).name('smallWavesSpeed')
+perlinNoiseFolder.add(waterMaterial.uniforms.uSmallWavesIterations, 'value').min(0).max(5).step(1).name('smallWavesIterations')
 
 
 // Mesh

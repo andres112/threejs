@@ -201,7 +201,7 @@ gui
  */
 const gltfLoader = new GLTFLoader();
 let model;
-gltfLoader.load('/models/Duck/glTF-Binary/Duck.glb', (gltf) => {
+gltfLoader.load('models/Duck/glTF-Binary/Duck.glb', (gltf) => {
   model = gltf.scene;
   model.scale.set(1, 1, 1);
   model.position.set(0, -3, 0);

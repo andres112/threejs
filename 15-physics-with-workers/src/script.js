@@ -106,7 +106,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Environment map
  */
 const rgbeloader = new RGBELoader();
-rgbeloader.load('/textures/environmentMap/2k.hdr', (envMap) => {
+rgbeloader.load('textures/environmentMap/2k.hdr', (envMap) => {
   envMap.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = envMap;
   scene.environment = envMap;

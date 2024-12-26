@@ -37,7 +37,7 @@ const axesHelper = new THREE.AxesHelper(1);
 const textureLoader = new THREE.TextureLoader();
 const matcapTextures = [];
 for (let i = 0; i < 9; i++) {
-  const texture = textureLoader.load(`/textures/matcaps/${i}.png`);
+  const texture = textureLoader.load(`./textures/matcaps/${i}.png`);
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
   matcapTextures.push(texture);
   //   matcapTextures[i].colorSpace = THREE.sRGBEncoding;
@@ -48,7 +48,7 @@ for (let i = 0; i < 9; i++) {
  */
 const fontLoader = new FontLoader();
 const BEVEL_SIZE = 0.02;
-fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
+fontLoader.load('./fonts/helvetiker_regular.typeface.json', (font) => {
   // date in format 'YYYY-MM-DD'
   const date = new Date().toISOString().split('T')[0];
   const textGeometry = new TextGeometry(date, {

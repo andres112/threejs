@@ -21,8 +21,8 @@ const scene = new THREE.Scene();
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
-const particleTexture = textureLoader.load('/textures/particles/9.png');
-const sunTexture = textureLoader.load('/textures/2k_sun.jpg');
+const particleTexture = textureLoader.load('textures/particles/9.png');
+const sunTexture = textureLoader.load('textures/2k_sun.jpg');
 sunTexture.colorSpace = THREE.SRGBColorSpace;
 
 /**
@@ -52,7 +52,7 @@ const armOffset = Math.PI; // Offset for the second arm
 
 for (let i = 0; i < count * 0.5; i++) {
   const angle = spiralTurns * Math.PI * 2 * (i / (count * 0.5));
-  const radius = maxRadius * Math.sqrt((3*i) / (count * 0.5)); // Logarithmic spiral
+  const radius = maxRadius * Math.sqrt((3 * i) / (count * 0.5)); // Logarithmic spiral
   const randomFactor = (Math.random() - 0.5) * 0.5;
 
   // First arm

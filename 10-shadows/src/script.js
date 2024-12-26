@@ -137,25 +137,25 @@ const modifyTexture = (texture) => {
 };
 
 const textureLoader = new THREE.TextureLoader();
-const brainColorTexture = textureLoader.load('/textures/brain/basecolor.png');
+const brainColorTexture = textureLoader.load('./textures/brain/basecolor.png');
 modifyTexture(brainColorTexture);
 brainColorTexture.magFilter = brainColorTexture.minFilter = THREE.NearestFilter;
 brainColorTexture.mipmaps = false;
-const brainNormalTexture = textureLoader.load('/textures/brain/normal.png');
+const brainNormalTexture = textureLoader.load('./textures/brain/normal.png');
 modifyTexture(brainNormalTexture);
-const brainRoughnessTexture = textureLoader.load('/textures/brain/roughness.png');
+const brainRoughnessTexture = textureLoader.load('./textures/brain/roughness.png');
 modifyTexture(brainRoughnessTexture);
-const brainAmbientOcclusionTexture = textureLoader.load('/textures/brain/ambientOcclusion.png');
+const brainAmbientOcclusionTexture = textureLoader.load('./textures/brain/ambientOcclusion.png');
 modifyTexture(brainAmbientOcclusionTexture);
-const brainHeightTexture = textureLoader.load('/textures/brain/height.png');
+const brainHeightTexture = textureLoader.load('./textures/brain/height.png');
 modifyTexture(brainHeightTexture);
 
 // Backed texture. MapCap texture
-const backedTexture = textureLoader.load('/textures/bakedShadow.jpg');
+const backedTexture = textureLoader.load('./textures/bakedShadow.jpg');
 backedTexture.colorSpace = THREE.SRGBColorSpace;
 
 // Simple shadow texture
-const simpleShadowTexture = textureLoader.load('/textures/simpleShadow.jpg');
+const simpleShadowTexture = textureLoader.load('./textures/simpleShadow.jpg');
 simpleShadowTexture.colorSpace = THREE.SRGBColorSpace;
 
 /**

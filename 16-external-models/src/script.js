@@ -31,15 +31,15 @@ helperFolder.add(axesHelper, 'visible').name('Axes Helper');
  */
 const gltfLoader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
-// move from node_modules three/examples/js/libs/draco/ to /draco/ in static folder
-dracoLoader.setDecoderPath('/draco/');
+// move from node_modules three/examples/js/libs/draco/ to draco/ in static folder
+dracoLoader.setDecoderPath('draco/');
 
 // Set the loader to be used by the gltfLoader
 gltfLoader.setDRACOLoader(dracoLoader);
 
 // FlightHelmet model
 gltfLoader.load(
-  '/models/FlightHelmet/glTF/helmet.gltf',
+  'models/FlightHelmet/glTF/helmet.gltf',
   (gltf) => {
     console.log('FlightHelmet', gltf);
 
@@ -67,7 +67,7 @@ gltfLoader.load(
 );
 
 // Biomechanical Mutant model 1
-gltfLoader.load('/models/Biomech_Mutant/Skin_1/Biomech_Mutant_Skin_1.gltf', (gltf) => {
+gltfLoader.load('models/Biomech_Mutant/Skin_1/Biomech_Mutant_Skin_1.gltf', (gltf) => {
   console.log('Biomech_Mutant_Skin_1', gltf);
 
   // the model is in the gltf.scene property
@@ -81,7 +81,7 @@ gltfLoader.load('/models/Biomech_Mutant/Skin_1/Biomech_Mutant_Skin_1.gltf', (glt
 });
 
 // Biomechanical Mutant model 2
-gltfLoader.load('/models/Biomech_Mutant/Skin_2/Biomech_Mutant_Skin_2.gltf', (gltf) => {
+gltfLoader.load('models/Biomech_Mutant/Skin_2/Biomech_Mutant_Skin_2.gltf', (gltf) => {
   console.log('Biomech_Mutant_Skin_2', gltf);
 
   // the model is in the gltf.scene property
@@ -96,7 +96,7 @@ gltfLoader.load('/models/Biomech_Mutant/Skin_2/Biomech_Mutant_Skin_2.gltf', (glt
 
 // Draco compression version of model - Is the most light model
 // Duck model
-gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
+gltfLoader.load('models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
   console.log('Duck', gltf);
 
   // the model is in the gltf.scene property
@@ -110,7 +110,7 @@ gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
 });
 
 // External model Created with Blender by Myself - LESSON 23
-gltfLoader.load('/models/hamburger.glb', (gltf) => {
+gltfLoader.load('models/hamburger.glb', (gltf) => {
   console.log('Hamburger', gltf);
   gltf.scene.scale.setScalar(0.05);
   gltf.scene.position.set(-3, -0.1, 2);
@@ -124,7 +124,7 @@ gltfLoader.load('/models/hamburger.glb', (gltf) => {
 let mixer = null;
 let fox;
 //Animated model - Fox
-gltfLoader.load('/models/Fox/glTF/Fox.gltf', (gltf) => {
+gltfLoader.load('models/Fox/glTF/Fox.gltf', (gltf) => {
   fox = gltf;
   console.log('Fox', gltf);
 

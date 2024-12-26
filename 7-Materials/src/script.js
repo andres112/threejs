@@ -24,34 +24,34 @@ const scene = new THREE.Scene()
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
-const metalColorTexture = textureLoader.load('/textures/metal/basecolor.png')
-const metalAlphaTexture = textureLoader.load('/textures/metal/opacity.png')
-const metalAmbientOcclusionTexture = textureLoader.load('/textures/metal/ambientOcclusion.png')
-const metalHeightTexture = textureLoader.load('/textures/metal/height.png')
-const metalNormalTexture = textureLoader.load('/textures/metal/normal.png')
-const metalMetalnessTexture = textureLoader.load('/textures/metal/metallic.png')
-const metalRoughnessTexture = textureLoader.load('/textures/metal/roughness.png')
+const metalColorTexture = textureLoader.load('./textures/metal/basecolor.png')
+const metalAlphaTexture = textureLoader.load('./textures/metal/opacity.png')
+const metalAmbientOcclusionTexture = textureLoader.load('./textures/metal/ambientOcclusion.png')
+const metalHeightTexture = textureLoader.load('./textures/metal/height.png')
+const metalNormalTexture = textureLoader.load('./textures/metal/normal.png')
+const metalMetalnessTexture = textureLoader.load('./textures/metal/metallic.png')
+const metalRoughnessTexture = textureLoader.load('./textures/metal/roughness.png')
 
-const rusticColorTexture = textureLoader.load('/textures/rustic/basecolor.jpg')
-const rusticAmbientOcclusionTexture = textureLoader.load('/textures/rustic/ambientOcclusion.jpg')
-const rusticNormalTexture = textureLoader.load('/textures/rustic/normal.jpg')
-const rusticRoughnessTexture = textureLoader.load('/textures/rustic/roughness.jpg')
-const rusticHeightTexture = textureLoader.load('/textures/rustic/height.jpg')
-const rusticMetalnessTexture = textureLoader.load('/textures/rustic/metallic.jpg')
+const rusticColorTexture = textureLoader.load('./textures/rustic/basecolor.jpg')
+const rusticAmbientOcclusionTexture = textureLoader.load('./textures/rustic/ambientOcclusion.jpg')
+const rusticNormalTexture = textureLoader.load('./textures/rustic/normal.jpg')
+const rusticRoughnessTexture = textureLoader.load('./textures/rustic/roughness.jpg')
+const rusticHeightTexture = textureLoader.load('./textures/rustic/height.jpg')
+const rusticMetalnessTexture = textureLoader.load('./textures/rustic/metallic.jpg')
 
-const fabricColorTexture = textureLoader.load('/textures/fabric/basecolor.jpg')
-const fabricAmbientOcclusionTexture = textureLoader.load('/textures/fabric/ambientOcclusion.jpg')
-const fabricNormalTexture = textureLoader.load('/textures/fabric/normal.jpg')
-const fabricRoughnessTexture = textureLoader.load('/textures/fabric/roughness.jpg')
-const fabricHeightTexture = textureLoader.load('/textures/fabric/height.jpg')
+const fabricColorTexture = textureLoader.load('./textures/fabric/basecolor.jpg')
+const fabricAmbientOcclusionTexture = textureLoader.load('./textures/fabric/ambientOcclusion.jpg')
+const fabricNormalTexture = textureLoader.load('./textures/fabric/normal.jpg')
+const fabricRoughnessTexture = textureLoader.load('./textures/fabric/roughness.jpg')
+const fabricHeightTexture = textureLoader.load('./textures/fabric/height.jpg')
 
 // Material Capture
 /**
  - Static Lighting: Since the lighting is pre-baked into the texture, it does not change dynamically with the scene lighting or object movement.
  - Specific Use Cases: Best suited for scenarios where a consistent appearance is desired, rather than dynamic and realistic lighting effects.
  */
-const matcapTexture = textureLoader.load('/textures/matcaps/9.png')
-const gradientTexture = textureLoader.load('/textures/gradients/5.jpg')
+const matcapTexture = textureLoader.load('./textures/matcaps/9.png')
+const gradientTexture = textureLoader.load('./textures/gradients/5.jpg')
 
 // map and matcap types require the colorSpace to be set to SRGBColorSpace
 metalColorTexture.colorSpace = THREE.SRGBColorSpace
@@ -304,7 +304,7 @@ matcapGroup.add(tweaks, 'matcap', {
 }).name('MatCap').onChange(() => {
     matcapTexture.dispose()
     // Load the new texture and then update the material
-    textureLoader.load(`/textures/matcaps/${tweaks.matcap}.png`, function(loadedTexture) {
+    textureLoader.load(`./textures/matcaps/${tweaks.matcap}.png`, function(loadedTexture) {
         matcapTexture.image = loadedTexture.image;
         matcapTexture.needsUpdate = true;
     });
@@ -347,7 +347,7 @@ gui
  * Environment map
  */
 const rgbeloader = new RGBELoader()
-rgbeloader.load('/textures/environmentMap/2k.hdr', (envMap) => {
+rgbeloader.load('./textures/environmentMap/2k.hdr', (envMap) => {
     envMap.mapping = THREE.EquirectangularReflectionMapping
     scene.background = envMap
     scene.environment = envMap

@@ -13,7 +13,19 @@ export default {
     {
         outDir: '../dist', // Output in the dist/ folder
         emptyOutDir: true, // Empty the folder first
-        sourcemap: true // Add sourcemap
+        sourcemap: true, // Add sourcemap
+        assetsInlineLimit: 0, // Ensure all assets are written to files, not inlined
+        rollupOptions: {
+            output: {
+                assetFileNames: (assetInfo) => {
+                    // Ensure assets (like textures) are placed correctly
+                    if (/textures/.test(assetInfo.name)) {
+                        return 'textures/[name][extname]';
+                    }
+                    return 'assets/[name][extname]';
+                },
+            },
+        },
     },
     plugins:
     [

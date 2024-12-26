@@ -14,7 +14,7 @@ export const createParticles = (isUpdate = false): THREE.Points => {
   const colors = new Float32Array(parameters.particlesCount * 3);
   const colorParticles = new THREE.Color(parameters.materialColor);
 
-  const particleTexture = new THREE.TextureLoader().load('/textures/particles/3.png');
+  const particleTexture = new THREE.TextureLoader().load('textures/particles/3.png');
 
   for (let i = 0; i < parameters.particlesCount; i++) {
     const i3 = i * 3;

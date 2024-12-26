@@ -4,7 +4,7 @@ import { parameters, textureLoader } from './app';
 export class CustomMesh extends THREE.Mesh {
   constructor() {
     super();
-    const gradientTexture = textureLoader.load('/textures/gradients/3.jpg');
+    const gradientTexture = textureLoader.load('textures/gradients/3.jpg');
     gradientTexture.magFilter = THREE.NearestFilter;
     this.material = new THREE.MeshToonMaterial({
       color: parameters.materialColor,

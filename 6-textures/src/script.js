@@ -31,7 +31,7 @@ loadingManager.onError = (error) => {
 // One textureLoader can load multiple textures
 const textureLLoader = new THREE.TextureLoader(loadingManager);
 const colorTexture = textureLLoader.load(
-  '/textures/wall/basecolor.jpg'
+  './textures/wall/basecolor.jpg'
   // Control the loading process with callbacks. But the LoadingManager is more powerful
   //   () => {
   //     console.log('loaded');
@@ -43,10 +43,10 @@ const colorTexture = textureLLoader.load(
   //     console.log('error');
   //   }
 );
-// const ambientOcclusionTexture = textureLLoader.load('/textures/wall/ambientOcclusion.jpg');
-// const heightTexture = textureLLoader.load('/textures/wall/height.png');
-// const normalTexture = textureLLoader.load('/textures/wall/normal.jpg');
-// const roughnessTexture = textureLLoader.load('/textures/wall/roughness.jpg');
+// const ambientOcclusionTexture = textureLLoader.load('./textures/wall/ambientOcclusion.jpg');
+// const heightTexture = textureLLoader.load('./textures/wall/height.png');
+// const normalTexture = textureLLoader.load('./textures/wall/normal.jpg');
+// const roughnessTexture = textureLLoader.load('./textures/wall/roughness.jpg');
 
 // colorTexture.repeat.x = 2
 // colorTexture.repeat.y = 2
@@ -61,14 +61,14 @@ const colorTexture = textureLLoader.load(
 // colorTexture.center.y = 0.5
 
 // All textures
-const wallColorTexture = textureLLoader.load('/textures/wall/basecolor.jpg');
-const woodColorTexture = textureLLoader.load('/textures/wood/basecolor.jpg');
-const rockColorTexture = textureLLoader.load('/textures/rock/basecolor.jpg');
-const metalColorTexture = textureLLoader.load('/textures/metal/basecolor.png');
-const checkerboardColorTexture = textureLLoader.load('/textures/checkerboard-1024x1024.png');
+const wallColorTexture = textureLLoader.load('./textures/wall/basecolor.jpg');
+const woodColorTexture = textureLLoader.load('./textures/wood/basecolor.jpg');
+const rockColorTexture = textureLLoader.load('./textures/rock/basecolor.jpg');
+const metalColorTexture = textureLLoader.load('./textures/metal/basecolor.png');
+const checkerboardColorTexture = textureLLoader.load('./textures/checkerboard-1024x1024.png');
 checkerboardColorTexture.mipmaps = false;
 checkerboardColorTexture.minFilter = THREE.NearestFilter;
-const minecraftColorTexture = textureLLoader.load('/textures/minecraft.png');
+const minecraftColorTexture = textureLLoader.load('./textures/minecraft.png');
 minecraftColorTexture.mipmaps = false;
 minecraftColorTexture.magFilter = THREE.NearestFilter;
 

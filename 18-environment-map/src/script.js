@@ -13,7 +13,7 @@ import { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js';
  */
 const gltfLoader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('/draco/');
+dracoLoader.setDecoderPath('draco/');
 gltfLoader.setDRACOLoader(dracoLoader);
 
 // environment map loaders
@@ -128,7 +128,7 @@ const loadEnvironmentMap = () => {
 
   if (environmentOptions.useHDRI) {
     // The use of HDRI is recommended for lights and reflections with small resolutions ONLY
-    currentEnvironmentMap = rgbeLoader.load('/environmentMaps/empty-blender-2k.hdr', (envMap) => {
+    currentEnvironmentMap = rgbeLoader.load('environmentMaps/empty-blender-2k.hdr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = envMap;
       // scene.background = envMap;
@@ -136,7 +136,7 @@ const loadEnvironmentMap = () => {
       setGroundedSkybox();
     });
   } else if (environmentOptions.useEXR) {
-    currentEnvironmentMap = exrLoader.load('/environmentMaps/church.exr', (envMap) => {
+    currentEnvironmentMap = exrLoader.load('environmentMaps/church.exr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.backgroundIntensity = 0.1;
       scene.environmentIntensity = 1;
@@ -145,7 +145,7 @@ const loadEnvironmentMap = () => {
     });
   } else if (environmentOptions.useJPEG) {
     currentEnvironmentMap = textureLoader.load(
-      '/environmentMaps/blockadesLabsSkybox/fantasy_lands_castles_at_night.jpg'
+      'environmentMaps/blockadesLabsSkybox/fantasy_lands_castles_at_night.jpg'
     );
     currentEnvironmentMap.mapping = THREE.EquirectangularReflectionMapping;
     currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
@@ -154,7 +154,7 @@ const loadEnvironmentMap = () => {
     setSceneProperties();
   } else if (environmentOptions.realTimeEnvMap) {
     currentEnvironmentMap = textureLoader.load(
-      '/environmentMaps/blockadesLabsSkybox/interior_views_cozy_wood_cabin_with_cauldron_and_p.jpg'
+      'environmentMaps/blockadesLabsSkybox/interior_views_cozy_wood_cabin_with_cauldron_and_p.jpg'
     );
     currentEnvironmentMap.mapping = THREE.EquirectangularReflectionMapping;
     currentEnvironmentMap.colorSpace = THREE.SRGBColorSpace;
@@ -163,12 +163,12 @@ const loadEnvironmentMap = () => {
     setHolyDonut();
   } else {
     currentEnvironmentMap = cubeTextureLoader.load([
-      '/environmentMaps/0/px.png',
-      '/environmentMaps/0/nx.png',
-      '/environmentMaps/0/py.png',
-      '/environmentMaps/0/ny.png',
-      '/environmentMaps/0/pz.png',
-      '/environmentMaps/0/nz.png',
+      'environmentMaps/0/px.png',
+      'environmentMaps/0/nx.png',
+      'environmentMaps/0/py.png',
+      'environmentMaps/0/ny.png',
+      'environmentMaps/0/pz.png',
+      'environmentMaps/0/nz.png',
     ]);
     scene.environment = currentEnvironmentMap;
     scene.background = currentEnvironmentMap;
@@ -218,7 +218,7 @@ scene.add(torusKnot);
  */
 
 // gltf Model
-gltfLoader.load('/models/FlightHelmet/glTF/FlightHelmet.gltf', (model) => {
+gltfLoader.load('models/FlightHelmet/glTF/FlightHelmet.gltf', (model) => {
   model.scene.scale.setScalar(10);
   model.scene.position.set(-3, 0, 0);
   scene.add(model.scene);
@@ -233,7 +233,7 @@ gltfLoader.load('/models/FlightHelmet/glTF/FlightHelmet.gltf', (model) => {
 });
 
 // draco Model
-gltfLoader.load('/models/FlightHelmet/glTF/helmet.glb', (model) => {
+gltfLoader.load('models/FlightHelmet/glTF/helmet.glb', (model) => {
   model.scene.scale.setScalar(3);
   model.scene.position.set(3, 4, 0);
   scene.add(model.scene);

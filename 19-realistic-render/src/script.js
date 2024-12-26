@@ -40,26 +40,26 @@ const updateAllMaterials = () => {
  */
 // Floor
 const floorColorTexture = textureLoader.load(
-  '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_diff_1k.jpg'
+  'textures/wood_cabinet_worn_long/wood_cabinet_worn_long_diff_1k.jpg'
 ); // this is not linear color space, but threejs assumes it is linear
 const floorNormalTexture = textureLoader.load(
-  '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_nor_gl_1k.png'
+  'textures/wood_cabinet_worn_long/wood_cabinet_worn_long_nor_gl_1k.png'
 );
 const floorAORoughnessMetallicTexture = textureLoader.load(
-  '/textures/wood_cabinet_worn_long/wood_cabinet_worn_long_arm_1k.jpg'
+  'textures/wood_cabinet_worn_long/wood_cabinet_worn_long_arm_1k.jpg'
 );
 // convert textures to sRGB
 floorColorTexture.colorSpace = THREE.SRGBColorSpace;
 
 // Wall
 const wallColorTexture = textureLoader.load(
-  '/textures/castle_brick_broken_06/castle_brick_broken_06_diff_1k.jpg'
+  'textures/castle_brick_broken_06/castle_brick_broken_06_diff_1k.jpg'
 ); // this is not linear color space, but threejs assumes it is linear
 const wallNormalTexture = textureLoader.load(
-  '/textures/castle_brick_broken_06/castle_brick_broken_06_nor_gl_1k.png'
+  'textures/castle_brick_broken_06/castle_brick_broken_06_nor_gl_1k.png'
 );
 const wallAORoughnessMetallicTexture = textureLoader.load(
-  '/textures/castle_brick_broken_06/castle_brick_broken_06_arm_1kF.jpg'
+  'textures/castle_brick_broken_06/castle_brick_broken_06_arm_1kF.jpg'
 );
 
 // convert textures to sRGB
@@ -113,7 +113,7 @@ scene.environmentIntensity = 1;
 gui.add(scene, 'environmentIntensity').min(0).max(10).step(0.001);
 
 // HDR (RGBE) equirectangular
-rgbeLoader.load('/environmentMaps/0/2k.hdr', (environmentMap) => {
+rgbeLoader.load('environmentMaps/0/2k.hdr', (environmentMap) => {
   environmentMap.mapping = THREE.EquirectangularReflectionMapping;
 
   scene.background = environmentMap;
@@ -159,7 +159,7 @@ directionalLight.target.updateMatrixWorld(); // necessary to update the world ma
  * Models
  */
 // Helmet
-gltfLoader.load('/models/FlightHelmet/glTF/FlightHelmet.gltf', (gltf) => {
+gltfLoader.load('models/FlightHelmet/glTF/FlightHelmet.gltf', (gltf) => {
   gltf.scene.scale.setScalar(10);
   gltf.scene.position.set(-2.5, 0, 0);
   scene.add(gltf.scene);
@@ -169,7 +169,7 @@ gltfLoader.load('/models/FlightHelmet/glTF/FlightHelmet.gltf', (gltf) => {
 });
 
 // Hamburger
-gltfLoader.load('/models/hamburger.glb', (gltf) => {
+gltfLoader.load('models/hamburger.glb', (gltf) => {
   gltf.scene.scale.setScalar(0.25);
   gltf.scene.position.set(2.5, -0.04, 0);
   scene.add(gltf.scene);

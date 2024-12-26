@@ -31,7 +31,7 @@ const scene = new THREE.Scene();
 
 // Environment map
 let skybox = null;
-rgbeLoader.load('/envMaps/autumn_field_puresky_2k.hdr', (envMap) => {
+rgbeLoader.load('envMaps/autumn_field_puresky_2k.hdr', (envMap) => {
   envMap.colorSpace = THREE.SRGBColorSpace;
   scene.environment = envMap;
   scene.background = envMap;

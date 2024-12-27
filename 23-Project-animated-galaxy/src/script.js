@@ -4,8 +4,6 @@ import GUI from 'lil-gui'
 import galaxyShaderVertex from './shaders/galaxy/vertex.glsl'
 import galaxyShaderFragment from './shaders/galaxy/fragment.glsl'
 
-const pixelRatio = Math.min(window.devicePixelRatio, 2)
-
 /**
  * Base
  */
@@ -23,7 +21,7 @@ const scene = new THREE.Scene()
  */
 const parameters = {}
 parameters.count = 200000
-parameters.size = 8
+parameters.size = 5
 parameters.radius = 5
 parameters.branches = 3
 parameters.spin = 1
@@ -104,7 +102,7 @@ const generateGalaxy = () =>
         vertexShader: galaxyShaderVertex,
         fragmentShader: galaxyShaderFragment,
         uniforms: {
-            uSize: { value: parameters.size * pixelRatio },
+            uSize: { value: parameters.size * renderer.getPixelRatio() },
         }
     })
 
@@ -114,8 +112,6 @@ const generateGalaxy = () =>
     points = new THREE.Points(geometry, material)
     scene.add(points)
 }
-
-generateGalaxy()
 
 gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy)
 gui.add(parameters, 'size').min(0.1).max(10).step(0.1).onFinishChange(generateGalaxy)
@@ -146,7 +142,7 @@ window.addEventListener('resize', () =>
 
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(pixelRatio)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
 /**
@@ -184,6 +180,11 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 /**
+ * Generate Galaxy after rendering the scene
+ */
+generateGalaxy()
+
+/**
  * Animate
  */
 const clock = new THREE.Clock()
@@ -201,5 +202,4 @@ const tick = () =>
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
 }
-
 tick()

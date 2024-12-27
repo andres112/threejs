@@ -1,3 +1,5 @@
+uniform float uSize;
+
 void main() {
     /**
     * Position
@@ -11,5 +13,5 @@ void main() {
     * Size
     * https://docs.gl/el3/gl_PointSize
     */
-    gl_PointSize = 1.0;
+    gl_PointSize = uSize;
 }

@@ -4,6 +4,8 @@ import GUI from 'lil-gui'
 import galaxyShaderVertex from './shaders/galaxy/vertex.glsl'
 import galaxyShaderFragment from './shaders/galaxy/fragment.glsl'
 
+const pixelRatio = Math.min(window.devicePixelRatio, 2)
+
 /**
  * Base
  */
@@ -21,7 +23,7 @@ const scene = new THREE.Scene()
  */
 const parameters = {}
 parameters.count = 200000
-parameters.size = 0.005
+parameters.size = 8
 parameters.radius = 5
 parameters.branches = 3
 parameters.spin = 1
@@ -50,6 +52,7 @@ const generateGalaxy = () =>
 
     const positions = new Float32Array(parameters.count * 3)
     const colors = new Float32Array(parameters.count * 3)
+    const scales = new Float32Array(parameters.count * 1) // the value goes from 0 to 1
 
     const insideColor = new THREE.Color(parameters.insideColor)
     const outsideColor = new THREE.Color(parameters.outsideColor)
@@ -78,10 +81,16 @@ const generateGalaxy = () =>
         colors[i3    ] = mixedColor.r
         colors[i3 + 1] = mixedColor.g
         colors[i3 + 2] = mixedColor.b
+
+        // Scale
+        scales[i] = Math.random()       
     }
 
+    // Remember that position and color are attributes already defined by the ShaderMaterial
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+    // Adding aScale attribute to the geometry
+    geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1))
 
     /**
      * Material
@@ -95,7 +104,7 @@ const generateGalaxy = () =>
         vertexShader: galaxyShaderVertex,
         fragmentShader: galaxyShaderFragment,
         uniforms: {
-            uSize: { value: parameters.size  },
+            uSize: { value: parameters.size * pixelRatio },
         }
     })
 
@@ -109,6 +118,7 @@ const generateGalaxy = () =>
 generateGalaxy()
 
 gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy)
+gui.add(parameters, 'size').min(0.1).max(10).step(0.1).onFinishChange(generateGalaxy)
 gui.add(parameters, 'radius').min(0.01).max(20).step(0.01).onFinishChange(generateGalaxy)
 gui.add(parameters, 'branches').min(2).max(20).step(1).onFinishChange(generateGalaxy)
 gui.add(parameters, 'randomness').min(0).max(2).step(0.001).onFinishChange(generateGalaxy)
@@ -136,7 +146,7 @@ window.addEventListener('resize', () =>
 
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(pixelRatio)
 })
 
 /**

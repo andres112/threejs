@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
+import galaxyShaderVertex from './shaders/galaxy/vertex.glsl'
+import galaxyShaderFragment from './shaders/galaxy/fragment.glsl'
 
 /**
  * Base
@@ -90,29 +92,8 @@ const generateGalaxy = () =>
         depthWrite: false,
         blending: THREE.AdditiveBlending,
         vertexColors: true,
-        vertexShader: `
-            void main() {
-                /**
-                 * Position
-                 */
-                vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-                vec4 viewPosition = viewMatrix * modelPosition;
-                vec4 projectedPosition = projectionMatrix * viewPosition;
-                gl_Position = projectedPosition;
-
-                /**
-                 * Size
-                 * https://docs.gl/el3/gl_PointSize
-                 */
-                gl_PointSize = 1.0;
-            }
-        `,
-        fragmentShader: `
-            void main() {
-                gl_FragColor = vec4(1.0, 1.0, 0.3, 1.0);
-                #include <colorspace_fragment>
-            }
-        `,
+        vertexShader: galaxyShaderVertex,
+        fragmentShader: galaxyShaderFragment,
     })
 
     /**

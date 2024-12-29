@@ -167,8 +167,7 @@ controls.zoomSpeed = 0.5;
 controls.panSpeed = 0.5;
 controls.rotateSpeed = 0.5;
 controls.dampingFactor = 0.1;
-controls.autoRotate = true;
-controls.autoRotateSpeed = 0.5;
+controls.autoRotate = false;
 
 /**
  * Renderer

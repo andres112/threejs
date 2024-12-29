@@ -16,4 +16,7 @@ void main() {
     * https://docs.gl/el3/gl_PointSize
     */
     gl_PointSize = uSize * aScale;
+    // From node_modules/three/src/renderers/shaders/points.glsl.js
+    // gl_PointSize *= ( scale / - mvPosition.z );
+    gl_PointSize *= (1.0 / -viewPosition.z); // allows size change based on distance to camera
 }

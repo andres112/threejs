@@ -21,7 +21,7 @@ const scene = new THREE.Scene()
  */
 const parameters = {}
 parameters.count = 200000
-parameters.size = 5
+parameters.size = 15
 parameters.radius = 5
 parameters.branches = 3
 parameters.spin = 1
@@ -114,7 +114,7 @@ const generateGalaxy = () =>
 }
 
 gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy)
-gui.add(parameters, 'size').min(0.1).max(10).step(0.1).onFinishChange(generateGalaxy)
+gui.add(parameters, 'size').min(1).max(30).step(1).onFinishChange(generateGalaxy)
 gui.add(parameters, 'radius').min(0.01).max(20).step(0.01).onFinishChange(generateGalaxy)
 gui.add(parameters, 'branches').min(2).max(20).step(1).onFinishChange(generateGalaxy)
 gui.add(parameters, 'randomness').min(0).max(2).step(0.001).onFinishChange(generateGalaxy)

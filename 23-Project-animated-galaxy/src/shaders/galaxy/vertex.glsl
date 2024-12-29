@@ -2,6 +2,11 @@ uniform float uSize;
 
 attribute float aScale;
 
+// The color is already defined as attribute in ShaderMaterial
+// when is used vertexColors: true in the material
+// pass as varying to fragment shader
+varying vec3 vColor;
+
 void main() {
     /**
     * Position
@@ -19,4 +24,9 @@ void main() {
     // From node_modules/three/src/renderers/shaders/points.glsl.js
     // gl_PointSize *= ( scale / - mvPosition.z );
     gl_PointSize *= (1.0 / -viewPosition.z); // allows size change based on distance to camera
+
+    /**
+    * Color
+    */
+    vColor = color;
 }

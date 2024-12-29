@@ -74,6 +74,7 @@ const generateGalaxy = () =>
 
         // Color
         const mixedColor = insideColor.clone()
+        // https://threejs.org/docs/#api/en/math/Color.lerp
         mixedColor.lerp(outsideColor, radius / parameters.radius)
 
         colors[i3    ] = mixedColor.r

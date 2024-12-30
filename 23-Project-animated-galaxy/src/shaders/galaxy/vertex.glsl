@@ -2,6 +2,7 @@ uniform float uSize;
 uniform float uTime;
 
 attribute float aScale;
+attribute vec3 aRandomness;
 
 // The color is already defined as attribute in ShaderMaterial
 // when is used vertexColors: true in the material
@@ -26,6 +27,9 @@ void main() {
     // 4. calculate the new position
     modelPosition.x = cos(angle) * distanceToCenter;
     modelPosition.z = sin(angle) * distanceToCenter;
+
+    // Add randomness to the position
+    modelPosition.xyz += aRandomness;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;

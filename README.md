@@ -29,7 +29,7 @@ Here’s the complete list of projects. Click on any project name to explore it 
 | 21    | [🚀 Big Projects](./20-big-projects)           | Combine techniques into big projects.    | [Demo](https://andres112.github.io/threejs/20-big-projects/dist/index.html)  |
 | 22    | [✨ Shaders](./21-shaders)                     | Write custom shaders for effects.        | [Demo](https://andres112.github.io/threejs/21-shaders/dist/index.html)       |
 | 23    | [🌊 Raging Sea](./22-raging-sea)               | Simulate a dynamic sea surface.          | [Demo](https://andres112.github.io/threejs/22-raging-sea/dist/index.html)    |
-| 24    | [🪐 Animated Galaxy with Shaders](./23-Project-animated-galaxy)               | Similar project as 13 but with Shaders.          | [Demo](https://andres112.github.io/threejs/23-Project-animated-galaxy/dist/index.html)    |
+| 24    | [🪐 Animated Galaxy with Shaders](./23-shaders-animated-galaxy)               | Similar project as 13 but with Shaders.          | [Demo](https://andres112.github.io/threejs/23-shaders-animated-galaxy/dist/index.html)    |
 
 
 

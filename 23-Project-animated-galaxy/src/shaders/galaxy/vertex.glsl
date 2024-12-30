@@ -1,4 +1,5 @@
 uniform float uSize;
+uniform float uTime;
 
 attribute float aScale;
 
@@ -12,6 +13,20 @@ void main() {
     * Position
     */
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+    
+    // Modify the position based on the time
+    // generate a spiral effect in x and z axis
+    // 1. get the angle
+    float angle = atan(modelPosition.x, modelPosition.z);
+    // 2. get the distance from the center
+    float distanceToCenter = length(modelPosition.xz);
+    // 3. calculate offset angle
+    float angleOffset = (1.0 / distanceToCenter) * uTime * 0.2;
+    angle += angleOffset;
+    // 4. calculate the new position
+    modelPosition.x = cos(angle) * distanceToCenter;
+    modelPosition.z = sin(angle) * distanceToCenter;
+
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
     gl_Position = projectedPosition;

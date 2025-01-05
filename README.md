@@ -21,15 +21,16 @@ Here’s the complete list of projects. Click on any project name to explore it 
 | 13    | [🌌 Galaxy Project](./13-Project-Galaxy)       | Procedurally generate a galaxy.          | [Demo](https://andres112.github.io/threejs/13-Project-Galaxy/dist/index.html) |
 | 14    | [🖱️ Scroll Animation](./14-scroll-based-animation) | Animate on scroll events.       | [Demo](https://andres112.github.io/threejs/14-scroll-based-animation/dist/index.html) |
 | 15    | [⚖️ Physics](./15-physics)                     | Add basic physics simulations.           | [Demo](https://andres112.github.io/threejs/15-physics/dist/index.html)       |
-| 16    | [🔧 Physics Workers](./15-physics-with-workers)| Physics using web workers.               | [Demo](https://andres112.github.io/threejs/15-physics-with-workers/dist/index.html) |
-| 17    | [📦 External Models](./16-external-models)     | Load external 3D models into your scene. | [Demo](https://andres112.github.io/threejs/16-external-models/dist/index.html) |
-| 18    | [🎯 Raycaster & Events](./17-raycaster-and-mouse-events) | Interact using raycasting.   | [Demo](https://andres112.github.io/threejs/17-raycaster-and-mouse-events/dist/index.html) |
-| 19    | [🌎 Environment Map](./18-environment-map)     | Explore environment mapping.             | [Demo](https://andres112.github.io/threejs/18-environment-map/dist/index.html) |
-| 20    | [🖼️ Realistic Render](./19-realistic-render)   | Create realistic-looking renders.        | [Demo](https://andres112.github.io/threejs/19-realistic-render/dist/index.html) |
-| 21    | [🚀 Big Projects](./20-big-projects)           | Combine techniques into big projects.    | [Demo](https://andres112.github.io/threejs/20-big-projects/dist/index.html)  |
-| 22    | [✨ Shaders](./21-shaders)                     | Write custom shaders for effects.        | [Demo](https://andres112.github.io/threejs/21-shaders/dist/index.html)       |
-| 23    | [🌊 Raging Sea](./22-raging-sea)               | Simulate a dynamic sea surface.          | [Demo](https://andres112.github.io/threejs/22-raging-sea/dist/index.html)    |
-| 24    | [🪐 Animated Galaxy with Shaders](./23-shaders-animated-galaxy)               | Similar project as 13 but with Shaders.          | [Demo](https://andres112.github.io/threejs/23-shaders-animated-galaxy/dist/index.html)    |
+| 15.1    | [🔧 Physics Workers](./15-physics-with-workers)| Physics using web workers.               | [Demo](https://andres112.github.io/threejs/15-physics-with-workers/dist/index.html) |
+| 16    | [📦 External Models](./16-external-models)     | Load external 3D models into your scene. | [Demo](https://andres112.github.io/threejs/16-external-models/dist/index.html) |
+| 17    | [🎯 Raycaster & Events](./17-raycaster-and-mouse-events) | Interact using raycasting.   | [Demo](https://andres112.github.io/threejs/17-raycaster-and-mouse-events/dist/index.html) |
+| 18    | [🌎 Environment Map](./18-environment-map)     | Explore environment mapping.             | [Demo](https://andres112.github.io/threejs/18-environment-map/dist/index.html) |
+| 19    | [🖼️ Realistic Render](./19-realistic-render)   | Create realistic-looking renders.        | [Demo](https://andres112.github.io/threejs/19-realistic-render/dist/index.html) |
+| 20    | [🚀 Big Projects](./20-big-projects)           | Combine techniques into big projects.    | [Demo](https://andres112.github.io/threejs/20-big-projects/dist/index.html)  |
+| 21    | [✨ Shaders](./21-shaders)                     | Write custom shaders for effects.        | [Demo](https://andres112.github.io/threejs/21-shaders/dist/index.html)       |
+| 22    | [🌊 Raging Sea](./22-raging-sea)               | Simulate a dynamic sea surface.          | [Demo](https://andres112.github.io/threejs/22-raging-sea/dist/index.html)    |
+| 23    | [🪐 Animated Galaxy with Shaders](./23-shaders-animated-galaxy)               | Similar project as 13 but with Shaders.          | [Demo](https://andres112.github.io/threejs/23-shaders-animated-galaxy/dist/index.html)    |
+| 24    | [🥸 Modified Materials](./24-modified-materials)               | Similar project as 13 but with Shaders.          | [Demo](https://andres112.github.io/threejs/24-modified-materials/dist/index.html)    |
 
 
 
